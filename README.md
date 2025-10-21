@@ -108,25 +108,35 @@ Run `python3 ascii_waves.py -h` for all options. Highlights:
 - `--rule`, `--burst`, `--jitter`, `--rows`, `--delay`, `--seed`
 - `--no-color`: disable ANSI colors entirely
 
-## Development Roadmap
+## Directional Glyph System
 
-### Current: Directional Glyph Mapping System (In Progress)
+**NEW!** A probabilistic character selection system for more organic terminal animations.
 
-We're building a **probabilistic directional character library** that will:
+Instead of static character maps, the glyph system:
+- **Categorizes** Unicode chars by direction, intensity, and style
+- **Selects probabilistically** - same criteria, varied results!
+- **Enables organic walkers** - encode both direction AND intensity
 
-1. **Scan Unicode Space** - Discover and categorize printable characters by visual properties
-2. **Hand-Pick Characters** - Curate characters by:
-   - Direction (N/E/S/W/NE/NW/SE/SW)
-   - Intensity/weight (light/medium/heavy)
-   - Style (arrows, lines, curves, organic, geometric)
-3. **Probabilistic Selection** - Replace static connector mappings with weighted random selection:
-   ```python
-   # Future API
-   char = glyph_picker.get(direction=EAST, intensity=0.7, style='organic')
-   ```
-4. **Create Organic Walkers** - Walkers that encode both direction AND intensity for more natural, varied trails
+```python
+from src.glyphs import GlyphPicker, Direction
 
-This will enable more expressive and varied terminal animations!
+picker = GlyphPicker.from_json("glyph_database.json")
+char = picker.get(direction=Direction.E, intensity=0.7)  # Varies each call!
+```
+
+**Try it:**
+```bash
+# Generate starter database (arrows + box-drawing)
+python3 tools/glyph_categorizer.py --quick-start
+
+# Run probabilistic walker demo
+python3 demos/walker_probabilistic.py --style connector
+
+# Try with arrows
+python3 demos/walker_probabilistic.py --style arrow --intensity-base 0.7
+```
+
+See `src/glyphs/README.md` for full documentation.
 
 ## License
 MIT — do whatever makes beautiful waves.

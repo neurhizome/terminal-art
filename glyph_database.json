@@ -1,0 +1,533 @@
+{
+  "glyphs": [
+    {
+      "char": "←",
+      "codepoint": "U+2190",
+      "directions": "W",
+      "intensity": 0.7,
+      "styles": [
+        "arrow",
+        "geometric"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "↑",
+      "codepoint": "U+2191",
+      "directions": "N",
+      "intensity": 0.7,
+      "styles": [
+        "arrow",
+        "geometric"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "→",
+      "codepoint": "U+2192",
+      "directions": "E",
+      "intensity": 0.7,
+      "styles": [
+        "arrow",
+        "geometric"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "↓",
+      "codepoint": "U+2193",
+      "directions": "S",
+      "intensity": 0.7,
+      "styles": [
+        "arrow",
+        "geometric"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "↔",
+      "codepoint": "U+2194",
+      "directions": "EW",
+      "intensity": 0.7,
+      "styles": [
+        "arrow",
+        "geometric"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "↕",
+      "codepoint": "U+2195",
+      "directions": "NS",
+      "intensity": 0.7,
+      "styles": [
+        "arrow",
+        "geometric"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "↖",
+      "codepoint": "U+2196",
+      "directions": "NW",
+      "intensity": 0.7,
+      "styles": [
+        "arrow",
+        "geometric"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "↗",
+      "codepoint": "U+2197",
+      "directions": "NE",
+      "intensity": 0.7,
+      "styles": [
+        "arrow",
+        "geometric"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "↘",
+      "codepoint": "U+2198",
+      "directions": "ES",
+      "intensity": 0.7,
+      "styles": [
+        "arrow",
+        "geometric"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "↙",
+      "codepoint": "U+2199",
+      "directions": "SW",
+      "intensity": 0.7,
+      "styles": [
+        "arrow",
+        "geometric"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "⇐",
+      "codepoint": "U+21D0",
+      "directions": "W",
+      "intensity": 0.9,
+      "styles": [
+        "arrow",
+        "double",
+        "geometric"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "⇑",
+      "codepoint": "U+21D1",
+      "directions": "N",
+      "intensity": 0.9,
+      "styles": [
+        "arrow",
+        "double",
+        "geometric"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "⇒",
+      "codepoint": "U+21D2",
+      "directions": "E",
+      "intensity": 0.9,
+      "styles": [
+        "arrow",
+        "double",
+        "geometric"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "⇓",
+      "codepoint": "U+21D3",
+      "directions": "S",
+      "intensity": 0.9,
+      "styles": [
+        "arrow",
+        "double",
+        "geometric"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "⟵",
+      "codepoint": "U+27F5",
+      "directions": "W",
+      "intensity": 0.8,
+      "styles": [
+        "arrow",
+        "long"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "⟶",
+      "codepoint": "U+27F6",
+      "directions": "E",
+      "intensity": 0.8,
+      "styles": [
+        "arrow",
+        "long"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "⟷",
+      "codepoint": "U+27F7",
+      "directions": "EW",
+      "intensity": 0.8,
+      "styles": [
+        "arrow",
+        "long"
+      ],
+      "weight": "medium"
+    },
+    {
+      "char": "─",
+      "codepoint": "U+2500",
+      "directions": "EW",
+      "intensity": 0.3,
+      "styles": [
+        "connector",
+        "light",
+        "line"
+      ],
+      "weight": "light"
+    },
+    {
+      "char": "│",
+      "codepoint": "U+2502",
+      "directions": "NS",
+      "intensity": 0.3,
+      "styles": [
+        "connector",
+        "light",
+        "line"
+      ],
+      "weight": "light"
+    },
+    {
+      "char": "┌",
+      "codepoint": "U+250C",
+      "directions": "ES",
+      "intensity": 0.3,
+      "styles": [
+        "connector",
+        "corner",
+        "light",
+        "line"
+      ],
+      "weight": "light"
+    },
+    {
+      "char": "┐",
+      "codepoint": "U+2510",
+      "directions": "SW",
+      "intensity": 0.3,
+      "styles": [
+        "connector",
+        "corner",
+        "light",
+        "line"
+      ],
+      "weight": "light"
+    },
+    {
+      "char": "└",
+      "codepoint": "U+2514",
+      "directions": "NE",
+      "intensity": 0.3,
+      "styles": [
+        "connector",
+        "corner",
+        "light",
+        "line"
+      ],
+      "weight": "light"
+    },
+    {
+      "char": "┘",
+      "codepoint": "U+2518",
+      "directions": "NW",
+      "intensity": 0.3,
+      "styles": [
+        "connector",
+        "corner",
+        "light",
+        "line"
+      ],
+      "weight": "light"
+    },
+    {
+      "char": "├",
+      "codepoint": "U+251C",
+      "directions": "NES",
+      "intensity": 0.3,
+      "styles": [
+        "connector",
+        "junction",
+        "light",
+        "line"
+      ],
+      "weight": "light"
+    },
+    {
+      "char": "┤",
+      "codepoint": "U+2524",
+      "directions": "NSW",
+      "intensity": 0.3,
+      "styles": [
+        "connector",
+        "junction",
+        "light",
+        "line"
+      ],
+      "weight": "light"
+    },
+    {
+      "char": "┬",
+      "codepoint": "U+252C",
+      "directions": "ESW",
+      "intensity": 0.3,
+      "styles": [
+        "connector",
+        "junction",
+        "light",
+        "line"
+      ],
+      "weight": "light"
+    },
+    {
+      "char": "┴",
+      "codepoint": "U+2534",
+      "directions": "NEW",
+      "intensity": 0.3,
+      "styles": [
+        "connector",
+        "junction",
+        "light",
+        "line"
+      ],
+      "weight": "light"
+    },
+    {
+      "char": "┼",
+      "codepoint": "U+253C",
+      "directions": "ALL",
+      "intensity": 0.3,
+      "styles": [
+        "connector",
+        "junction",
+        "light",
+        "line"
+      ],
+      "weight": "light"
+    },
+    {
+      "char": "━",
+      "codepoint": "U+2501",
+      "directions": "EW",
+      "intensity": 0.8,
+      "styles": [
+        "connector",
+        "heavy",
+        "line"
+      ],
+      "weight": "heavy"
+    },
+    {
+      "char": "┃",
+      "codepoint": "U+2503",
+      "directions": "NS",
+      "intensity": 0.8,
+      "styles": [
+        "connector",
+        "heavy",
+        "line"
+      ],
+      "weight": "heavy"
+    },
+    {
+      "char": "┏",
+      "codepoint": "U+250F",
+      "directions": "ES",
+      "intensity": 0.8,
+      "styles": [
+        "connector",
+        "corner",
+        "heavy",
+        "line"
+      ],
+      "weight": "heavy"
+    },
+    {
+      "char": "┓",
+      "codepoint": "U+2513",
+      "directions": "SW",
+      "intensity": 0.8,
+      "styles": [
+        "connector",
+        "corner",
+        "heavy",
+        "line"
+      ],
+      "weight": "heavy"
+    },
+    {
+      "char": "┗",
+      "codepoint": "U+2517",
+      "directions": "NE",
+      "intensity": 0.8,
+      "styles": [
+        "connector",
+        "corner",
+        "heavy",
+        "line"
+      ],
+      "weight": "heavy"
+    },
+    {
+      "char": "┛",
+      "codepoint": "U+251B",
+      "directions": "NW",
+      "intensity": 0.8,
+      "styles": [
+        "connector",
+        "corner",
+        "heavy",
+        "line"
+      ],
+      "weight": "heavy"
+    },
+    {
+      "char": "┣",
+      "codepoint": "U+2523",
+      "directions": "NES",
+      "intensity": 0.8,
+      "styles": [
+        "connector",
+        "heavy",
+        "junction",
+        "line"
+      ],
+      "weight": "heavy"
+    },
+    {
+      "char": "┫",
+      "codepoint": "U+252B",
+      "directions": "NSW",
+      "intensity": 0.8,
+      "styles": [
+        "connector",
+        "heavy",
+        "junction",
+        "line"
+      ],
+      "weight": "heavy"
+    },
+    {
+      "char": "┳",
+      "codepoint": "U+2533",
+      "directions": "ESW",
+      "intensity": 0.8,
+      "styles": [
+        "connector",
+        "heavy",
+        "junction",
+        "line"
+      ],
+      "weight": "heavy"
+    },
+    {
+      "char": "┻",
+      "codepoint": "U+253B",
+      "directions": "NEW",
+      "intensity": 0.8,
+      "styles": [
+        "connector",
+        "heavy",
+        "junction",
+        "line"
+      ],
+      "weight": "heavy"
+    },
+    {
+      "char": "╋",
+      "codepoint": "U+254B",
+      "directions": "ALL",
+      "intensity": 0.8,
+      "styles": [
+        "connector",
+        "heavy",
+        "junction",
+        "line"
+      ],
+      "weight": "heavy"
+    },
+    {
+      "char": "╭",
+      "codepoint": "U+256D",
+      "directions": "ES",
+      "intensity": 0.3,
+      "styles": [
+        "connector",
+        "corner",
+        "line",
+        "organic",
+        "rounded"
+      ],
+      "weight": "light"
+    },
+    {
+      "char": "╮",
+      "codepoint": "U+256E",
+      "directions": "SW",
+      "intensity": 0.3,
+      "styles": [
+        "connector",
+        "corner",
+        "line",
+        "organic",
+        "rounded"
+      ],
+      "weight": "light"
+    },
+    {
+      "char": "╯",
+      "codepoint": "U+256F",
+      "directions": "NW",
+      "intensity": 0.3,
+      "styles": [
+        "connector",
+        "corner",
+        "line",
+        "organic",
+        "rounded"
+      ],
+      "weight": "light"
+    },
+    {
+      "char": "╰",
+      "codepoint": "U+2570",
+      "directions": "NE",
+      "intensity": 0.3,
+      "styles": [
+        "connector",
+        "corner",
+        "line",
+        "organic",
+        "rounded"
+      ],
+      "weight": "light"
+    }
+  ]
+}

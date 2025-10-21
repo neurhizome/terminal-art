@@ -1,0 +1,13 @@
+# Full toolkit (skip on constrained Alpine)
+blessed>=1.20
+rich>=13.7
+colorama>=0.4.6; platform_system=="Windows"
+typer[all]>=0.12
+pyyaml>=6.0.2
+tomli>=2.0.1; python_version<"3.11"
+
+pillow>=10.4
+imageio>=2.36
+numpy>=2.0
+noise>=1.2.2
+matplotlib>=3.9

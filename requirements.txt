@@ -1,0 +1,10 @@
+# Core dependencies for terminal-art toolkit
+# Most demos are dependency-free and only use stdlib
+
+# Optional: better width detection for Unicode scanner
+wcwidth>=0.2.0
+
+# For future development:
+# blessed>=1.20      # Terminal handling
+# rich>=13.7         # Rich text formatting
+# typer>=0.12        # CLI framework

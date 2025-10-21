@@ -1,44 +1,86 @@
-# asciiwaves — Modular ASCII/Braille/Unicode Automata Renderer
+# terminal-art — Modular Terminal Graphics & Unicode Automata Toolkit
 
-A lightweight, dependency‑free toolkit to render cellular‑automata‑driven
-“maze/river” flows using swappable **glyph sets**, **connector styles**, and **background
-fill glyphs** — with optional 24‑bit color and multi‑char tiles.
+A lightweight toolkit for creating animated terminal graphics using Unicode characters,
+cellular automata, and directional walkers. Most demos are **dependency-free** and run
+on any POSIX terminal, including **iSH on iOS**.
 
-It’s designed to play nicely in **iSH on iOS** as well as regular terminals.
+## Features
 
-## Why
-- Swap foreground/background glyphs on the fly.
-- Use Unicode sets: box‑drawing, blocks, braille, light/shade, angles, dots, ASCII density, etc.
-- Keep the connector‑logic (N/E/S/W masks) from `maze_river.py`, but make it modular.
-- Animate with simple 1D→2D CA rules (e.g., Rule 110), with “burst” spice and color jitter.
+- **Directional Walkers** - Create flowing, organic animations with NESW connector logic
+- **Unicode Glyph System** - Scan and categorize thousands of Unicode characters
+- **Terminal Stage** - Efficient full-screen rendering with double-buffering and 24-bit color
+- **Modular Design** - Clean separation between core library and demos
+- **Cellular Automata** - Multiple CA-driven renderers with customizable rules
 
-## Quick Start (any POSIX terminal)
-```bash
-python3 ascii_waves.py --rows 200 --delay 0.01 --style heavy --bg-glyph "·" --extras dots --extra-prob 0.07
+## Project Structure
+
 ```
-Try a braille vibe as background:
-```bash
-python3 ascii_waves.py --bg-set braille-lite --style rounded --rows 300 --delay 0.02
+terminal-art/
+├── src/              # Core library code
+│   ├── renderers/    # Terminal rendering engines (TerminalStage, etc.)
+│   ├── glyphs/       # Character mapping and selection system
+│   └── utils/        # Shared utilities and helpers
+├── demos/            # Runnable example scripts
+│   ├── walker_*.py   # Walker-based animations
+│   ├── braille_*.py  # Braille pattern demos
+│   └── ascii_*.py    # ASCII/box-drawing demos
+├── tools/            # Utilities for glyph discovery
+│   ├── unicode_scanner.py  # Scan Unicode ranges
+│   └── glyph_viewer.py     # Browse glyph collections
+├── scripts/          # Bootstrap and setup scripts
+└── tests/            # Future test suite
 ```
 
-Force a single foreground glyph for the “on” cells (ignoring connector boxes):
+## Quick Start
+
+### 1. Set up virtual environment (recommended)
+
 ```bash
-python3 ascii_waves.py --fg-glyph "╳" --bg-set shade --rows 200
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-Turn off color entirely:
+### 2. Try some demos
+
+**Animated connector walker:**
 ```bash
-python3 ascii_waves.py --no-color --style double --bg-glyph "░" --rows 120
+python3 demos/walker_connect_color16.py --style heavy --wrap
 ```
 
-## iSH Setup (Alpine) — Truecolor & UTF‑8
+**Cellular automata waves:**
+```bash
+python3 demos/ascii_waves.py --rows 200 --delay 0.01 --style heavy --bg-glyph "·"
+```
+
+**Morphing connectors:**
+```bash
+python3 demos/morphing_connectors_demo.py
+```
+
+**Braille galaxies:**
+```bash
+python3 demos/braille_galaxies.py
+```
+
+### 3. Scan Unicode for glyphs
+
+```bash
+# Scan box-drawing characters
+python3 tools/unicode_scanner.py --start 0x2500 --end 0x259F --outfile box_drawing.json
+
+# View results
+python3 tools/glyph_viewer.py box_drawing.json
+```
+
+## iSH Setup (Alpine iOS) — Truecolor & UTF‑8
+
 In iSH (iOS):
 ```bash
 apk update
-apk add python3 py3-pip ncurses
-python3 -m ensurepip --upgrade
-pip3 install --upgrade pip
-# (No deps required for asciiwaves)
+apk add python3 py3-pip ncurses git
+python3 -m venv venv
+source venv/bin/activate
 export TERM=xterm-256color
 export COLORTERM=truecolor
 export PYTHONIOENCODING=utf-8
@@ -46,11 +88,10 @@ export PYTHONIOENCODING=utf-8
 
 Run a demo:
 ```bash
-python3 /mnt/data/asciiwaves/ascii_waves.py --rows 300 --delay 0.015 --style light --bg-set dots
+python3 demos/ascii_waves.py --rows 300 --delay 0.015 --style light --bg-set dots
 ```
 
-> Tip: iSH inherits iOS font rendering. For best alignment, prefer monospaced fonts that include box‑drawing & braille.
-If a glyph looks off, switch to a different set (e.g., `--bg-set ascii-density`).
+> **Tip:** iSH inherits iOS font rendering. For best alignment, use monospaced fonts that include box-drawing & braille characters. If glyphs look misaligned, try different styles or scan your font with `tools/unicode_scanner.py`.
 
 ## Concepts
 - **Connector style**: maps N/E/S/W bitmasks → box‑drawing (or ASCII) characters.
@@ -67,10 +108,25 @@ Run `python3 ascii_waves.py -h` for all options. Highlights:
 - `--rule`, `--burst`, `--jitter`, `--rows`, `--delay`, `--seed`
 - `--no-color`: disable ANSI colors entirely
 
-## Integrating With `maze_river.py`
-`ascii_waves.py` carries over the connector logic and CA dynamics so you can use it standalone.
-If you want to call into your existing script’s logic, treat it as a generator of bit‑rows and pass
-those into `AsciiRenderer.render_row(bits)` (see code comments).
+## Development Roadmap
+
+### Current: Directional Glyph Mapping System (In Progress)
+
+We're building a **probabilistic directional character library** that will:
+
+1. **Scan Unicode Space** - Discover and categorize printable characters by visual properties
+2. **Hand-Pick Characters** - Curate characters by:
+   - Direction (N/E/S/W/NE/NW/SE/SW)
+   - Intensity/weight (light/medium/heavy)
+   - Style (arrows, lines, curves, organic, geometric)
+3. **Probabilistic Selection** - Replace static connector mappings with weighted random selection:
+   ```python
+   # Future API
+   char = glyph_picker.get(direction=EAST, intensity=0.7, style='organic')
+   ```
+4. **Create Organic Walkers** - Walkers that encode both direction AND intensity for more natural, varied trails
+
+This will enable more expressive and varied terminal animations!
 
 ## License
 MIT — do whatever makes beautiful waves.

@@ -110,30 +110,58 @@ Run `python3 ascii_waves.py -h` for all options. Highlights:
 
 ## Directional Glyph System
 
-**NEW!** A probabilistic character selection system for more organic terminal animations.
+**NEW!** A probabilistic character selection system with **1,742 glyphs** for organic terminal animations.
 
-Instead of static character maps, the glyph system:
-- **Categorizes** Unicode chars by direction, intensity, and style
-- **Selects probabilistically** - same criteria, varied results!
-- **Enables organic walkers** - encode both direction AND intensity
+The glyph system features:
+- **Comprehensive Unicode coverage** - 11 ranges including arrows, clocks, braille, geometric shapes
+- **Intelligent categorization** - Auto-inferred direction, intensity, and style tags
+- **Probabilistic selection** - Same criteria, varied results every time!
+- **Connection logic** - Proper NESW connector tracking for walkers
+- **Perturbative events** - Dynamic intensity modulation (bursts, calms, waves)
+
+### Database Coverage
+
+The full database (`glyph_database_full.json`) includes:
+- **Arrows** (112 glyphs) - Basic, supplemental, long, curved, double
+- **Box Drawing** (128 glyphs) - Light, heavy, double connectors
+- **Geometric Shapes** (96 glyphs) - Triangles, circles, polygons
+- **Block Elements** (32 glyphs) - Partial blocks, density gradients
+- **Braille Patterns** (256 glyphs) - Subtle directional hints
+- **Clock Faces** (24 glyphs) - Hour hand directions (12, 1, 1:30, 2, etc.)
+- **Symbols & Dingbats** (448+ glyphs) - Decorative and directional
+- **646 additional glyphs** from misc symbols and fullwidth forms
+
+### Quick Start
+
+```bash
+# Build comprehensive database (1,742 glyphs)
+python3 tools/build_comprehensive_db.py --all-ranges -o glyph_database_full.json
+
+# Run enhanced walker with proper connections + perturbative events
+python3 demos/walker_enhanced.py --database glyph_database_full.json
+
+# Watch intensity changes from events (shown in status line)
+# Events include: Energy Burst, Calm Period, Heavy Wave, etc.
+
+# Run without events (steady intensity)
+python3 demos/walker_enhanced.py --no-events --base-intensity 0.7
+```
+
+### API Example
 
 ```python
 from src.glyphs import GlyphPicker, Direction
 
-picker = GlyphPicker.from_json("glyph_database.json")
-char = picker.get(direction=Direction.E, intensity=0.7)  # Varies each call!
-```
+# Load comprehensive database
+picker = GlyphPicker.from_json("glyph_database_full.json")
 
-**Try it:**
-```bash
-# Generate starter database (arrows + box-drawing)
-python3 tools/glyph_categorizer.py --quick-start
+# Get varied characters for same direction
+char = picker.get(direction=Direction.E, intensity=0.7)  # Different each time!
 
-# Run probabilistic walker demo
-python3 demos/walker_probabilistic.py --style connector
-
-# Try with arrows
-python3 demos/walker_probabilistic.py --style arrow --intensity-base 0.7
+# Filter by style
+arrow = picker.get(direction=Direction.NE, style="arrow")
+clock = picker.get(direction=Direction.SE, style="clock")
+braille = picker.get(direction=Direction.S, style="braille", intensity=0.3)
 ```
 
 See `src/glyphs/README.md` for full documentation.

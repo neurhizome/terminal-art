@@ -36,6 +36,84 @@ python3 experiments/memetic_territories.py --spawn-rate 0.15 --events
 
 **Modules used:** `automata`, `genetics`, `fields`, `events`, `renderers`
 
+### Color Speciation (NEW!)
+Reproductive barriers create distinct color species that compete for space.
+
+```bash
+# Default: 8 species, moderate breeding barrier
+python3 experiments/color_speciation.py
+
+# Strict barriers (few species survive)
+python3 experiments/color_speciation.py --breed-threshold 0.1 --initial-species 12
+
+# Loose barriers (species merge)
+python3 experiments/color_speciation.py --breed-threshold 0.25 --spawn-rate 0.12
+
+# Watch diversity collapse over time
+python3 experiments/color_speciation.py --initial-species 15 --walkers-per-species 20
+```
+
+**What to watch for:**
+- Initial rainbow of colors collapses into 3-5 dominant species
+- Color boundaries form distinct territories
+- Weaker species go extinct through competition
+- Species counter in status line tracks diversity over time
+
+**Modules used:** `automata`, `genetics`, `fields`, `renderers`
+
+### Gradient Flow - Aesthetic Mode (NEW!)
+Pure visual beauty: flowing color gradients with no death or competition.
+
+```bash
+# Default: smooth gradients
+python3 experiments/gradient_flow.py --walkers 250
+
+# With color shift events (mesmerizing!)
+python3 experiments/gradient_flow.py --walkers 300 --events
+
+# High mutation (rainbow chaos)
+python3 experiments/gradient_flow.py --mutation-rate 0.15 --spawn-rate 0.2 --events
+
+# Slow and meditative
+python3 experiments/gradient_flow.py --walkers 200 --mutation-rate 0.03 --delay 0.05
+```
+
+**What to watch for:**
+- Smooth color transitions across the screen
+- Flowing waves of color
+- Events create synchronized color shifts
+- Hypnotic, screensaver-like motion
+
+**Perfect for:** Background visuals, meditation, screensavers
+
+**Modules used:** `automata`, `genetics`, `fields`, `events`, `renderers`
+
+### Predator-Prey Dynamics (NEW!)
+Classic Lotka-Volterra: Green prey vs red predators with population cycles.
+
+```bash
+# Default balanced populations
+python3 experiments/predator_prey.py
+
+# Fast-breeding prey (oscillations)
+python3 experiments/predator_prey.py --prey-spawn-rate 0.18 --initial-prey 80
+
+# Aggressive predators (tight hunt radius)
+python3 experiments/predator_prey.py --hunt-radius 3.0 --predator-spawn-rate 0.05
+
+# High chaos
+python3 experiments/predator_prey.py --initial-prey 100 --initial-predators 25
+```
+
+**What to watch for:**
+- Population oscillations (classic predator-prey cycles)
+- Prey forms defensive clusters
+- Predators patrol between prey groups
+- Green scent trails show prey movement
+- Status line shows population trends (↑↓)
+
+**Modules used:** `automata`, `genetics`, `fields` (with different behaviors)
+
 ## Creating New Experiments
 
 ### Pattern 1: Minimal (Pure Walkers)

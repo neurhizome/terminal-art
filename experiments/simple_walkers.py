@@ -7,9 +7,14 @@ Demonstrates how little code is needed with modular components.
 """
 
 import sys
+import os
 import time
 import random
 import argparse
+
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
 from src.automata import Walker, Spawner, RandomWalk
 from src.genetics import Genome
 

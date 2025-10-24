@@ -24,9 +24,14 @@ Expected patterns:
 """
 
 import sys
+import os
 import time
 import random
 import argparse
+
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
 from src.automata import Walker, Spawner, RandomWalk, BiasedWalk
 from src.genetics import Genome
 from src.fields import DiffusionField, TerritoryField

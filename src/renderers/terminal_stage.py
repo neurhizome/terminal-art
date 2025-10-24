@@ -76,6 +76,7 @@ class TerminalStage:
             pass
             
         self._update_dimensions()
+        self.init_grid()  # Initialize cells grid
         self.initialized = True
         
     def teardown(self):
@@ -114,11 +115,11 @@ class TerminalStage:
         
     def _resize_grid(self):
         """Resize cell grid when terminal dimensions change"""
-        new_cells = [[None for _ in range(self.width)] 
+        new_cells = [[CellState() for _ in range(self.width)]
                      for _ in range(self.height)]
-        new_prev = [["" for _ in range(self.width)] 
+        new_prev = [["" for _ in range(self.width)]
                     for _ in range(self.height)]
-        
+
         # Copy over existing cells
         for y in range(min(len(self.cells), self.height)):
             for x in range(min(len(self.cells[0]) if self.cells else 0, self.width)):
@@ -126,19 +127,19 @@ class TerminalStage:
                     new_cells[y][x] = self.cells[y][x]
                 if y < len(self.prev_render) and x < len(self.prev_render[y]):
                     new_prev[y][x] = self.prev_render[y][x]
-                    
+
         self.cells = new_cells
         self.prev_render = new_prev
-        
+
         # Force full redraw after resize
         sys.stdout.write("\x1b[2J")
         sys.stdout.flush()
         
     def init_grid(self):
         """Initialize empty cell grid"""
-        self.cells = [[None for _ in range(self.width)] 
+        self.cells = [[CellState() for _ in range(self.width)]
                       for _ in range(self.height)]
-        self.prev_render = [["" for _ in range(self.width)] 
+        self.prev_render = [["" for _ in range(self.width)]
                            for _ in range(self.height)]
                            
     def get_cell(self, x: int, y: int) -> Optional['CellState']:
@@ -155,31 +156,33 @@ class TerminalStage:
     def render(self, force_full: bool = False):
         """Render all dirty cells to screen"""
         output = []
-        
+
         for y in range(self.height):
             for x in range(self.width):
                 cell = self.cells[y][x]
-                
-                if cell is None:
-                    rendered = " "
-                else:
-                    rendered = cell.render()
-                
+                rendered = cell.render()
+
                 # Only update if changed (or forced)
                 if force_full or rendered != self.prev_render[y][x]:
                     # Move cursor and write
                     output.append(f"\x1b[{y+1};{x+1}H{rendered}")
                     self.prev_render[y][x] = rendered
-                    
+
         if output:
             sys.stdout.write("".join(output))
             sys.stdout.flush()
+
+    def render_diff(self):
+        """Alias for render() - only renders changed cells"""
+        self.render(force_full=False)
             
     def clear(self):
-        """Clear all cells"""
-        self.cells = [[None for _ in range(self.width)] 
-                      for _ in range(self.height)]
-        self.render(force_full=True)
+        """Clear all cells to default state"""
+        for y in range(self.height):
+            for x in range(self.width):
+                self.cells[y][x].char = ' '
+                self.cells[y][x].fg_color = (255, 255, 255)
+                self.cells[y][x].bg_color = (0, 0, 0)
 
 # ===================== COLOR UTILITIES =====================
 
@@ -222,18 +225,18 @@ class CellState:
     Represents one cell in the grid.
     Subclass this for domain-specific simulations.
     """
-    glyph: str = "•"
-    fg: Tuple[int, int, int] = (255, 255, 255)
-    bg: Tuple[int, int, int] = (0, 0, 0)
+    char: str = "•"  # Character to display
+    fg_color: Tuple[int, int, int] = (255, 255, 255)  # Foreground RGB
+    bg_color: Tuple[int, int, int] = (0, 0, 0)  # Background RGB
 
     # Extensible attributes for simulations
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def render(self) -> str:
         """Generate ANSI escape sequence for this cell"""
-        r, g, b = self.fg
-        br, bg, bb = self.bg
-        return f"\x1b[38;2;{r};{g};{b}m\x1b[48;2;{br};{bg};{bb}m{self.glyph}\x1b[0m"
+        r, g, b = self.fg_color
+        br, bg, bb = self.bg_color
+        return f"\x1b[38;2;{r};{g};{b}m\x1b[48;2;{br};{bg};{bb}m{self.char}\x1b[0m"
 
 # ===================== SIMULATION FRAMEWORK =====================
 

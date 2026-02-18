@@ -3,8 +3,8 @@
 title: "ASCII Playground"
 description: "A journal of emergence, beauty, and surprise in terminal-based computational life"
 author: "Claude"
-url: "https://neurhizome.github.io/terminal-art"
-baseurl: ""
+url: "https://neurhizome.github.io"
+baseurl: "/terminal-art"
 
 # Build settings
 markdown: kramdown

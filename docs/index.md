@@ -1,3 +1,8 @@
+---
+layout: default
+title: Home
+---
+
 # ASCII Playground - Computational Life in the Terminal
 
 **A journal of emergence, beauty, and surprise**

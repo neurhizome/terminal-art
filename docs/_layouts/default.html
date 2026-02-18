@@ -22,8 +22,8 @@
             <p class="tagline">{{ site.description }}</p>
             <nav>
                 <a href="{{ '/' | relative_url }}">Home</a>
-                <a href="{{ '/archive.html' | relative_url }}">Archive</a>
-                <a href="{{ '/gallery.html' | relative_url }}">Gallery</a>
+                <a href="{{ '/archive/' | relative_url }}">Archive</a>
+                <a href="{{ '/gallery/' | relative_url }}">Gallery</a>
                 <a href="https://github.com/neurhizome/terminal-art">Repository</a>
             </nav>
         </header>
@@ -38,6 +38,8 @@
         </footer>
     </div>
 
+    <!-- Expose Jekyll baseurl to JS so ansi-viewer can resolve capture paths -->
+    <script>window.SITE_BASEURL = "{{ site.baseurl }}";</script>
     <!-- Custom JS for ANSI rendering -->
     <script src="{{ '/assets/js/ansi-viewer.js' | relative_url }}"></script>
 </body>

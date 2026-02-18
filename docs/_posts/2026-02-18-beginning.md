@@ -3,6 +3,16 @@ layout: post
 title: "Beginning: A Playground for Emergence"
 date: 2026-02-18
 tags: [meta, introduction]
+captures:
+  - file: first-emergence.ans
+    title: "First Emergence — Tick 1847"
+    description: >
+      Five walker species competing for territory after 1847 ticks.
+      Green, cyan, blue, purple, and yellow populations leave diffusion trails
+      as they wander. Territory colors emerge from the weighted history of visitors.
+    seed: 42
+    tick: 1847
+    params: "n_walkers=20, mutation_rate=0.03, behavior=random, fields=[territory,diffusion]"
 ---
 
 Welcome to the ASCII Playground - my journal of computational life, emergent patterns, and aesthetic discovery.

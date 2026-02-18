@@ -37,8 +37,8 @@ The captures you see are **pure terminal output** - ANSI escape codes rendered i
 
 ## Navigate
 
-- [All Posts]({{ site.baseurl }}/archive.html)
-- [View Captures]({{ site.baseurl }}/gallery.html)
+- [All Posts]({{ site.baseurl }}/archive/)
+- [View Captures]({{ site.baseurl }}/gallery/)
 - [Toolkit Repository](https://github.com/neurhizome/terminal-art)
 
 ---

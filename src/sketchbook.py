@@ -17,6 +17,8 @@ from src.genetics import Genome
 from src.fields import DiffusionField, TerritoryField
 from src.events import EventScheduler, PeriodicEventSpawner, AESTHETIC_POOL, CHAOS_POOL, COMPETITIVE_POOL
 from src.renderers.terminal_stage import TerminalStage
+from src.capture import quick_capture
+from src.keyboard import KeyboardInput
 
 
 @dataclass
@@ -128,9 +130,62 @@ class QuickSketch:
 
             # Main loop
             tick = 0
+            paused = False
+            capture_count = 0
+
+            # Setup keyboard input
+            kb = KeyboardInput()
+            kb.start()
 
             try:
                 while True:
+                    # Handle keyboard input
+                    key = kb.get_key()
+                    if key:
+                        if key == 'q':
+                            break
+                        elif key == 'c':
+                            # Capture screenshot!
+                            filepath = quick_capture(
+                                stage,
+                                f"capture_{capture_count:03d}",
+                                description=f"Captured at tick {tick}",
+                                script="sketchbook",
+                                seed=self.seed,
+                                tick=tick,
+                                params={
+                                    'walkers': len(spawner.walkers),
+                                    'mutation_rate': self.mutation_rate,
+                                    'spawn_rate': self.spawn_rate,
+                                }
+                            )
+                            capture_count += 1
+                            # Show notification (will be visible briefly)
+                            sys.stdout.write(f"\x1b[{height+2};1H📸 Captured: {filepath}\x1b[K")
+                            sys.stdout.flush()
+                            time.sleep(0.5)
+                        elif key == 'p':
+                            paused = not paused
+                        elif key == '+':
+                            self.spawn_rate = min(1.0, self.spawn_rate + 0.01)
+                        elif key == '-':
+                            self.spawn_rate = max(0.0, self.spawn_rate - 0.01)
+                        elif key == 'm':
+                            self.mutation_rate = max(0.0, self.mutation_rate - 0.01)
+                        elif key == 'M':
+                            self.mutation_rate = min(1.0, self.mutation_rate + 0.01)
+                        elif key in ('?', 'h'):
+                            # Show help (will be visible briefly)
+                            help_text = (
+                                "Controls: c=capture p=pause +/-=spawn m/M=mutation q=quit"
+                            )
+                            sys.stdout.write(f"\x1b[{height+2};1H{help_text}\x1b[K")
+                            sys.stdout.flush()
+                            time.sleep(1.5)
+
+                    if paused:
+                        time.sleep(0.1)
+                        continue
                     # Update
                     spawner.age_all()
 
@@ -222,14 +277,23 @@ class QuickSketch:
                         f"Tick: {tick:6d} | "
                         f"Pop: {stats['count']:3d}/{self.max_walkers} | "
                         f"Age: {stats['avg_age']:.1f} | "
-                        f"Vigor: {stats['avg_vigor']:.2f}"
+                        f"Vigor: {stats['avg_vigor']:.2f} | "
+                        f"Spawn: {self.spawn_rate:.2f} | "
+                        f"Mut: {self.mutation_rate:.2f}"
                     )
+
+                    if paused:
+                        status += " | PAUSED"
 
                     if event_scheduler:
                         status += f" | {event_scheduler.get_status_line()}"
 
+                    # Controls hint
+                    controls = "[c]apture [p]ause [+/-]spawn [m/M]mut [?]help [q]uit"
+
                     stage.render_diff()
                     sys.stdout.write(f"\x1b[{height+1};1H{status}\x1b[K")
+                    sys.stdout.write(f"\x1b[{height+2};1H{controls}\x1b[K")
                     sys.stdout.flush()
 
                     time.sleep(self.delay)
@@ -237,6 +301,8 @@ class QuickSketch:
 
             except KeyboardInterrupt:
                 pass
+            finally:
+                kb.stop()
 
     def _spawn_initial(self, spawner, width, height):
         """Spawn initial population with color scheme"""

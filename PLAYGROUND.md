@@ -31,6 +31,14 @@ python3 -m sketches aesthetic
 python3 -m sketches flow
 ```
 
+**Interactive Controls (While Running):**
+- **`c`** - 📸 Capture screenshot to `museum/`
+- **`p`** - Pause/unpause
+- **`+/-`** - Adjust spawn rate
+- **`m/M`** - Adjust mutation rate
+- **`?`** - Show help
+- **`q`** - Quit
+
 ### 2. Make a Quick Sketch (30 seconds!)
 
 ```python

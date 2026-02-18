@@ -4,6 +4,8 @@ A **composable toolkit** for creating animated terminal graphics, memetic automa
 
 Most components are **dependency-free** and run on any POSIX terminal, including **iSH on iOS**.
 
+📸 **[Visit the Blog - ASCII Playground](https://neurhizome.github.io/terminal-art/)** - A journal of emergence, beauty, and surprise
+
 ## Features
 
 ### Core Modules (NEW!)

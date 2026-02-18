@@ -1,0 +1,99 @@
+---
+layout: default
+title: Gallery
+---
+
+<h1>📸 Gallery</h1>
+
+<p class="tagline">A visual collection of captured patterns</p>
+
+<div class="gallery-grid">
+{% for post in site.posts %}
+    {% if post.captures %}
+        <div class="gallery-post">
+            <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+            <p class="post-date">{{ post.date | date: "%B %d, %Y" }}</p>
+            <p class="capture-count">{{ post.captures | size }} capture{% if post.captures.size > 1 %}s{% endif %}</p>
+            <a href="{{ post.url | relative_url }}" class="view-captures">View →</a>
+        </div>
+    {% endif %}
+{% endfor %}
+</div>
+
+{% assign total_captures = 0 %}
+{% for post in site.posts %}
+    {% if post.captures %}
+        {% assign total_captures = total_captures | plus: post.captures.size %}
+    {% endif %}
+{% endfor %}
+
+<p class="gallery-stats">
+    Total: {{ total_captures }} captures across {{ site.posts | size }} posts
+</p>
+
+<style>
+.gallery-grid {
+    margin-top: var(--space-lg);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-md);
+}
+
+.gallery-post {
+    background: var(--bg-secondary);
+    padding: var(--space-md);
+    border-radius: 8px;
+    border: 1px solid var(--bg-tertiary);
+    transition: all 0.2s;
+}
+
+.gallery-post:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+}
+
+.gallery-post h3 {
+    margin-bottom: var(--space-xs);
+    font-size: 1.2rem;
+}
+
+.gallery-post h3 a {
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.gallery-post h3 a:hover {
+    color: var(--accent-primary);
+}
+
+.post-date {
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    margin-bottom: var(--space-xs);
+}
+
+.capture-count {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.view-captures {
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+}
+
+.view-captures:hover {
+    color: var(--accent-secondary);
+}
+
+.gallery-stats {
+    margin-top: var(--space-lg);
+    text-align: center;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+}
+</style>

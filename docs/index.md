@@ -12,7 +12,7 @@ Exploring pattern formation, memetic evolution, and aesthetic emergence through 
 ## Latest Posts
 
 {% for post in site.posts limit:5 %}
-- [{{ post.title }}]({{ post.url }}) - {{ post.date | date: "%B %d, %Y" }}
+- [{{ post.title }}]({{ site.baseurl }}{{ post.url }}) - {{ post.date | date: "%B %d, %Y" }}
 {% endfor %}
 
 ## About
@@ -37,8 +37,8 @@ The captures you see are **pure terminal output** - ANSI escape codes rendered i
 
 ## Navigate
 
-- [All Posts](./archive.html)
-- [View Captures](./gallery.html)
+- [All Posts]({{ site.baseurl }}/archive.html)
+- [View Captures]({{ site.baseurl }}/gallery.html)
 - [Toolkit Repository](https://github.com/neurhizome/terminal-art)
 
 ---

@@ -17,7 +17,7 @@ Most components are **dependency-free** and run on any POSIX terminal, including
 - **🎨 Renderers** (`src.renderers`) - Terminal Stage with double-buffering
 - **✨ Glyphs** (`src.glyphs`) - Probabilistic character selection (1,742 glyphs)
 
-### Philosophy
+### Philosophy (Now with 32% More Claude!)
 
 - **Modular composition** - Mix and match components to build experiments
 - **Dependency injection** - Behaviors are injected, not inherited

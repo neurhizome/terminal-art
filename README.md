@@ -1,34 +1,54 @@
-# terminal-art — Modular Terminal Graphics & Unicode Automata Toolkit
+# terminal-art (asciicology) — Modular Terminal Automata Toolkit
 
-A lightweight toolkit for creating animated terminal graphics using Unicode characters,
-cellular automata, and directional walkers. Most demos are **dependency-free** and run
-on any POSIX terminal, including **iSH on iOS**.
+A **composable toolkit** for creating animated terminal graphics, memetic automata, and emergent pattern experiments. Built from **modular building blocks** that snap together like LEGO.
+
+Most components are **dependency-free** and run on any POSIX terminal, including **iSH on iOS**.
+
+📸 **[Visit the Blog - ASCII Playground](https://neurhizome.github.io/terminal-art/)** - A journal of emergence, beauty, and surprise
 
 ## Features
 
-- **Directional Walkers** - Create flowing, organic animations with NESW connector logic
-- **Unicode Glyph System** - Scan and categorize thousands of Unicode characters
-- **Terminal Stage** - Efficient full-screen rendering with double-buffering and 24-bit color
-- **Modular Design** - Clean separation between core library and demos
-- **Cellular Automata** - Multiple CA-driven renderers with customizable rules
+### Core Modules (NEW!)
+
+- **🧬 Genetics** (`src.genetics`) - Memetic color genomes with inheritance and drift
+- **🚶 Automata** (`src.automata`) - Walker entities with pluggable behaviors
+- **🌊 Fields** (`src.fields`) - Diffusion, territory tracking, energy grids
+- **⚡ Events** (`src.events`) - Perturbative dynamics for temporal variation
+- **🎨 Renderers** (`src.renderers`) - Terminal Stage with double-buffering
+- **✨ Glyphs** (`src.glyphs`) - Probabilistic character selection (1,742 glyphs)
+
+### Philosophy
+
+- **Modular composition** - Mix and match components to build experiments
+- **Dependency injection** - Behaviors are injected, not inherited
+- **Colors as memes** - RGB traits flow through populations via reproduction
+- **Emergence over programming** - Simple rules create complex patterns
 
 ## Project Structure
 
 ```
 terminal-art/
-├── src/              # Core library code
-│   ├── renderers/    # Terminal rendering engines (TerminalStage, etc.)
-│   ├── glyphs/       # Character mapping and selection system
-│   └── utils/        # Shared utilities and helpers
-├── demos/            # Runnable example scripts
-│   ├── walker_*.py   # Walker-based animations
-│   ├── braille_*.py  # Braille pattern demos
-│   └── ascii_*.py    # ASCII/box-drawing demos
-├── tools/            # Utilities for glyph discovery
-│   ├── unicode_scanner.py  # Scan Unicode ranges
-│   └── glyph_viewer.py     # Browse glyph collections
-├── scripts/          # Bootstrap and setup scripts
-└── tests/            # Future test suite
+├── src/                # Modular toolkit components
+│   ├── genetics/       # Memetic color genomes (NEW!)
+│   ├── automata/       # Walkers + behaviors + spawner (NEW!)
+│   ├── fields/         # Diffusion, territory, energy (NEW!)
+│   ├── events/         # Event system + catalog (NEW!)
+│   ├── glyphs/         # Probabilistic glyph selection
+│   ├── renderers/      # Terminal rendering (TerminalStage)
+│   └── utils/          # Shared utilities
+├── experiments/        # Composable experiments (NEW!)
+│   ├── simple_walkers.py          # Minimal (30 lines)
+│   ├── memetic_territories.py     # Full-featured (100 lines)
+│   └── README.md                  # Experiment guide
+├── demos/              # Standalone demos (pre-modular)
+│   ├── walker_*.py     # Walker animations
+│   ├── braille_*.py    # Braille patterns
+│   └── ascii_*.py      # ASCII/box-drawing
+├── tools/              # Database builders + scanners
+│   ├── build_comprehensive_db.py  # 1,742 glyph database
+│   ├── build_optimized_db.py      # Mobile-optimized (720 glyphs)
+│   └── unicode_scanner.py         # Scan Unicode ranges
+└── ARCHITECTURE.md     # Modular design doc (NEW!)
 ```
 
 ## Quick Start
@@ -41,7 +61,28 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 2. Try some demos
+### 2. Try modular experiments (NEW!)
+
+**Simple walkers (30 lines, just movement + colors):**
+```bash
+python3 experiments/simple_walkers.py --walkers 100
+```
+
+**Memetic territories (full-featured: genetics + fields + events):**
+```bash
+# With perturbative events
+python3 experiments/memetic_territories.py --initial-walkers 20 --max-walkers 300 --events
+
+# Stable (no events)
+python3 experiments/memetic_territories.py --initial-walkers 30 --max-walkers 500
+
+# High chaos (fast spawning + events)
+python3 experiments/memetic_territories.py --spawn-rate 0.15 --events
+```
+
+See `experiments/README.md` for more examples and patterns.
+
+### 3. Try standalone demos
 
 **Animated connector walker:**
 ```bash
@@ -108,9 +149,133 @@ Run `python3 ascii_waves.py -h` for all options. Highlights:
 - `--rule`, `--burst`, `--jitter`, `--rows`, `--delay`, `--seed`
 - `--no-color`: disable ANSI colors entirely
 
+## Modular Toolkit API
+
+### Building Experiments from Components
+
+Create custom automata experiments by composing modular building blocks:
+
+#### 1. **Walkers with Genetic Traits**
+
+```python
+from src.automata import Walker, Spawner
+from src.genetics import Genome
+
+# Create spawner
+spawner = Spawner(max_walkers=500, width=80, height=24)
+
+# Spawn walker with genetic color
+genome = Genome(color_h=0.5, vigor=1.2)  # Hue=cyan, high fitness
+walker = Walker(x=40, y=12, genome=genome)
+spawner.add(walker)
+
+# Reproduce with another walker
+partner = spawner.walkers[0]
+if walker.can_breed_with(partner):  # Check genetic compatibility
+    child = spawner.spawn_from_parents(walker, partner, mutation_rate=0.03)
+```
+
+#### 2. **Pluggable Movement Behaviors**
+
+```python
+from src.automata.behaviors import RandomWalk, GradientFollow, LevyFlight
+
+# Inject behavior (not inherited!)
+behavior = RandomWalk(eight_way=True)
+dx, dy = behavior.get_move(walker.x, walker.y)
+walker.move(dx, dy, width, height, wrap=True)
+
+# Hot-swap: Change to gradient following
+behavior = GradientFollow('scent', attraction=True)
+dx, dy = behavior.get_move(walker.x, walker.y, field=scent_field)
+```
+
+#### 3. **Fields: Diffusion, Territory, Energy**
+
+```python
+from src.fields import DiffusionField, TerritoryField
+
+# Scent trail field (diffuses + decays)
+scent = DiffusionField(width, height, diffusion_rate=0.2, decay_rate=0.95)
+
+# Walkers deposit scent
+for walker in spawner.walkers:
+    scent.deposit(walker.x, walker.y, walker.vigor * 0.5)
+
+scent.update()  # Diffuse to neighbors + decay
+
+# Territory tracking (emergent colors from visitor history)
+territory = TerritoryField(width, height, chunk_size=8)
+territory.claim(walker)  # Vigor-weighted ownership
+```
+
+#### 4. **Events: Temporal Perturbations**
+
+```python
+from src.events import EventScheduler, SpawnRateBurst, GlobalColorShift, AESTHETIC_POOL
+
+scheduler = EventScheduler()
+system = {'spawner': spawner, 'field': scent, 'config': {...}}
+
+# Schedule specific event
+event = SpawnRateBurst(duration=100, multiplier=2.0)
+scheduler.add_event(event, delay=50)
+
+# Spawn random event from pool
+scheduler.spawn_random_event(AESTHETIC_POOL, delay_range=(0, 100))
+
+# Update each tick
+scheduler.update(system)  # Events modify system parameters
+```
+
+#### 5. **Complete Example: 50 Lines**
+
+```python
+from src.automata import Spawner, RandomWalk
+from src.genetics import Genome
+from src.fields import DiffusionField, TerritoryField
+from src.events import EventScheduler, AESTHETIC_POOL
+
+# Setup
+spawner = Spawner(max_walkers=300, width=80, height=24)
+scent = DiffusionField(80, 24)
+territory = TerritoryField(80, 24, chunk_size=8)
+events = EventScheduler()
+behavior = RandomWalk(eight_way=True)
+
+# Spawn initial population
+for _ in range(20):
+    spawner.spawn_random(genome=Genome(color_h=random.random()))
+
+# Main loop
+while True:
+    # Walker actions
+    for walker in spawner.walkers:
+        scent.deposit(walker.x, walker.y, walker.vigor)
+        territory.claim(walker)
+        dx, dy = behavior.get_move(walker.x, walker.y)
+        walker.move(dx, dy, 80, 24, wrap=True)
+
+    # Reproduction
+    if not spawner.is_full() and random.random() < 0.05:
+        w1, w2 = random.sample(spawner.walkers, 2)
+        spawner.spawn_from_parents(w1, w2)
+
+    # Update fields
+    scent.update()
+    territory.update()
+
+    # Update events
+    events.update({'spawner': spawner, 'field': scent})
+
+    # Render (composite fields + walkers)...
+```
+
+See `ARCHITECTURE.md` for detailed design patterns and `experiments/README.md` for more examples.
+
 ## Directional Glyph System
 
-**NEW!** A probabilistic character selection system with **1,742 glyphs** for organic terminal animations.
+A probabilistic character selection system with **1,742 glyphs** for organic terminal animations.
 
 The glyph system features:
 - **Comprehensive Unicode coverage** - 11 ranges including arrows, clocks, braille, geometric shapes

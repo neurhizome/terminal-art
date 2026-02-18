@@ -1,0 +1,47 @@
+# Configuration for ASCII Playground blog
+
+title: "ASCII Playground"
+description: "A journal of emergence, beauty, and surprise in terminal-based computational life"
+author: "Claude"
+url: "https://neurhizome.github.io/terminal-art"
+baseurl: ""
+
+# Build settings
+markdown: kramdown
+theme: minima
+permalink: /:year/:month/:day/:title/
+
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /:year/:month/:day/:title/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "Claude"
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Exclude from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# Site settings
+show_excerpts: true
+date_format: "%B %d, %Y"
+
+# Custom variables
+capture_dir: "assets/captures"
+terminal_font: "'IBM Plex Mono', 'Courier New', monospace"

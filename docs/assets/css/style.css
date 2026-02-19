@@ -60,7 +60,7 @@ body {
     max-width: 860px;
     margin: 0 auto;
     /* extra horizontal padding gives breathing room on all screen sizes */
-    padding: var(--space-md) var(--space-lg);
+    padding: var(--space-md) 3rem;
 }
 
 /* ─── Header ──────────────────────────────────────────── */
@@ -614,12 +614,137 @@ nav a:hover {
     color: var(--accent-cyan);
 }
 
+/* ─── Color Grimoire ─────────────────────────────────── */
+
+.grimoire {
+    max-width: 780px;
+}
+
+.grimoire-header {
+    margin-bottom: var(--space-xl);
+}
+
+.grimoire-title {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.grimoire-intro {
+    color: var(--text-secondary);
+    line-height: 1.65;
+}
+
+.grimoire-section {
+    margin-bottom: var(--space-2xl);
+}
+
+.grimoire-section-title {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: var(--space-xs);
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--bg-tertiary);
+}
+
+.grimoire-section-note {
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    margin-bottom: var(--space-lg);
+}
+
+.grimoire-entries {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.grimoire-entry {
+    display: flex;
+    gap: var(--space-lg);
+    align-items: flex-start;
+    padding: var(--space-md);
+    background: var(--bg-secondary);
+    border-radius: 6px;
+    border: 1px solid var(--bg-tertiary);
+}
+
+.grimoire-swatch-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    flex-shrink: 0;
+}
+
+.grimoire-swatch {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.grimoire-hex {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+}
+
+.grimoire-detail {
+    flex: 1;
+    min-width: 0;
+}
+
+.grimoire-name-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-xs);
+}
+
+.grimoire-name {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.grimoire-alias {
+    font-size: 0.82rem;
+    color: var(--accent-secondary);
+    background: var(--bg-tertiary);
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+}
+
+.grimoire-resonance {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.grimoire-notes {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
 /* ─── Responsive ──────────────────────────────────────── */
 
 @media (max-width: 640px) {
     .container {
         /* keep generous horizontal margins on small screens */
-        padding: var(--space-sm) 1.25rem;
+        padding: var(--space-sm) 1.75rem;
     }
 
     .site-header h1 {

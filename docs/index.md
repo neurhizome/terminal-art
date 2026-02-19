@@ -3,10 +3,6 @@ layout: default
 title: Home
 ---
 
-# ASCII Playground - Computational Life in the Terminal
-
-**A journal of emergence, beauty, and surprise**
-
 Exploring pattern formation, memetic evolution, and aesthetic emergence through terminal-based automata.
 
 ## Latest Posts

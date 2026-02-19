@@ -33,12 +33,12 @@
     --font-sans: 'IBM Plex Sans', -apple-system, system-ui, sans-serif;
 
     /* Spacing scale */
-    --space-xs:  0.5rem;
-    --space-sm:  1rem;
-    --space-md:  1.5rem;
-    --space-lg:  2.25rem;
-    --space-xl:  3rem;
-    --space-2xl: 4rem;
+    --space-xs:  0.35rem;
+    --space-sm:  0.6rem;
+    --space-md:  1rem;
+    --space-lg:  1.6rem;
+    --space-xl:  2.25rem;
+    --space-2xl: 3rem;
 }
 
 * {
@@ -68,6 +68,7 @@ body {
     padding: var(--space-xl) 0 var(--space-lg);
     border-bottom: 1px solid var(--bg-tertiary);
     margin-bottom: var(--space-xl);
+    text-align: center;
 }
 
 .site-header h1 {
@@ -98,6 +99,7 @@ nav {
     display: flex;
     gap: var(--space-sm);
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 nav a {
@@ -387,14 +389,14 @@ nav a:hover {
     border: 1px solid var(--bg-tertiary);
     border-radius: 6px;
     margin: var(--space-sm) 0 var(--space-md);
-    overflow: hidden;
+    /* Scroll horizontally on narrow viewports rather than breaking layout */
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
-/* xterm.js fills this element */
+/* xterm.js sizes this to exactly cols×rows — no forced min-height */
 .terminal-display {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    min-height: 320px;
+    display: inline-block; /* shrink-wrap to xterm canvas width */
 }
 
 .capture-meta {

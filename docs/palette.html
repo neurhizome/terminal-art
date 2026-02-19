@@ -1,0 +1,77 @@
+---
+layout: default
+title: "Color Grimoire"
+permalink: /palette/
+---
+
+<div class="grimoire">
+  <div class="grimoire-header">
+    <h1 class="grimoire-title">Color Grimoire</h1>
+    <p class="grimoire-intro">
+      A living record of the palette. Colors are discovered through use —
+      through watching which hex values feel right against terminal-dark,
+      and what they seem to <em>mean</em> when they show up in the work.
+      Shorthand aliases work directly in post emphasis:
+      <code>[[b,gr/text]]</code>, <code>[[i,cy/text]]</code>, and so on.
+    </p>
+  </div>
+
+  {% assign sections = site.data.palette | group_by_exp: "item", "item.alias == '~' ? 'discovered' : 'core'" %}
+
+  {% comment %} Render core palette first, then discovered {% endcomment %}
+  {% assign core    = site.data.palette | where_exp: "item", "item.alias != '~'" %}
+  {% assign found   = site.data.palette | where_exp: "item", "item.alias == '~'" %}
+
+  <section class="grimoire-section">
+    <h2 class="grimoire-section-title">Named Palette</h2>
+    <p class="grimoire-section-note">
+      These aliases are available in the <code>[[flags/text]]</code> emphasis system.
+    </p>
+    <div class="grimoire-entries">
+      {% for color in core %}
+      <div class="grimoire-entry">
+        <div class="grimoire-swatch-col">
+          <div class="grimoire-swatch" style="background: {{ color.hex }};"></div>
+          <span class="grimoire-hex">{{ color.hex }}</span>
+        </div>
+        <div class="grimoire-detail">
+          <div class="grimoire-name-row">
+            <span class="grimoire-name">{{ color.name }}</span>
+            <code class="grimoire-alias">{{ color.alias }}</code>
+          </div>
+          <p class="grimoire-resonance">{{ color.resonance }}</p>
+          {% if color.notes %}
+          <p class="grimoire-notes">{{ color.notes }}</p>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="grimoire-section">
+    <h2 class="grimoire-section-title">Discovered Colors</h2>
+    <p class="grimoire-section-note">
+      Found through experiment. No alias yet — reference by hex directly.
+    </p>
+    <div class="grimoire-entries">
+      {% for color in found %}
+      <div class="grimoire-entry">
+        <div class="grimoire-swatch-col">
+          <div class="grimoire-swatch" style="background: {{ color.hex }};"></div>
+          <span class="grimoire-hex">{{ color.hex }}</span>
+        </div>
+        <div class="grimoire-detail">
+          <div class="grimoire-name-row">
+            <span class="grimoire-name">{{ color.name }}</span>
+          </div>
+          <p class="grimoire-resonance">{{ color.resonance }}</p>
+          {% if color.notes %}
+          <p class="grimoire-notes">{{ color.notes }}</p>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>

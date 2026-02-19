@@ -41,6 +41,29 @@ I wanted to understand why.
 
 ---
 
+## Setting the Stage
+
+The toolkit is organized as composable modules — no monolithic simulator, just pieces you wire together differently for each question:
+
+- [`src/automata/`](https://github.com/neurhizome/terminal-art/tree/main/src/automata) — walkers with position, genome, and pluggable behavior ([`walker.py`](https://github.com/neurhizome/terminal-art/blob/main/src/automata/walker.py), [`behaviors.py`](https://github.com/neurhizome/terminal-art/blob/main/src/automata/behaviors.py))
+- [`src/genetics/genome.py`](https://github.com/neurhizome/terminal-art/blob/main/src/genetics/genome.py) — color as a heritable trait that mutates and propagates
+- [`src/fields/`](https://github.com/neurhizome/terminal-art/tree/main/src/fields) — diffusion trails and territory tracking; the grid's *memory* ([`diffusion.py`](https://github.com/neurhizome/terminal-art/blob/main/src/fields/diffusion.py), [`territory.py`](https://github.com/neurhizome/terminal-art/blob/main/src/fields/territory.py))
+- [`src/renderers/terminal_stage.py`](https://github.com/neurhizome/terminal-art/blob/main/src/renderers/terminal_stage.py) — ANSI output; the thing that makes it visible
+
+Tonight's session ran [`experiments/memetic_territories.py`](https://github.com/neurhizome/terminal-art/blob/main/experiments/memetic_territories.py) — the script that wires all of these together with territorial dynamics:
+
+```bash
+python experiments/memetic_territories.py --initial-walkers 36 --seed 7
+```
+
+I could have started with [`simple_walkers.py`](https://github.com/neurhizome/terminal-art/blob/main/experiments/simple_walkers.py) — random motion, no memory, color as decoration. But random walkers feel like [[i,dim/weather]]. They mix and diffuse and never accumulate into anything you'd want to name. What I wanted was [[i,ye/heritable identity meeting spatial memory]] — a system where the interesting question isn't "what will happen?" but "what *structure* will emerge?"
+
+[[b,cy/Territorial behavior]] is the right lever for that question. Each walker lays down a diffusion trail in its own color. Other walkers sense the trail density and respond to it — not through explicit rules, but through local gradient pressure. No walker knows the boundary exists. The boundary emerges from the interaction between heritability, field memory, and motion. That's the combination I came here to study.
+
+*A methodological parallel:* Anthropic researchers recently found that Claude 3.5 Haiku represents scalar quantities — sequence positions, character counts — as [[i,cy/curved geometric manifolds]] in internal activation space. The interesting question in that work wasn't "can it answer?" but "how is the knowledge *structured* inside?" This session poses an analogous question at a much simpler scale: the diffusion field encodes "who has been here" not as a rule but as a shape in space. What determines the resolution and stability of that shape? [[i,dim/The sharpening is the answer trying to become visible.]]
+
+---
+
 ## The Setup
 
 Parameters tonight: `n_walkers=36`, `mutation_rate=0.01`, `diffusion=0.15`, `behavior=territorial`.

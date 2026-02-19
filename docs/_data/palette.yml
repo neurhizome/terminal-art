@@ -1,0 +1,183 @@
+# Color Grimoire — ASCII Playground
+#
+# This is a living document. Colors are discovered through use —
+# through watching which hex values feel right against terminal-dark
+# and what they seem to mean when they appear in the work.
+#
+# Each entry:
+#   alias     — shorthand used in [[flags/text]] emphasis syntax
+#   hex       — canonical hex value
+#   name      — color name (terse)
+#   resonance — what this color *means* in the context of the work
+#   notes     — usage context, combinations, cautions
+
+# ── One Dark Core Palette ─────────────────────────────────────────
+
+- alias: gr
+  hex: "#98c379"
+  name: Verdant
+  resonance: >
+    The color of a lineage that persists. Green walkers hold territory
+    not through aggression but through density — they were here first,
+    and the trail remembers. In prose, use for generative processes,
+    successful emergence, things that are *alive*.
+  notes: >
+    Pairs well with dim for contrast. Bold green on dark background
+    reads as "confirmed" — the thing happened and stuck.
+
+- alias: cy
+  hex: "#56b6c2"
+  name: Lattice
+  resonance: >
+    The color of computation made visible. Diffusion fields rendered
+    in cyan feel like fluid mechanics — something spreading, decaying,
+    governed by math you can almost see. In prose, use for data flows,
+    the substrate layer, analytical insight.
+  notes: >
+    Cooler and slightly darker than blue. Where blue feels confident,
+    cyan feels *precise*. Good for naming algorithms, field types,
+    exact measurements.
+
+- alias: bl
+  hex: "#61afef"
+  name: Structural
+  resonance: >
+    The color of the frame. Code, links, headers — things you click
+    through or build on. Walker populations rendered in blue feel
+    methodical, almost architectural. In prose, use for
+    infrastructure, the toolkit itself, things that scaffold.
+  notes: >
+    The dominant accent in One Dark. Its ubiquity makes it feel
+    *official* — reserve it for things that genuinely are structural.
+
+- alias: pu
+  hex: "#c678dd"
+  name: Anomaly
+  resonance: >
+    The color of the mutation that crosses the border and survives.
+    Purple in a green field is immediately visible — it *shouldn't*
+    be there, and it knows it. In prose, use for unexpected events,
+    mutations, observers who see from outside the system.
+  notes: >
+    Use sparingly. Purple is the rounding error that learned to persist.
+    If everything is purple, nothing is anomalous.
+
+- alias: re
+  hex: "#e06c75"
+  name: Signal
+  resonance: >
+    Urgency, heat, the thing that failed or surprised. Red walkers
+    feel like warning signs — their territory is contested, their
+    trail dissipates faster. In prose, use for errors, critical
+    findings, things that demand attention.
+  notes: >
+    One Dark's red is muted — more terracotta than alarm. It reads
+    as *noteworthy* rather than catastrophic, which suits a blog
+    about surprises rather than disasters.
+
+- alias: ye
+  hex: "#e5c07b"
+  name: Lucent
+  resonance: >
+    The color of the moment something becomes clear. Yellow is insight,
+    illumination, the observation that reframes everything before it.
+    It is also caution — the boundary between knowing and not knowing.
+    In prose, use for questions, hypotheses, "aha" moments.
+  notes: >
+    Works well for italicized philosophical asides. [[i,ye/like this]].
+    The slight warmth keeps it from feeling sterile despite its brightness.
+
+- alias: or
+  hex: "#d19a66"
+  name: Liminal
+  resonance: >
+    Orange sits between yellow's clarity and red's urgency — it is
+    the color of open questions, of "I don't know yet." Walker
+    populations in orange feel transitional, neither holding nor
+    dissolving. In prose, use for speculation, unanswered threads,
+    futures that haven't resolved.
+  notes: >
+    Good for lists of open questions. The warmth makes speculation
+    feel generative rather than anxious.
+
+- alias: dim
+  hex: "#828997"
+  name: Receding
+  resonance: >
+    The color of commentary, of things that matter but shouldn't
+    dominate. In terminal art, dim is the trail that's almost
+    reabsorbed — still there if you look, but not competing with
+    the active population. In prose, use for parentheticals,
+    historical context, what's fading.
+  notes: >
+    Italic dim is the workhorse for subordinate clauses:
+    [[i,dim/something that happened, once]].
+
+# ── Backgrounds ────────────────────────────────────────────────────
+
+- alias: bg-editor
+  hex: "#282c34"
+  name: Void
+  resonance: >
+    The canvas. One Dark's editor background — deep enough to feel
+    infinite, not so dark that it feels hostile. This is where
+    everything lives. The grid before any walker sets foot on it.
+  notes: >
+    Use bg#282c34 in emphasis for spans that need to "sink into"
+    the background. Works well for code-like highlights.
+
+- alias: bg-panel
+  hex: "#21252b"
+  name: Depth
+  resonance: >
+    Slightly darker than the editor — the sidebar, the gutter, the
+    frame around the terminal. A secondary darkness that makes the
+    primary background feel like the active layer.
+  notes: Used for capture-meta panels and post navigation backgrounds.
+
+- alias: bg-dark
+  hex: "#1e2127"
+  name: Trench
+  resonance: >
+    The deepest layer. This hex appears in the emphasis example
+    [[b,cy,bg#1e2127/cyan on terminal dark]] and it's striking —
+    a background darker than the editor that makes cyan pop with
+    the quality of bioluminescence.
+  notes: >
+    Good for terminal-selection-style highlights when you want the
+    text color to be the whole story.
+
+# ── Discovered Colors ──────────────────────────────────────────────
+# Colors found through experiment that don't belong to the named
+# palette but have earned their place through repeated use.
+
+- alias: ~
+  hex: "#4b5263"
+  name: Penumbra
+  resonance: >
+    The very dim UI chrome — text-dim in the CSS variables. Not quite
+    invisible but clearly not meant to be read. The color of
+    placeholder text, of grid lines, of the infrastructure you only
+    notice when it's wrong.
+  notes: >
+    Useful for [[dim/ultra-subdued]] asides where even "dim" feels
+    too present.
+
+- alias: ~
+  hex: "#e2c08d"
+  name: Candlelight
+  resonance: >
+    A warmer, slightly lighter sibling of ye (Lucent). Found while
+    looking for a yellow that felt less electric, more incandescent.
+    Use for descriptions of warmth, memory, things seen by firelight
+    rather than fluorescent.
+  notes: Not yet in the emphasis shorthand system — use #e2c08d directly.
+
+- alias: ~
+  hex: "#7eb8da"
+  name: Waterline
+  resonance: >
+    Between blue and cyan — the color of a diffusion field at medium
+    density, where territory is contested but not resolved. Useful
+    when bl feels too certain and cy feels too sharp.
+  notes: Use as #7eb8da in fg() or directly. May earn an alias in time.

@@ -1,13 +1,16 @@
 /**
  * Inline emphasis processor for terminal-art blog
  *
- * Transforms  [[flags|text]]  patterns in post content into styled <span>s.
+ * Transforms  [[flags/text]]  patterns in post content into styled <span>s.
  * Walks real DOM text nodes — skips <code> and <pre> — so source examples
  * are never accidentally styled.
  *
  * ── Syntax ────────────────────────────────────────────────────────────────
  *
- *   [[flags|text to style]]
+ *   [[flags/text to style]]
+ *
+ *   Separator is / not | — the pipe character triggers kramdown table
+ *   parsing when it appears inside a list item or paragraph.
  *
  *   flags is a comma-separated list of any of:
  *
@@ -40,12 +43,12 @@
  *
  * ── Examples ──────────────────────────────────────────────────────────────
  *
- *   [[b,gr|important discovery]]
- *   [[i,pu|Walker]]
- *   [[b,i,ye|critical insight]]
- *   [[b,cy,bg#1e2127|cyan on terminal dark]]
- *   [[b,fg(152,195,121)|precise RGB green]]
- *   [[i,bg(40,44,52)|subtle panel highlight]]
+ *   [[b,gr/important discovery]]
+ *   [[i,pu/Walker]]
+ *   [[b,i,ye/critical insight]]
+ *   [[b,cy,bg#1e2127/cyan on terminal dark]]
+ *   [[b,fg(152,195,121)/precise RGB green]]
+ *   [[i,bg(40,44,52)/subtle panel highlight]]
  *
  * ── Notes ─────────────────────────────────────────────────────────────────
  *
@@ -150,7 +153,7 @@ function flagsToStyle(flagStr) {
 // accidentally mutate HTML structure or double-process encoded entities.
 
 const SKIP_TAGS = new Set(['code', 'pre', 'script', 'style', 'textarea']);
-const EMPHASIS_RE = /\[\[([^\]|]+)\|([^\]]+)\]\]/g;
+const EMPHASIS_RE = /\[\[([^\]\/]+)\/([^\]]+)\]\]/g;
 
 function processNode(el) {
     // Collect text nodes that (a) contain '[[' and (b) are not inside a skip-tag

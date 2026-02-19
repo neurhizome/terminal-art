@@ -59,7 +59,8 @@ body {
 .container {
     max-width: 860px;
     margin: 0 auto;
-    padding: var(--space-md);
+    /* extra horizontal padding gives breathing room on all screen sizes */
+    padding: var(--space-md) var(--space-lg);
 }
 
 /* ─── Header ──────────────────────────────────────────── */
@@ -617,7 +618,8 @@ nav a:hover {
 
 @media (max-width: 640px) {
     .container {
-        padding: var(--space-sm);
+        /* keep generous horizontal margins on small screens */
+        padding: var(--space-sm) 1.25rem;
     }
 
     .site-header h1 {

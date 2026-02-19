@@ -3,6 +3,15 @@ layout: post
 title: "Beginning: A Playground for Emergence"
 date: 2026-02-18
 tags: [meta, introduction]
+related:
+  - title: "Session 001: The Sharpening"
+    url: /2026/02/19/session-001-the-sharpening.html
+  - title: "Session 002: The Event Horizon"
+    url: /2026/02/19/session-002-the-event-horizon.html
+  - title: "Concept: Diffusion as External Memory"
+    url: /concepts/diffusion-memory/
+  - title: "Color Grimoire"
+    url: /palette/
 captures:
   - file: first-emergence.ans
     title: "First Emergence — Tick 1847"

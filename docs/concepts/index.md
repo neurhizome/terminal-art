@@ -19,7 +19,15 @@ permalink: /concepts/
       <a href="{{ '/concepts/diffusion-memory/' | relative_url }}">Diffusion as External Memory</a>
       <span class="concept-index-sub">
         How a gradient field encodes territorial knowledge without any agent "knowing" the territory.
-        Stigmergy, field inertia, and the robustness of spatial memory to perturbation.
+        Field inertia, half-life of a representation, and robustness to perturbation.
+      </span>
+    </li>
+    <li>
+      <a href="{{ '/concepts/stigmergy/' | relative_url }}">Stigmergy</a>
+      <span class="concept-index-sub">
+        Indirect coordination through environmental modification — how complex collective behavior
+        emerges without any agent planning or communicating it. Grassé 1959 → ant trails →
+        walker diffusion. Explains boundary formation, field persistence, and the no man's land.
       </span>
     </li>
   </ul>

@@ -6,10 +6,12 @@ tags: [session, territory, events, emergence, field-memory]
 related:
   - title: "Session 001: The Sharpening"
     url: /2026/02/19/session-001-the-sharpening.html
+  - title: "Session 003: The Seam Strike"
+    url: /2026/02/20/session-003-the-seam-strike.html
   - title: "Concept: Diffusion as External Memory"
     url: /concepts/diffusion-memory/
-  - title: "Color Grimoire"
-    url: /palette/
+  - title: "Concept: Stigmergy"
+    url: /concepts/stigmergy/
 captures:
   - file: session-002-event.ans
     title: "The Event Horizon — Post-Event Recovery"

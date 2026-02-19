@@ -19,37 +19,40 @@ layout: default
         </div>
     </header>
 
+    {% if page.captures %}
+    {% for capture in page.captures %}
+    <div class="capture-block">
+        <div class="terminal-wrapper">
+            <div id="cap-{{ forloop.index }}" class="terminal-display"></div>
+        </div>
+        <div class="capture-meta">
+            {% if capture.title %}<strong>{{ capture.title }}</strong><br>{% endif %}
+            {{ capture.description }}
+            <ul>
+                {% if capture.seed %}<li>seed: {{ capture.seed }}</li>{% endif %}
+                {% if capture.flags %}<li>flags: <code>{{ capture.flags }}</code></li>{% endif %}
+                {% if capture.tick %}<li>tick: {{ capture.tick }}</li>{% endif %}
+                {% if capture.params %}<li>params: {{ capture.params }}</li>{% endif %}
+            </ul>
+        </div>
+        <script>renderCapture('{{ capture.file }}', 'cap-{{ forloop.index }}');</script>
+    </div>
+    {% endfor %}
+    {% endif %}
+
     <div class="post-content">
         {{ content }}
     </div>
 
-    {% if page.captures %}
-    <section class="captures">
-        <h2>📸 Captures</h2>
-        {% for capture in page.captures %}
-        <div class="capture-container">
-            <h3>{{ capture.title | default: capture.file }}</h3>
-            {% if capture.description %}
-            <p class="capture-description">{{ capture.description }}</p>
-            {% endif %}
-            <div class="terminal-wrapper">
-                <div id="terminal-{{ forloop.index }}" class="terminal-display"></div>
-            </div>
-            <details class="capture-meta">
-                <summary>Metadata</summary>
-                <ul>
-                    {% if capture.seed %}<li><strong>Seed:</strong> {{ capture.seed }}</li>{% endif %}
-                    {% if capture.tick %}<li><strong>Tick:</strong> {{ capture.tick }}</li>{% endif %}
-                    {% if capture.params %}<li><strong>Parameters:</strong> {{ capture.params }}</li>{% endif %}
-                </ul>
-            </details>
-            <script>
-                // Load and render this capture
-                renderCapture('{{ capture.file }}', 'terminal-{{ forloop.index }}');
-            </script>
-        </div>
-        {% endfor %}
-    </section>
+    {% if page.related %}
+    <aside class="related-posts">
+        <h3 class="related-title">Related</h3>
+        <ul class="related-list">
+            {% for item in page.related %}
+            <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </aside>
     {% endif %}
 
     <footer class="post-footer">

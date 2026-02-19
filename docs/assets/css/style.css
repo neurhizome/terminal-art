@@ -390,14 +390,24 @@ nav a:hover {
     border: 1px solid var(--bg-tertiary);
     border-radius: 6px;
     margin: var(--space-sm) 0 var(--space-md);
-    /* Scroll horizontally on narrow viewports rather than breaking layout */
-    overflow-x: auto;
-    overflow-y: hidden;
+    padding: var(--space-sm);
+    overflow: hidden; /* clip xterm viewport scrollbar artifact */
+    display: inline-block; /* shrink-wrap to terminal canvas width */
+    max-width: 100%;
 }
 
 /* xterm.js sizes this to exactly cols×rows — no forced min-height */
 .terminal-display {
-    display: inline-block; /* shrink-wrap to xterm canvas width */
+    display: block;
+}
+
+/* suppress xterm.js viewport scrollbar — scrollback is 0, no scroll needed */
+.terminal-display .xterm-viewport {
+    overflow: hidden !important;
+    scrollbar-width: none; /* Firefox */
+}
+.terminal-display .xterm-viewport::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
 }
 
 .capture-meta {
@@ -462,6 +472,239 @@ nav a:hover {
     border-color: var(--accent-primary);
 }
 
+/* ─── Related posts ──────────────────────────────────── */
+
+.related-posts {
+    margin: var(--space-xl) 0 var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--bg-secondary);
+    border-left: 3px solid var(--accent-cyan);
+    border-radius: 0 6px 6px 0;
+}
+
+.related-title {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-cyan);
+    margin-bottom: var(--space-sm);
+}
+
+.related-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.related-list li a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.92rem;
+    transition: color 0.15s;
+}
+
+.related-list li a:hover {
+    color: var(--accent-primary);
+}
+
+/* ─── Concept notes ──────────────────────────────────── */
+
+.concept-note {
+    max-width: 720px;
+}
+
+.concept-header {
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--bg-tertiary);
+}
+
+.concept-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent-cyan);
+    background: var(--bg-tertiary);
+    padding: 0.15em 0.6em;
+    border-radius: 3px;
+    margin-bottom: var(--space-sm);
+}
+
+.concept-title {
+    font-family: var(--font-mono);
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: var(--space-xs) 0;
+}
+
+.concept-subtitle {
+    color: var(--text-secondary);
+    font-style: italic;
+    line-height: 1.55;
+}
+
+.concept-note h2 {
+    font-family: var(--font-mono);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    margin: var(--space-xl) 0 var(--space-sm);
+}
+
+.concept-note p, .concept-note li {
+    color: var(--text-primary);
+    line-height: 1.7;
+    font-size: 0.97rem;
+}
+
+.concept-note table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    margin: var(--space-md) 0;
+}
+
+.concept-note th {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    text-align: left;
+    padding: var(--space-xs) var(--space-sm);
+    font-weight: 600;
+}
+
+.concept-note td {
+    padding: var(--space-xs) var(--space-sm);
+    border-bottom: 1px solid var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.concept-note code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--bg-tertiary);
+    padding: 0.15em 0.4em;
+    border-radius: 3px;
+    color: var(--accent-secondary);
+}
+
+.concept-note pre {
+    background: var(--bg-secondary);
+    border: 1px solid var(--bg-tertiary);
+    border-radius: 6px;
+    padding: var(--space-md);
+    overflow-x: auto;
+    font-size: 0.88rem;
+}
+
+.concept-note pre code {
+    background: none;
+    padding: 0;
+}
+
+.concept-links {
+    margin-top: var(--space-xl);
+    padding: var(--space-md);
+    background: var(--bg-secondary);
+    border-radius: 6px;
+    border: 1px solid var(--bg-tertiary);
+}
+
+.concept-links h3 {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin-bottom: var(--space-xs);
+    margin-top: var(--space-md);
+}
+
+.concept-links h3:first-child {
+    margin-top: 0;
+}
+
+.concept-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-sm);
+}
+
+.concept-links li {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    padding: var(--space-xs) 0;
+}
+
+.concept-links li a {
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+
+.concept-links li a:hover {
+    text-decoration: underline;
+}
+
+/* ─── Capture block (post layout wrapper) ────────────── */
+
+.capture-block {
+    margin: var(--space-md) 0;
+}
+
+/* ─── Concepts index ─────────────────────────────────── */
+
+.concept-index-header {
+    margin-bottom: var(--space-xl);
+}
+
+.concept-index-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.concept-index-list > li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding: var(--space-md);
+    background: var(--bg-secondary);
+    border-radius: 6px;
+    border: 1px solid var(--bg-tertiary);
+    transition: border-color 0.2s;
+}
+
+.concept-index-list > li:hover {
+    border-color: var(--accent-cyan);
+}
+
+.concept-index-list > li > a {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+
+.concept-index-list > li > a:hover {
+    text-decoration: underline;
+}
+
+.concept-index-sub {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+}
+
 /* ─── Archive / Gallery pages ─────────────────────────── */
 
 .page-title {
@@ -471,10 +714,12 @@ nav a:hover {
     margin-bottom: var(--space-sm);
 }
 
-.page-subtitle {
+.page-subtitle,
+.page-intro {
     color: var(--text-secondary);
     font-style: italic;
     margin-bottom: var(--space-xl);
+    line-height: 1.65;
 }
 
 .post-list {

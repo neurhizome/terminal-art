@@ -112,7 +112,7 @@ async function renderCapture(captureFile, elementId, opts = {}) {
         scrollback:    0,
         fontFamily:    "'IBM Plex Mono', 'Courier New', monospace",
         fontSize,
-        lineHeight:    1.25,
+        lineHeight:    1.0,
         letterSpacing: 0,
         theme:         ONE_DARK_THEME,
     });

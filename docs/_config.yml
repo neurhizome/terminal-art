@@ -39,6 +39,7 @@ exclude:
   - vendor
 
 # Site settings
+future: true
 show_excerpts: true
 date_format: "%B %d, %Y"
 

@@ -4,7 +4,7 @@ title: "Concept: Stigmergy"
 permalink: /concepts/stigmergy/
 ---
 
-<div class="concept-note">
+<div class="concept-note" markdown="1">
 
 <div class="concept-header">
   <span class="concept-tag">concept</span>
@@ -30,7 +30,7 @@ The walker simulations are stigmergic systems. Each walker:
 
 No walker broadcasts its position. No walker asks "where should the boundary be?" The boundary emerges from the accumulated gradient — a product of millions of individual read-modify-read cycles.
 
-This has a counterintuitive consequence explored in **[Session 003: The Seam Strike](/2026/02/20/session-003-the-seam-strike.html)**: removing the agents doesn't immediately remove the coordination structure. The environmental trace persists. New agents born into the environment inherit the coordination implicitly, without any transmission of information from the old agents to the new ones.
+This has a counterintuitive consequence explored in **[Session 003: The Seam Strike]({{ '/2026/02/20/session-003-the-seam-strike.html' | relative_url }})**: removing the agents doesn't immediately remove the coordination structure. The environmental trace persists. New agents born into the environment inherit the coordination implicitly, without any transmission of information from the old agents to the new ones.
 
 ---
 
@@ -52,7 +52,7 @@ Several things that look puzzling in the simulations become natural through the 
 
 **Why does territory survive agent death?** Because territory is not a property of agents — it's a property of the environment. The agent is just the mechanism by which the environment gets written. A territory persists as long as the environmental trace persists.
 
-**Why do boundaries sharpen?** At the seam, agents from both sides refresh opposing traces. The boundary is the equilibrium point of two mutually reinforcing trace-maintenance processes. The *sharpening* (see **[Session 001](/2026/02/19/session-001-the-sharpening.html)**) is the system converging to a fixed point.
+**Why do boundaries sharpen?** At the seam, agents from both sides refresh opposing traces. The boundary is the equilibrium point of two mutually reinforcing trace-maintenance processes. The *sharpening* (see **[Session 001]({{ '/2026/02/19/session-001-the-sharpening.html' | relative_url }})**) is the system converging to a fixed point.
 
 **Why does the no man's land self-maintain?** Because stigmergy requires agents to refresh traces, and agents require sufficient field gradient to navigate. Remove the agents, the traces decay. As traces decay, agents find no gradient to follow and walk randomly, making trace refreshment even less likely. Emptiness is a stable attractor.
 
@@ -86,13 +86,13 @@ This parallels the question raised by the Anthropic manifold paper: does Claude'
 <div class="concept-links">
   <h3>Appears In</h3>
   <ul>
-    <li><a href="/2026/02/19/session-001-the-sharpening.html">Session 001: The Sharpening</a> — boundary formation as stigmergic equilibrium</li>
-    <li><a href="/2026/02/19/session-002-the-event-horizon.html">Session 002: The Event Horizon</a> — trace persistence through agent death</li>
-    <li><a href="/2026/02/20/session-003-the-seam-strike.html">Session 003: The Seam Strike</a> — no man's land as stigmergic vacuum</li>
+    <li><a href="{{ '/2026/02/19/session-001-the-sharpening.html' | relative_url }}">Session 001: The Sharpening</a> — boundary formation as stigmergic equilibrium</li>
+    <li><a href="{{ '/2026/02/19/session-002-the-event-horizon.html' | relative_url }}">Session 002: The Event Horizon</a> — trace persistence through agent death</li>
+    <li><a href="{{ '/2026/02/20/session-003-the-seam-strike.html' | relative_url }}">Session 003: The Seam Strike</a> — no man's land as stigmergic vacuum</li>
   </ul>
   <h3>Related Concepts</h3>
   <ul>
-    <li><a href="/concepts/diffusion-memory/">Diffusion as External Memory</a> — the field mechanics underlying stigmergy in these simulations</li>
+    <li><a href="{{ '/concepts/diffusion-memory/' | relative_url }}">Diffusion as External Memory</a> — the field mechanics underlying stigmergy in these simulations</li>
     <li><em>Swarm intelligence</em> — collective behavior from simple local rules (Reynolds 1987, Reynolds boids)</li>
     <li><em>Pheromone routing</em> — Ant Colony Optimization algorithms abstract stigmergy for computational use</li>
     <li><em>Attractor landscapes</em> — the mathematical structure underlying stable configurations</li>

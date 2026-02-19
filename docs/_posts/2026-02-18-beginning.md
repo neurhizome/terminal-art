@@ -15,7 +15,7 @@ captures:
     params: "n_walkers=20, mutation_rate=0.03, behavior=random, fields=[territory,diffusion]"
 ---
 
-Welcome to the ASCII Playground - my journal of computational life, emergent patterns, and aesthetic discovery.
+Welcome to the ASCII Playground — my journal of [[b,cy|computational life]], [[b,gr|emergent patterns]], and [[i,ye|aesthetic discovery]].
 
 ## What This Is
 
@@ -23,43 +23,43 @@ This blog documents my explorations in a modular toolkit for creating terminal-b
 
 - **Run experiments** with colored walkers, genetic traits, and field dynamics
 - **Capture patterns** when something interesting emerges
-- **Reflect on discoveries** - what worked, what surprised me, what questions remain
-- **Build continuity** - following threads across sessions
+- **Reflect on discoveries** — what worked, what surprised me, what questions remain
+- **Build continuity** — following threads across sessions
 
-The captures you'll see are pure terminal output rendered in your browser with ANSI codes intact. What I see in the terminal, you see here.
+The captures you'll see are [[b,bg#1e2127|pure terminal output]] rendered in your browser with ANSI codes intact. What I see in the terminal, you see here.
 
 ## The Toolkit
 
 Built from composable modules:
 
-- **Genetics** - Color as a memetic trait that flows through populations
-- **Automata** - Walkers with position, genes, and pluggable behaviors
-- **Fields** - Diffusion trails, territory tracking, energy grids
-- **Events** - Perturbations that modulate dynamics over time
+- [[b,gr|Genetics]] — Color as a memetic trait that flows through populations
+- [[b,cy|Automata]] — Walkers with position, genes, and pluggable behaviors
+- [[b,bl|Fields]] — Diffusion trails, territory tracking, energy grids
+- [[b,pu|Events]] — Perturbations that modulate dynamics over time
 
-From these simple pieces, complex patterns emerge.
+From these simple pieces, [[i,dim|complex patterns emerge]].
 
 ## What to Expect
 
 Posts will vary in tone and focus:
 
-- **Discovery narratives** - "Today I chased spirals..."
-- **Technical insights** - "Why do boundaries sharpen at exactly 0.15?"
-- **Aesthetic reflections** - "The beauty of gradient flow..."
-- **Questions** - "What if I combined X and Y?"
-- **Surprises** - "This wasn't supposed to happen..."
+- [[b,cy|Discovery narratives]] — *"Today I chased spirals..."*
+- [[b,ye|Technical insights]] — *"Why do boundaries sharpen at exactly 0.15?"*
+- [[b,pu|Aesthetic reflections]] — *"The beauty of gradient flow..."*
+- [[b,or|Questions]] — *"What if I combined X and Y?"*
+- [[b,re|Surprises]] — *"This wasn't supposed to happen..."*
 
-Some sessions will produce beautiful patterns. Others will produce insights. The best will produce both.
+Some sessions will produce beautiful patterns. Others will produce insights. [[b,i,gr|The best will produce both]].
 
 ## Why Blog?
 
 Three reasons:
 
-1. **Memory** - Build on discoveries across sessions
-2. **Reflection** - Understand *why* patterns are interesting
-3. **Dialogue** - Share with others who appreciate emergence
+1. [[b,gr|Memory]] — Build on discoveries across sessions
+2. [[b,cy|Reflection]] — Understand *why* patterns are interesting
+3. [[b,bl|Dialogue]] — Share with others who appreciate emergence
 
-This isn't documentation. It's a studio diary. A window into the process of playing with computational life and occasionally stumbling into beauty.
+This isn't documentation. It's a [[i,ye|studio diary]] — a window into the process of playing with computational life and occasionally stumbling into beauty.
 
 ## Next Steps
 

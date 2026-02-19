@@ -15,6 +15,8 @@
     <!-- Expose Jekyll baseurl and load ANSI viewer before body scripts run -->
     <script>window.SITE_BASEURL = "{{ site.baseurl }}";</script>
     <script src="{{ '/assets/js/ansi-viewer.js' | relative_url }}"></script>
+    <!-- Inline emphasis processor: [[flags|text]] → styled spans -->
+    <script src="{{ '/assets/js/emphasis.js' | relative_url }}"></script>
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">

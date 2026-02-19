@@ -1,18 +1,23 @@
 /**
  * ANSI Viewer — render terminal captures in the browser via xterm.js v5
  *
+ * Reads cols/rows from the capture file's metadata header so the terminal
+ * frame is bounded to the exact dimensions of the recorded artifact.
+ *
  * One Dark terminal theme to match site palette.
  */
 
-// Jekyll injects window.SITE_BASEURL from the post layout
-const _baseUrl = (typeof window !== 'undefined' && window.SITE_BASEURL) ? window.SITE_BASEURL : '';
+// Jekyll injects window.SITE_BASEURL before this script loads (set in <head>).
+const _baseUrl = (typeof window !== 'undefined' && window.SITE_BASEURL != null)
+    ? window.SITE_BASEURL
+    : '';
 
-// One Dark terminal theme — matches joshdick/onedark.vim
+// One Dark terminal theme — joshdick/onedark.vim
 const ONE_DARK_THEME = {
-    background:    '#1e2127',
-    foreground:    '#abb2bf',
-    cursor:        '#528bff',
-    cursorAccent:  '#1e2127',
+    background:          '#1e2127',
+    foreground:          '#abb2bf',
+    cursor:              '#528bff',
+    cursorAccent:        '#1e2127',
     selectionBackground: 'rgba(97,175,239,0.25)',
     black:         '#282c34',
     red:           '#e06c75',
@@ -33,25 +38,72 @@ const ONE_DARK_THEME = {
 };
 
 /**
+ * Parse the comment-header of a capture file.
+ *
+ * Header lines look like:  # key: value
+ * Content begins at the first non-# line.
+ *
+ * Returns { meta: { key: value, ... }, content: "the rest of the file" }
+ */
+function parseCaptureFile(raw) {
+    const lines = raw.split('\n');
+    const meta = {};
+    let i = 0;
+    for (; i < lines.length; i++) {
+        if (!lines[i].startsWith('#')) break;
+        const m = lines[i].match(/^#\s*(\w+)\s*:\s*(.+)/);
+        if (m) meta[m[1].toLowerCase()] = m[2].trim();
+    }
+    // Skip a single blank separator line between header and content, if present
+    if (i < lines.length && lines[i].trim() === '') i++;
+    return { meta, content: lines.slice(i).join('\n') };
+}
+
+/**
  * Render an ANSI capture file inside a terminal element.
  *
- * @param {string} captureFile  Filename inside assets/captures/ (e.g. "first-run.ans")
- * @param {string} elementId    ID of the <div> to render into
- * @param {object} [opts]       Optional overrides: { cols, rows, fontSize }
+ * The terminal is sized to exactly the cols×rows declared in the capture's
+ * metadata header (with sensible defaults if the keys are absent).
+ *
+ * @param {string} captureFile  Filename inside assets/captures/
+ * @param {string} elementId    ID of the container <div>
+ * @param {object} [opts]       Fallback overrides: { cols, rows, fontSize }
  */
 async function renderCapture(captureFile, elementId, opts = {}) {
-    const terminalElement = document.getElementById(elementId);
-    if (!terminalElement) {
-        console.error(`[ansi-viewer] element #${elementId} not found`);
+    const el = document.getElementById(elementId);
+    if (!el) {
+        console.error(`[ansi-viewer] #${elementId} not found`);
         return;
     }
 
-    const cols     = opts.cols     || 80;
-    const rows     = opts.rows     || 24;
-    const fontSize = opts.fontSize || 13;
+    // ── 1. Fetch the capture file ────────────────────────────────────────
+    let raw;
+    try {
+        const url = `${_baseUrl}/assets/captures/${captureFile}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status} — ${url}`);
+        raw = await res.text();
+    } catch (err) {
+        console.error(`[ansi-viewer] fetch failed:`, err);
+        el.innerHTML =
+            `<p style="color:#e06c75;padding:1rem;font-family:monospace;font-size:0.9rem">` +
+            `Could not load capture: ${err.message}</p>`;
+        return;
+    }
 
-    // Create xterm.js v5 Terminal — all options go in the constructor;
-    // setOption() was removed in v5.
+    // ── 2. Parse metadata so we know the artifact dimensions ─────────────
+    const { meta, content } = parseCaptureFile(raw);
+
+    const cols     = parseInt(meta.cols)     || opts.cols     || 80;
+    const rows     = parseInt(meta.rows)     || opts.rows     || 24;
+    const fontSize = parseInt(meta.fontsize) || opts.fontSize || 13;
+
+    // ── 3. Wait for fonts so xterm measures character cells correctly ─────
+    if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+    }
+
+    // ── 4. Build xterm.js terminal at exact artifact dimensions ──────────
     const term = new Terminal({
         cols,
         rows,
@@ -65,33 +117,6 @@ async function renderCapture(captureFile, elementId, opts = {}) {
         theme:         ONE_DARK_THEME,
     });
 
-    term.open(terminalElement);
-
-    try {
-        const url = `${_baseUrl}/assets/captures/${captureFile}`;
-        const response = await fetch(url);
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status} fetching ${url}`);
-        }
-
-        const ansiContent = await response.text();
-
-        // Strip comment/metadata header lines (lines starting with #)
-        const lines = ansiContent.split('\n');
-        const firstContent = lines.findIndex(l => !l.startsWith('#'));
-        const content = lines.slice(firstContent >= 0 ? firstContent : 0).join('\n');
-
-        term.write(content);
-
-    } catch (err) {
-        console.error(`[ansi-viewer] failed to load ${captureFile}:`, err);
-        terminalElement.innerHTML =
-            `<p style="color:#e06c75;padding:1.5rem;font-family:monospace;">` +
-            `Error loading capture: ${err.message}</p>`;
-    }
+    term.open(el);
+    term.write(content);
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Inline scripts in post.html call renderCapture() directly.
-});

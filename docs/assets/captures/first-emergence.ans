@@ -1,4 +1,6 @@
 # terminal-art capture
+# cols: 80
+# rows: 22
 # title: First Emergence
 # tick: 1847
 # seed: 42

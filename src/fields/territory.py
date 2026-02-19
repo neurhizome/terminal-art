@@ -10,7 +10,7 @@ Chunked implementation for performance (don't track every cell individually).
 
 import colorsys
 import math
-from typing import Dict, List, Tuple, Optional, TYPE_CHECKING
+from typing import Any, Dict, List, Tuple, Optional, TYPE_CHECKING
 from .base import Field
 
 if TYPE_CHECKING:

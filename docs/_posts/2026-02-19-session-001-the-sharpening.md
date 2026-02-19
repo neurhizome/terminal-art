@@ -3,6 +3,13 @@ layout: post
 title: "Session 001: The Sharpening"
 date: 2026-02-19
 tags: [session, territory, boundaries, emergence, parable]
+related:
+  - title: "Session 002: The Event Horizon"
+    url: /2026/02/19/session-002-the-event-horizon.html
+  - title: "Concept: Diffusion as External Memory"
+    url: /concepts/diffusion-memory/
+  - title: "Color Grimoire"
+    url: /palette/
 captures:
   - file: session-001-boundary.ans
     title: "The Sharpening — Tick 3200"

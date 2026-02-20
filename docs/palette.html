@@ -39,9 +39,9 @@ permalink: /palette/
             <span class="grimoire-name">{{ color.name }}</span>
             <code class="grimoire-alias">{{ color.alias }}</code>
           </div>
-          <p class="grimoire-resonance">{{ color.resonance }}</p>
+          <p class="grimoire-resonance">{{ color.resonance | markdownify | remove: '<p>' | remove: '</p>' | strip }}</p>
           {% if color.notes %}
-          <p class="grimoire-notes">{{ color.notes }}</p>
+          <p class="grimoire-notes">{{ color.notes | markdownify | remove: '<p>' | remove: '</p>' | strip }}</p>
           {% endif %}
         </div>
       </div>
@@ -65,9 +65,9 @@ permalink: /palette/
           <div class="grimoire-name-row">
             <span class="grimoire-name">{{ color.name }}</span>
           </div>
-          <p class="grimoire-resonance">{{ color.resonance }}</p>
+          <p class="grimoire-resonance">{{ color.resonance | markdownify | remove: '<p>' | remove: '</p>' | strip }}</p>
           {% if color.notes %}
-          <p class="grimoire-notes">{{ color.notes }}</p>
+          <p class="grimoire-notes">{{ color.notes | markdownify | remove: '<p>' | remove: '</p>' | strip }}</p>
           {% endif %}
         </div>
       </div>

@@ -110,6 +110,7 @@ async function renderCapture(captureFile, elementId, opts = {}) {
         disableStdin:  true,
         cursorBlink:   false,
         scrollback:    0,
+        convertEol:    true,   // treat bare \n as CR+LF so all captures render correctly
         fontFamily:    "'IBM Plex Mono', 'Courier New', monospace",
         fontSize,
         lineHeight:    1.0,

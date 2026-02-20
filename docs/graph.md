@@ -12,8 +12,12 @@ permalink: /graph/
   <p class="concept-subtitle">The topology of this blog — posts, concepts, and the links between them. Rendered as ANSI art. Rebuilt on every commit that touches a post or concept.</p>
 </div>
 
+<div class="capture-block">
+<div class="terminal-wrapper">
 <div id="cap-graph" class="terminal-display"></div>
-<script>renderCapture('knowledge-graph.ans', 'cap-graph', {fontsize: 12});</script>
+</div>
+</div>
+<script>renderCapture('knowledge-graph.ans', 'cap-graph');</script>
 
 <div class="capture-meta">
   <strong>knowledge-graph.ans</strong><br>

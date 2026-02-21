@@ -14,6 +14,7 @@ from .event import (
     MutationStorm,
     ResourceDepletion,
     FieldPulse,
+    EqualTemperament,
 )
 from .scheduler import EventScheduler, PeriodicEventSpawner
 from .catalog import (
@@ -33,6 +34,7 @@ __all__ = [
     'MutationStorm',
     'ResourceDepletion',
     'FieldPulse',
+    'EqualTemperament',
     'EventScheduler',
     'PeriodicEventSpawner',
     'CHAOS_POOL',

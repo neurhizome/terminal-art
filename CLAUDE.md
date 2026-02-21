@@ -2,13 +2,47 @@
 
 This file documents the codebase structure, development conventions, and workflows for AI assistants working in this repository.
 
-## Project Overview
+---
 
-**terminal-art** (also called *asciicology*) is a composable Python toolkit for creating animated terminal graphics, memetic cellular automata, and emergent pattern experiments. The core design philosophy is **modular composition**: independent components snap together to build complex visualizations from simple rules.
+## Spirit of the Work
 
-- **License**: MIT © 2025 neurhizome
-- **Runtime**: Python 3.7+, near-zero dependencies (only `wcwidth` optional)
-- **Targets**: Any POSIX terminal with UTF-8 and truecolor support (Linux, macOS, iSH/iOS)
+This project is a record of emergence documented from within the process itself. Before reading API signatures or directory trees, understand the methodology:
+
+**Run it. Watch what happens. Write down what surprised you.**
+
+The experiments don't have predetermined outcomes. They are genuine encounters with complexity — patterns that form without being designed, boundaries that emerge from math no walker planned. The sessions in `docs/_posts/` are not tutorials. They are evidence that certain behaviors are possible. Running the same code with different initial conditions will produce different results, and that is correct.
+
+Several constants throughout the codebase are intentionally imprecise — diffusion coefficients that average to almost-right but not quite right. If you correct them, the system dies: equilibrium, gray, nothing to see. The living behavior exists in the gap between correct and almost-correct. **Do not fix these unless you have confirmed they are actual bugs.** Many are the design principle.
+
+The order in which components are composed matters. The initialization history is present in every subsequent state. You cannot cleanly separate the path from the destination.
+
+---
+
+## Self-Documenting Knowledge Graph
+
+The most important automation in this repo: the knowledge graph rebuilds itself.
+
+`tools/graph_viz.py` parses YAML frontmatter from every post and concept file, builds a graph of nodes and edges from the `related:` links, and renders a 96×N ANSI canvas to `docs/assets/captures/knowledge-graph.ans`. This file is displayed live on the `/graph/` page of the blog.
+
+**The graph runs automatically:**
+
+- **Local commits**: `.git/hooks/post-commit` detects changes to `docs/_posts/` or `docs/concepts/` and runs `graph_viz.py`, then stages the updated `.ans` for the next commit.
+- **Merge to main**: `.github/workflows/pages.yml` runs `graph_viz.py` before Jekyll builds the site, so the deployed graph always reflects the current state.
+
+The graph is not a map of finished ideas. It is a record of introductions — what met what, in which order. The nodes matter less than the edges. The edges matter less than the sequence.
+
+**To run manually:**
+```bash
+python3 tools/graph_viz.py
+```
+
+**To install the local hook** (if working in a fresh clone):
+```bash
+cp scripts/hooks/post-commit .git/hooks/post-commit
+chmod +x .git/hooks/post-commit
+```
+
+**Layout is fully dynamic.** The graph positions every node automatically based on type and date — no hardcoded coordinates. New posts appear in the left (chronological) column; new concepts or aesthetic posts appear in the right (concept space) column. Add a post, commit it, and the graph updates.
 
 ---
 
@@ -50,33 +84,27 @@ terminal-art/
 │   └── README.md                 # Experiment composition guide
 ├── demos/                        # Standalone pre-modular demonstration scripts (20+)
 │   ├── ascii_waves.py            # Cellular automata waves (most feature-rich demo)
-│   ├── braille_galaxies.py       # Braille pattern animations
-│   ├── walker_connect.py         # Animated connector walkers
-│   ├── morphing_connectors_demo.py
 │   └── ...                       # Other standalone visualizations
-├── tools/                        # Glyph database builders and Unicode scanners
+├── tools/                        # Glyph database builders, Unicode scanners, graph renderer
+│   ├── graph_viz.py              # Knowledge graph renderer (dynamic layout, auto-run on commit)
 │   ├── build_comprehensive_db.py # Generates 1,742-glyph full database
 │   ├── build_optimized_db.py     # Mobile-optimized 720-glyph subset
 │   └── unicode_scanner.py        # Scans Unicode ranges for character properties
-├── docs/                         # Documentation, blog posts, concept articles
-│   ├── concepts/                 # stigmergy.md, diffusion-memory.md, index.md
-│   └── _posts/                   # Session exploration blog posts (001–004+)
-├── sketches/                     # Quick experiment templates
-├── gallery/                      # Screenshot collection
-├── museum/                       # Captured ANSI animation outputs
+├── docs/                         # Jekyll blog: posts, concepts, graph, gallery
+│   ├── _posts/                   # Session exploration blog posts
+│   ├── concepts/                 # stigmergy.md, diffusion-memory.md
+│   ├── assets/captures/          # ANSI art files (including knowledge-graph.ans)
+│   └── graph.md                  # Live knowledge graph page
 ├── scripts/
+│   ├── hooks/post-commit         # Tracked copy of the post-commit hook (install manually)
 │   └── speciation_capture.py     # Records animations to ANSI format
+├── .github/workflows/pages.yml   # Jekyll deploy — also runs graph_viz.py before build
+├── sketches/                     # Quick experiment templates
+├── museum/                       # Captured ANSI animation outputs
 ├── glyph_database.json           # Essential glyph set (~9.6 KB)
 ├── glyph_database_optimized.json # Mobile-optimized (~136 KB, 720 glyphs)
 ├── glyph_database_full.json      # Full database (~194 KB, 1,742 glyphs)
-├── requirements.txt              # Runtime deps (wcwidth only)
-├── requirements-min.txt          # Bare minimum
-├── requirements-full.txt         # Future dev (blessed, rich, typer)
-├── README.md                     # Main project overview and API examples
-├── ARCHITECTURE.md               # Detailed modular design patterns
-├── OPTIMIZATION.md               # Performance tuning guidelines
-├── PLAYGROUND.md                 # Creative exploration guide
-└── BLOG_GUIDE.md                 # Blog post generation documentation
+└── requirements.txt              # Runtime deps (wcwidth only)
 ```
 
 ---
@@ -105,7 +133,7 @@ class Walker:
 
 ### 2. Field (`src/fields/base.py`)
 
-An **abstract 2D grid** that stores and evolves values. All field types implement this interface.
+An **abstract 2D grid** that stores and evolves values.
 
 ```python
 class Field(ABC):
@@ -186,16 +214,6 @@ for walker in spawner.walkers:
     walker.move(dx, dy, 80, 24, wrap=True)
 ```
 
-### Field-driven dynamics
-```python
-from src.fields import DiffusionField
-
-scent = DiffusionField(width, height, diffusion_rate=0.2, decay_rate=0.95)
-for walker in spawner.walkers:
-    scent.deposit(walker.x, walker.y, walker.vigor * 0.5)
-scent.update()
-```
-
 ### Full composition (events + genetics + fields)
 ```python
 from src.automata import Spawner
@@ -236,27 +254,19 @@ Walkers → deposit() → Fields → update() → render() → Stage → Display
 
 ### Language & Style
 - **Python 3.7+** with type hints throughout
-- **Snake_case** for functions, variables, module names
-- **PascalCase** for classes
+- **Snake_case** for functions, variables, module names; **PascalCase** for classes
 - **Dataclasses** for immutable state containers (`WalkerState`, `GlyphInfo`)
 - **ABC** (Abstract Base Classes) for extensible interfaces
 - Comprehensive docstrings at module, class, and method level
 
 ### Module Exports
-Each subpackage uses explicit `__init__.py` exports via `__all__`:
-```python
-# src/automata/__init__.py
-from .walker import Walker, WalkerState
-from .spawner import Spawner
-from .behaviors import RandomWalk, LevyFlight, GradientFollow
-__all__ = ['Walker', 'WalkerState', 'Spawner', 'RandomWalk', ...]
-```
-
 Always import from the package, not sub-modules directly:
 ```python
 from src.automata import Walker, Spawner          # correct
 from src.automata.walker import Walker            # avoid in experiments
 ```
+
+Each subpackage uses explicit `__init__.py` exports via `__all__`.
 
 ### Behavior Injection (not inheritance)
 Behaviors are **always passed in** — never subclass Walker to add movement:
@@ -269,11 +279,14 @@ dx, dy = behavior.get_move(walker.x, walker.y, field=scent_field)
 class ChemotaxisWalker(Walker): ...
 ```
 
-### Graceful Degradation
-Components fall back gracefully when optional deps are absent (e.g., missing glyphs fall back to space character). Do not add hard runtime requirements.
+### On Imprecision
+Some numerical constants in the codebase are intentionally not exact. If you encounter a constant like `3.984` where `4.0` seems correct, investigate before changing it. The living dynamics of these systems often depend on the gap between almost-right and right. Correcting to exact values can cause the system to converge to gray equilibrium — which is the death of the pattern, not a bug fix.
 
 ### Colors
 Colors are represented as **HSV tuples `(h, s, v)`** internally, converted to RGB for ANSI output via `src/utils/colors.py`. Hue `color_h` is a float in `[0, 1)` using circular arithmetic.
+
+### Graceful Degradation
+Components fall back gracefully when optional deps are absent (e.g., missing glyphs fall back to space character). Do not add hard runtime requirements.
 
 ---
 
@@ -304,15 +317,39 @@ python3 experiments/predator_prey.py
 python3 demos/ascii_waves.py --rows 200 --delay 0.01 --style heavy
 ```
 
+### Writing a Session Post
+1. Run an experiment; capture interesting moments to `museum/`
+2. Create `docs/_posts/YYYY-MM-DD-title.md` with YAML frontmatter
+3. Add `related:` links to connect it to prior sessions and concepts
+4. Copy `.ans` captures to `docs/assets/captures/`
+5. Commit — the post-commit hook rebuilds the knowledge graph automatically
+
+Post frontmatter shape:
+```yaml
+---
+layout: post
+title: "Session N: What I Observed"
+date: YYYY-MM-DD
+tags: [session, tag1, tag2]
+related:
+  - title: "Session N-1: Previous"
+    url: /YYYY/MM/DD/previous-slug.html
+  - title: "Concept: Relevant Concept"
+    url: /concepts/concept-slug/
+captures:
+  - file: my-capture.ans
+    title: "Short title"
+    description: "Why this was interesting"
+    seed: 42
+    tick: 1500
+    params: "walkers=250, diffusion=0.15"
+---
+```
+
 ### Building Glyph Databases
 ```bash
-# Full 1,742-glyph database
 python3 tools/build_comprehensive_db.py --all-ranges -o glyph_database_full.json
-
-# Mobile-optimized 720-glyph subset
 python3 tools/build_optimized_db.py -o glyph_database_optimized.json
-
-# Scan a specific Unicode range
 python3 tools/unicode_scanner.py --start 0x2500 --end 0x259F --outfile box_drawing.json
 ```
 
@@ -321,19 +358,39 @@ python3 tools/unicode_scanner.py --start 0x2500 --end 0x259F --outfile box_drawi
 python3 scripts/speciation_capture.py   # Saves ANSI files to museum/
 ```
 
-### No Formal Test Suite
-There is no automated test runner. Validation is done by:
-1. Running the experiments directly and observing output
-2. Checking `experiments/README.md` for expected behaviors
-3. Using `PLAYGROUND.md` for guided exploration
+### Validation (the methodology)
+There is no automated test runner. Validation is watching:
+1. Run the experiment. Watch what emerges.
+2. If the output is static or gray, something has converged — consider reverting recent changes to numerical constants.
+3. Check `experiments/README.md` for described behaviors.
+4. Use `PLAYGROUND.md` for guided parameter exploration.
 
-When adding new modules, write a minimal experiment in `experiments/` or `sketches/` to demonstrate correct behavior.
+When adding new modules, write a minimal experiment in `experiments/` or `sketches/` that demonstrates the behavior you expect to see.
+
+---
+
+## Knowledge Graph Workflow
+
+The graph (`/graph/` on the blog) is the live topology of what-has-influenced-what.
+
+| Trigger | What runs | Result |
+|---------|-----------|--------|
+| `git commit` touching any post/concept `.md` | `.git/hooks/post-commit` → `tools/graph_viz.py` | Updated `.ans` staged for next commit |
+| Push/merge to `main` | `.github/workflows/pages.yml` → `python3 tools/graph_viz.py` → Jekyll build | Deployed site has fresh graph |
+| Manual | `python3 tools/graph_viz.py` | Updated `.ans` written locally |
+
+**How `graph_viz.py` works:**
+1. **Parse** — reads YAML frontmatter from every post and concept. Extracts `title`, `date`, `tags`, `related`.
+2. **Build** — constructs the node graph. Edges come from `related:` URL lists.
+3. **Layout** — assigns positions dynamically: posts sorted by date in the left column; concepts and aesthetic posts sorted by label in the right column. Canvas height grows automatically.
+4. **Render** — draws a 96×N ANSI canvas: `double` boxes for sessions, `heavy` for beginning, `single` for concepts, `round` for gradient/aesthetic posts. Edges route as horizontal or L-shaped connectors.
+5. **Write** — outputs `docs/assets/captures/knowledge-graph.ans`.
+
+The "Sleep Cycle" compression pass — folding dense clusters of tightly-linked nodes into topological knots — is designed but not yet implemented. The infrastructure is in place.
 
 ---
 
 ## Performance Guidelines
-
-From `OPTIMIZATION.md` and measured benchmarks:
 
 | Scale | Walkers | Fields | Target FPS |
 |-------|---------|--------|-----------|
@@ -344,7 +401,7 @@ From `OPTIMIZATION.md` and measured benchmarks:
 Key rules:
 - `TerminalStage.flush()` only writes **changed cells** — avoid forcing full redraws
 - `TerritoryField` uses **chunked** ownership (8×8 default) to avoid per-cell tracking
-- `DiffusionField.update()` uses NumPy-style array ops when available, pure Python fallback otherwise
+- `DiffusionField.update()` uses NumPy-style array ops when available, pure Python fallback
 - Use `glyph_database_optimized.json` (720 glyphs) on mobile/low-power terminals
 - Prefer `wrap=True` over edge-bounce for lower branch cost in the walker loop
 
@@ -352,28 +409,20 @@ Key rules:
 
 ## Glyph System
 
-The glyph system (`src/glyphs/`) provides probabilistic Unicode character selection with 1,742 glyphs across 11 Unicode ranges.
+Probabilistic Unicode character selection across 1,742 glyphs.
 
 ```python
 from src.glyphs import GlyphPicker, Direction
 
 picker = GlyphPicker.from_json("glyph_database_full.json")
-
-# Probabilistic — same query returns varied characters
-char = picker.get(direction=Direction.E, intensity=0.7)
-
-# Filtered by style
+char   = picker.get(direction=Direction.E, intensity=0.7)   # varies each call
 arrow  = picker.get(direction=Direction.NE, style="arrow")
-clock  = picker.get(direction=Direction.SE, style="clock")
-braille = picker.get(direction=Direction.S,  style="braille", intensity=0.3)
+braille = picker.get(direction=Direction.S, style="braille", intensity=0.3)
 ```
 
-**Database files** (choose based on environment):
-- `glyph_database.json` — essential set, smallest
-- `glyph_database_optimized.json` — 720 glyphs, mobile-friendly
-- `glyph_database_full.json` — 1,742 glyphs, all ranges
+**Database files:** `glyph_database.json` (essential), `glyph_database_optimized.json` (720, mobile), `glyph_database_full.json` (1,742, all ranges).
 
-**Direction enum values**: `N, NE, E, SE, S, SW, W, NW, NONE`
+**Direction enum:** `N, NE, E, SE, S, SW, W, NW, NONE`
 
 ---
 
@@ -389,13 +438,11 @@ pip install wcwidth
 python3 demos/ascii_waves.py --rows 300 --delay 0.015 --style light --bg-set dots
 ```
 
-Use `glyph_database_optimized.json` on iOS for best performance.
+Use `glyph_database_optimized.json` on iOS.
 
 ---
 
 ## Key Files for AI Assistants
-
-When investigating or modifying the codebase, these are the most important files:
 
 | File | Purpose |
 |------|---------|
@@ -407,11 +454,13 @@ When investigating or modifying the codebase, these are the most important files
 | `src/fields/diffusion.py` | Most-used field: scent/chemical diffusion |
 | `src/events/catalog.py` | Pre-built events and event pools |
 | `src/renderers/terminal_stage.py` | Rendering pipeline and display layer |
-| `src/glyphs/picker.py` | Glyph selection API |
+| `tools/graph_viz.py` | Knowledge graph renderer — dynamic layout, runs on every doc commit |
+| `scripts/hooks/post-commit` | Tracked hook source (copy to `.git/hooks/` to activate) |
 | `src/utils/colors.py` | Color math (HSV↔RGB, circular hue mean) |
 | `experiments/memetic_territories.py` | Best reference for full-stack composition |
 | `experiments/simple_walkers.py` | Best reference for minimal composition |
 | `ARCHITECTURE.md` | Design patterns and module contracts |
+| `docs/graph.md` | Knowledge graph page — topology and self-documentation system |
 
 ---
 
@@ -419,7 +468,7 @@ When investigating or modifying the codebase, these are the most important files
 
 ### Add a new movement behavior
 1. Open `src/automata/behaviors.py`
-2. Subclass the behavior base class and implement `get_move(x, y, **kwargs) -> (dx, dy)`
+2. Subclass the behavior base class; implement `get_move(x, y, **kwargs) -> (dx, dy)`
 3. Export from `src/automata/__init__.py`
 4. Demonstrate in a sketch or experiment
 
@@ -430,14 +479,18 @@ When investigating or modifying the codebase, these are the most important files
 
 ### Add a new event
 1. Subclass `Event` from `src/events/event.py`
-2. Implement `apply(self, system)` — `system` is a dict with keys like `'spawner'`, `'field'`, `'config'`
+2. Implement `apply(self, system)` — `system` is a dict with keys `'spawner'`, `'field'`, `'config'`
 3. Add to `catalog.py` and optionally to `AESTHETIC_POOL` or `CHAOS_POOL`
 
 ### Create a new experiment
-1. Copy `experiments/simple_walkers.py` as a starting point
-2. Import only the modules you need
-3. Keep total experiment length under 100 lines by relying on the modular API
-4. Add CLI args with `argparse` following the pattern in existing experiments
+1. Copy `experiments/simple_walkers.py` as starting point
+2. Import only what you need; keep total length under 100 lines
+3. Add CLI args with `argparse` following the pattern in existing experiments
+
+### Add a new blog post
+1. Write `docs/_posts/YYYY-MM-DD-title.md` with `related:` links to prior posts and concepts
+2. Commit — the hook rebuilds the graph automatically
+3. The `/graph/` page updates on next deploy to main
 
 ---
 
@@ -451,4 +504,5 @@ When investigating or modifying the codebase, these are the most important files
 | `PLAYGROUND.md` | Creative exploration guide, parameter tuning suggestions |
 | `BLOG_GUIDE.md` | How to write session blog posts in `docs/_posts/` |
 | `docs/concepts/` | Conceptual articles (stigmergy, diffusion-memory) |
+| `docs/graph.md` | Knowledge graph page — the self-documenting topology |
 | `experiments/README.md` | Experiment composition patterns and performance table |

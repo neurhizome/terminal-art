@@ -21,6 +21,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Regenerate knowledge graph
+        run: python3 tools/graph_viz.py
+
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:

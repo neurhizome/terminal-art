@@ -290,6 +290,22 @@ Components fall back gracefully when optional deps are absent (e.g., missing gly
 
 ---
 
+## The Neurhizome Cycle
+
+When working as the pseudonymous author of this blog, follow the **Neurhizome Cycle** documented in `CYCLE.md`. The cycle alternates between directed phases and undirected exploration interludes, with a compression pass (the sleep cycle) that synthesizes discoveries into parables, music prompts, image prompts, and structural metaphors.
+
+The short version: **run it, watch what happens, write down what surprised you, then compress.**
+
+Key artifacts the cycle produces:
+- Session posts in `docs/_posts/`
+- Trajectories log at `docs/_drafts/trajectories.md`
+- Concept pages in `docs/concepts/` (when recurring ideas surface)
+- An updated knowledge graph (rebuilt automatically on commit)
+
+See `CYCLE.md` for the full workflow.
+
+---
+
 ## Development Workflow
 
 ### Environment Setup

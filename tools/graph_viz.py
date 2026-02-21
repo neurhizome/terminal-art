@@ -6,10 +6,14 @@ Parses frontmatter from docs/_posts/ and docs/concepts/, builds the link
 graph, renders as box-drawing / 24-bit colour art, and writes to
 docs/assets/captures/knowledge-graph.ans.
 
-Run manually:
-    python tools/graph_viz.py
+Layout is fully dynamic: new posts and concepts are automatically positioned
+as they are added. No hardcoded node positions or edge lists.
 
-Called automatically by .git/hooks/post-commit.
+Run manually:
+    python3 tools/graph_viz.py
+
+Called automatically by .git/hooks/post-commit when docs/_posts/ or
+docs/concepts/ files change.
 """
 
 import argparse
@@ -25,21 +29,54 @@ CONC_DIR  = ROOT / "docs" / "concepts"
 OUT       = ROOT / "docs" / "assets" / "captures" / "knowledge-graph.ans"
 
 # ── canvas geometry ───────────────────────────────────────────────────────────
-COLS, ROWS = 96, 40
+COLS     = 96
+NODE_H   = 5      # height of each node box (including borders)
+NODE_GAP = 2      # gap rows between adjacent node boxes
+NODE_STRIDE = NODE_H + NODE_GAP   # rows from top of one node to top of next
+
+# Layout columns
+LX, LW = 1, 37     # left node column  (x offset, width)
+RX, RW = 52, 42    # right node column (x offset, width)
+SPINE_X  = LX + LW // 2   # x of the vertical chronological spine (= 19)
+CONN_MID = 44              # x of midpoint routing for L-shaped connectors
+
+START_Y  = 3       # first node's top row (below outer border + header)
+FOOTER_H = 7       # rows reserved for legend + bottom outer border
 
 # ── colour palette (RGB tuples) ───────────────────────────────────────────────
 BG        = (17,  21,  28)
-C_FRAME   = (56,  182, 194)   # teal  – outer chrome
-C_HEAD    = (200, 212, 230)   # near-white headline
-C_DIM     = (66,  78,  100)   # dark-grey dim elements
+C_FRAME   = (56,  182, 194)   # teal    – outer chrome
+C_HEAD    = (200, 212, 230)   # near-white – headline text
+C_DIM     = (66,  78,  100)   # dark-grey – ambient labels
 C_EDGE    = (88,  108, 140)   # edge connector lines
-C_TICK    = (48,  58,  80)    # subtle tick marks
+C_TICK    = (48,  58,  80)    # subtle tick / scanline marks
 
 C_BEGIN   = (229, 192, 123)   # amber   – beginning node
 C_SESSION = (97,  175, 239)   # blue    – session nodes
 C_GRAD    = (152, 195, 121)   # green   – gradient/aesthetic nodes
 C_CONCEPT = (198, 120, 221)   # purple  – concept nodes
-C_ACCENT  = (224, 108, 117)   # red     – accent / highlights
+
+# ── node appearance maps ──────────────────────────────────────────────────────
+NODE_TYPE_COLOR = {
+    'beginning': C_BEGIN,
+    'session':   C_SESSION,
+    'gradient':  C_GRAD,
+    'concept':   C_CONCEPT,
+}
+
+NODE_TYPE_STYLE = {
+    'beginning': 'heavy',
+    'session':   'double',
+    'gradient':  'round',
+    'concept':   'single',
+}
+
+NODE_TYPE_GLYPH = {
+    'beginning': '◈',
+    'session':   '◆',
+    'gradient':  '◉',
+    'concept':   '◇',
+}
 
 # ── ANSI helpers ──────────────────────────────────────────────────────────────
 def _fg(r, g, b): return f"\x1b[38;2;{r};{g};{b}m"
@@ -105,31 +142,38 @@ def _parse_file(path):
 
 # ── graph construction ────────────────────────────────────────────────────────
 def build_graph():
-    nodes = {}  # id -> dict
-    edges = set()  # frozensets of 2 ids
+    """
+    Parse all post and concept markdown files, return (nodes, edges).
+
+    nodes: dict  nid → {label, sub, type, related}
+    edges: set of frozenset({nid_a, nid_b})
+    """
+    nodes = {}
+    edges = set()
 
     def node_id(path, fm):
         stem = path.stem
         if 'concepts' in str(path):
             return stem
-        # date-slug form: strip date prefix
+        # date-slug form: strip YYYY-MM-DD- prefix
         parts = stem.split('-', 3)
         return parts[3] if len(parts) == 4 else stem
 
     def classify(fm, path):
         tags = fm.get('tags', [])
-        if isinstance(tags, str): tags = [tags]
-        if 'concepts' in str(path):       return 'concept'
-        if 'session'  in tags:            return 'session'
-        if 'aesthetic' in tags or 'gradient-flow' in tags: return 'gradient'
+        if isinstance(tags, str):
+            tags = [tags]
+        if 'concepts' in str(path):
+            return 'concept'
+        if 'session' in tags:
+            return 'session'
+        if 'aesthetic' in tags or 'gradient-flow' in tags:
+            return 'gradient'
         return 'beginning'
 
     def short_title(title):
-        """Shorten long titles to fit in a 33-char label field."""
         t = title.replace('Concept: ', '').replace('Session ', 'S').strip()
-        if len(t) > 33:
-            t = t[:30] + '…'
-        return t
+        return t[:30] + '…' if len(t) > 33 else t
 
     # ─ load posts ─
     for md in sorted(POSTS_DIR.glob('*.md')):
@@ -145,7 +189,8 @@ def build_graph():
 
     # ─ load concepts (skip index) ─
     for md in sorted(CONC_DIR.glob('*.md')):
-        if md.stem == 'index': continue
+        if md.stem == 'index':
+            continue
         fm  = _parse_file(md)
         nid = md.stem
         nodes[nid] = {
@@ -160,7 +205,6 @@ def build_graph():
         url = url.rstrip('/')
         parts = [p for p in url.split('/') if p]
         slug = parts[-1].replace('.html', '')
-        # if it looks like a date-slug strip the date
         if re.match(r'^\d{4}-\d{2}-\d{2}-', slug):
             slug = slug.split('-', 3)[3]
         return slug
@@ -175,9 +219,51 @@ def build_graph():
     return nodes, edges
 
 
+# ── dynamic layout ───────────────────────────────────────────────────────────
+def compute_layout(nodes):
+    """
+    Assign canvas positions to all nodes without any hardcoding.
+
+    Left column  — chronological narrative posts (type: beginning, session)
+    Right column — reference/aesthetic content  (type: concept, gradient)
+
+    Left sorted by date ascending; right sorted by label alphabetically.
+
+    Returns:
+        layout     – dict nid → {x, w, y, col: 'left'|'right'}
+        left_nodes – list of nids in left column, sorted by date
+        right_nodes– list of nids in right column, sorted by label
+    """
+    left_nodes  = []
+    right_nodes = []
+
+    for nid, node in nodes.items():
+        if node['type'] in ('concept', 'gradient'):
+            right_nodes.append(nid)
+        else:
+            left_nodes.append(nid)
+
+    left_nodes.sort(key=lambda nid: nodes[nid].get('sub', ''))
+    right_nodes.sort(key=lambda nid: nodes[nid].get('label', nid).lower())
+
+    layout = {}
+    for i, nid in enumerate(left_nodes):
+        layout[nid] = {'x': LX, 'w': LW, 'y': START_Y + i * NODE_STRIDE, 'col': 'left'}
+    for i, nid in enumerate(right_nodes):
+        layout[nid] = {'x': RX, 'w': RW, 'y': START_Y + i * NODE_STRIDE, 'col': 'right'}
+
+    return layout, left_nodes, right_nodes
+
+
+def canvas_height(left_nodes, right_nodes):
+    """Compute required canvas rows from node counts."""
+    max_col = max(len(left_nodes), len(right_nodes), 1)
+    return max(40, START_Y + max_col * NODE_STRIDE + FOOTER_H)
+
+
 # ── Canvas ────────────────────────────────────────────────────────────────────
 class Canvas:
-    def __init__(self, cols=COLS, rows=ROWS):
+    def __init__(self, cols, rows):
         self.cols, self.rows = cols, rows
         self.ch = [[' '] * cols for _ in range(rows)]
         self.fc = [[None]  * cols for _ in range(rows)]
@@ -194,10 +280,12 @@ class Canvas:
             self.put(x + i, y, c, fc, bc)
 
     def hline(self, x, y, n, c, fc=None):
-        for i in range(n): self.put(x + i, y, c, fc)
+        for i in range(n):
+            self.put(x + i, y, c, fc)
 
     def vline(self, x, y, n, c, fc=None):
-        for i in range(n): self.put(x, y + i, c, fc)
+        for i in range(n):
+            self.put(x, y + i, c, fc)
 
     def box(self, x, y, w, h, color, style='single'):
         tl, hz, tr, vt, bl, br = {
@@ -238,111 +326,61 @@ class Canvas:
         return '\r\n'.join(out) + RST
 
 
-# ── layout constants ──────────────────────────────────────────────────────────
-# Left column: sessions/beginning  (x=1, w=37, right edge at x=37)
-# Right column: concepts/gradient  (x=52, w=42, right edge at x=93)
-# Connection zone: x=38 to x=51
-LX, LW = 1, 37     # left node column
-RX, RW = 52, 42    # right node column
-SPINE_X = 19       # x of the vertical chronological spine
-CONN_MID = 44      # x of midpoint of horizontal connectors
-
-# Row positions (each node box h=5 to include a blank row inside)
-NODE_H = 5
-
-NODE_ROWS = {
-    'beginning':                    3,
-    'session-001-the-sharpening':   10,
-    'session-002-the-event-horizon':17,
-    'session-003-the-seam-strike':  24,
-    # right column
-    'diffusion-memory':             10,
-    'stigmergy':                    17,
-    'gradient-flow-without-competition': 24,
-}
-
-NODE_TYPE_COLOR = {
-    'beginning': C_BEGIN,
-    'session':   C_SESSION,
-    'gradient':  C_GRAD,
-    'concept':   C_CONCEPT,
-}
-
-NODE_TYPE_STYLE = {
-    'beginning': 'heavy',
-    'session':   'double',
-    'gradient':  'round',
-    'concept':   'single',
-}
-
-NODE_TYPE_GLYPH = {
-    'beginning': '◈',
-    'session':   '◆',
-    'gradient':  '◉',
-    'concept':   '◇',
-}
-
-RIGHT_NODES = {'diffusion-memory', 'stigmergy', 'gradient-flow-without-competition'}
-
-# ── rendering ─────────────────────────────────────────────────────────────────
-def draw_node(cv, nid, node):
+# ── node drawing ──────────────────────────────────────────────────────────────
+def draw_node(cv, nid, node, layout):
+    pos = layout.get(nid)
+    if pos is None:
+        return
     color = NODE_TYPE_COLOR.get(node['type'], C_DIM)
     style = NODE_TYPE_STYLE.get(node['type'], 'single')
     glyph = NODE_TYPE_GLYPH.get(node['type'], '·')
-
-    y = NODE_ROWS.get(nid)
-    if y is None: return  # unknown node, skip
-
-    x = RX if nid in RIGHT_NODES else LX
-    w = RW if nid in RIGHT_NODES else LW
-
+    x, y, w = pos['x'], pos['y'], pos['w']
     cv.box(x, y, w, NODE_H, color, style)
-
-    # type badge + title line
-    label = node['label']
     badge = f"{glyph} {node['type'].upper()}"
-    cv.txt(x+2, y+1, badge[:w-4],   fc=color)
-    cv.txt(x+2, y+2, label[:w-4],   fc=C_HEAD)
-    cv.txt(x+2, y+3, node['sub'][:w-4], fc=C_DIM)
+    cv.txt(x+2, y+1, badge[:w-4],        fc=color)
+    cv.txt(x+2, y+2, node['label'][:w-4], fc=C_HEAD)
+    cv.txt(x+2, y+3, node['sub'][:w-4],   fc=C_DIM)
 
 
-def draw_spine(cv, n_sessions):
-    """Draw the vertical chronological spine connecting beginning → sessions."""
-    start_y = NODE_ROWS['beginning'] + NODE_H       # just below BEGINNING
-    end_y   = NODE_ROWS['session-003-the-seam-strike']  # top of SESSION 003
-    x = SPINE_X
+# ── chronological spine ───────────────────────────────────────────────────────
+def draw_spine(cv, layout, left_nodes):
+    """
+    Vertical chronological spine connecting all left-column nodes.
 
-    # vertical trunk
-    cv.vline(x, start_y, end_y - start_y, '│', C_EDGE)
+    The spine runs down from the first node (BEGINNING) through all sessions,
+    with branch joints (├) above each node and a terminus (└) at the last.
+    """
+    if len(left_nodes) < 2:
+        return
 
-    # branch joints at each session row
-    session_ids = [
-        'session-001-the-sharpening',
-        'session-002-the-event-horizon',
-        'session-003-the-seam-strike',
-    ]
-    for sid in session_ids:
-        sy = NODE_ROWS[sid]
-        cv.put(x, sy - 1, '├', C_EDGE)   # junction
-        cv.hline(x+1, sy-1, LX + LW - x - 2, '─', C_EDGE)
-        # arrowhead just before box left edge
-        cv.put(LX + LW - 1, sy - 1, '▶', C_EDGE)
+    x        = SPINE_X
+    first_y  = layout[left_nodes[0]]['y']
+    last_y   = layout[left_nodes[-1]]['y']
 
-    # bottom cap
-    cv.put(x, end_y, '└', C_EDGE)
+    # Top cap: corner at the bottom-centre of the first node → spine turns down
+    cap_y = first_y + NODE_H - 1
+    cv.put(x, cap_y, '┐', C_EDGE)
 
-    # top connection from BEGINNING
-    beg_y = NODE_ROWS['beginning']
-    cv.put(LX + LW//2, beg_y + NODE_H - 1, '┴', C_EDGE)
-    cv.hline(LX + LW//2 + 1, beg_y + NODE_H - 1, x - LX - LW//2 - 1, '─', C_EDGE)
-    cv.put(x, beg_y + NODE_H - 1, '┐', C_EDGE)
+    # Trunk: vertical line from just below first node to last node's top row
+    trunk_start = first_y + NODE_H
+    cv.vline(x, trunk_start, last_y - trunk_start, '│', C_EDGE)
+
+    # Bottom cap at the top row of the last node
+    cv.put(x, last_y, '└', C_EDGE)
+
+    # Branch joints: one per subsequent node (all except the first)
+    for nid in left_nodes[1:]:
+        ny = layout[nid]['y']
+        cv.put(x,             ny - 1, '├', C_EDGE)
+        cv.hline(x + 1,       ny - 1, LX + LW - x - 2, '─', C_EDGE)
+        cv.put(LX + LW - 1,   ny - 1, '▶', C_EDGE)
 
 
-def draw_h_connector(cv, left_y_row, right_y_row, left_x_end, right_x_start, color=C_EDGE):
-    """Draw a horizontal (or L-shaped) connector between left and right columns."""
+# ── connectors ────────────────────────────────────────────────────────────────
+def _h_connector(cv, left_y_row, right_y_row, left_x_end, right_x_start, color=C_EDGE):
+    """Route a connector between the left and right columns (straight or L-shaped)."""
     mid_y_l = left_y_row  + NODE_H // 2
     mid_y_r = right_y_row + NODE_H // 2
-
     lx = left_x_end
     rx = right_x_start - 1
 
@@ -351,13 +389,10 @@ def draw_h_connector(cv, left_y_row, right_y_row, left_x_end, right_x_start, col
         cv.hline(lx, mid_y_l, rx - lx, '─', color)
         cv.put(rx, mid_y_l, '▶', color)
     else:
-        # L-shape: go right then up/down
+        # L-shape: go right to CONN_MID, then up/down to right-column row
         turn_x = CONN_MID
-        cy = mid_y_l
-        ty = mid_y_r
-        # horizontal from left node to turn point
+        cy, ty = mid_y_l, mid_y_r
         cv.hline(lx, cy, turn_x - lx, '─', color)
-        # vertical from cy to ty at turn_x
         if ty < cy:
             cv.vline(turn_x, ty, cy - ty, '│', color)
             cv.put(turn_x, ty, '┬', color)
@@ -366,15 +401,67 @@ def draw_h_connector(cv, left_y_row, right_y_row, left_x_end, right_x_start, col
             cv.vline(turn_x, cy, ty - cy + 1, '│', color)
             cv.put(turn_x, cy, '┌', color)
             cv.put(turn_x, ty, '└', color)
-        # horizontal from turn point to right node
-        cv.hline(turn_x+1, ty, rx - turn_x - 1, '─', color)
+        cv.hline(turn_x + 1, ty, rx - turn_x - 1, '─', color)
         cv.put(rx, ty, '▶', color)
 
 
+def draw_edges(cv, edges, layout):
+    """
+    Draw connectors for all edges derived from [[related]] frontmatter.
+
+    Cross-column edges are drawn as horizontal/L-shaped connectors.
+    Same-column right-column edges (concept→concept or concept→aesthetic)
+    are drawn as subtle vertical dotted links.
+    Left-column (session→session) edges are implied by the chronological
+    spine and are skipped to avoid visual clutter.
+    """
+    for edge in edges:
+        pair = list(edge)
+        if len(pair) != 2:
+            continue
+        a, b = pair
+        if a not in layout or b not in layout:
+            continue
+
+        pa, pb = layout[a], layout[b]
+
+        if pa['col'] == pb['col']:
+            # Right-column only: draw a subtle vertical dotted link
+            if pa['col'] == 'right':
+                py1, py2 = sorted([pa['y'], pb['y']])
+                gx = RX + RW // 2
+                gap_start = py1 + NODE_H
+                gap_len   = py2 - gap_start
+                if gap_len > 0:
+                    cv.vline(gx, gap_start, gap_len, '┆', fc=C_DIM)
+                    cv.put(gx, py2 - 1, '▼', fc=C_DIM)
+            # Left-left edges implied by spine — skip
+            continue
+
+        # Cross-column: normalise so pa is always left, pb always right
+        if pa['col'] == 'right':
+            pa, pb = pb, pa
+
+        _h_connector(
+            cv,
+            left_y_row    = pa['y'],
+            right_y_row   = pb['y'],
+            left_x_end    = pa['x'] + pa['w'],
+            right_x_start = pb['x'],
+            color         = C_EDGE,
+        )
+
+
+# ── legend ────────────────────────────────────────────────────────────────────
 def draw_legend(cv, n_nodes, n_edges):
-    """Draw type legend and metadata at the bottom."""
-    y = 33
-    cv.txt(2, y, "node types", fc=C_DIM)
+    rows     = cv.rows
+    y_rule   = rows - 7
+    y_types  = rows - 6
+    y_meta   = rows - 5
+
+    cv.hline(1, y_rule, COLS - 2, '─', C_TICK)
+    cv.txt(2, y_types, "node types", fc=C_DIM)
+
     cx = 14
     for t, color, glyph in [
         ('beginning', C_BEGIN,   '◈'),
@@ -382,97 +469,57 @@ def draw_legend(cv, n_nodes, n_edges):
         ('aesthetic', C_GRAD,    '◉'),
         ('concept',   C_CONCEPT, '◇'),
     ]:
-        cv.txt(cx, y, f"{glyph} {t}", fc=color)
+        cv.txt(cx, y_types, f"{glyph} {t}", fc=color)
         cx += len(t) + 5
 
-    y = 34
-    cv.txt(2, y, f"nodes: {n_nodes}   edges: {n_edges}   auto-rendered on commit", fc=C_DIM)
     ts = datetime.now().strftime('%Y-%m-%d %H:%M')
-    cv.txt(COLS - len(ts) - 2, y, ts, fc=C_TICK)
+    cv.txt(2, y_meta,
+           f"nodes: {n_nodes}   edges: {n_edges}   auto-rendered on commit",
+           fc=C_DIM)
+    cv.txt(COLS - len(ts) - 2, y_meta, ts, fc=C_TICK)
 
-    # horizontal rule
-    cv.hline(1, 32, COLS - 2, '─', C_TICK)
 
-
+# ── rendering ─────────────────────────────────────────────────────────────────
 def render(nodes, edges, print_ansi=False):
-    cv = Canvas()
+    layout, left_nodes, right_nodes = compute_layout(nodes)
+    rows = canvas_height(left_nodes, right_nodes)
+    cv   = Canvas(cols=COLS, rows=rows)
 
     # ── outer chrome ──────────────────────────────────────────────────────────
-    cv.box(0, 0, COLS, ROWS, C_FRAME, 'double')
+    cv.box(0, 0, COLS, rows, C_FRAME, 'double')
 
-    # header text
     header = "KNOWLEDGE GRAPH  //  TERMINAL-ART"
     cv.txt((COLS - len(header)) // 2, 0, header, fc=C_HEAD)
-    cv.txt(2, 1, "commit-driven topology · rendered on post-commit · nodes link through [[related]] frontmatter", fc=C_DIM)
+    cv.txt(2, 1,
+           "commit-driven topology · nodes link through [[related]] frontmatter",
+           fc=C_DIM)
 
     # decorative scanlines
-    for y in range(3, ROWS - 2, 6):
+    for y in range(3, rows - 2, 6):
         cv.hline(1, y, COLS - 2, '·', fc=C_TICK)
 
-    # ── nodes ─────────────────────────────────────────────────────────────────
+    # column labels
+    cv.txt(LX + 1, START_Y - 1, "chronological spine", fc=C_DIM)
+    cv.txt(RX + 1, START_Y - 1, "concept space",       fc=C_DIM)
+    cv.vline(49, START_Y - 1, rows - START_Y - FOOTER_H, '┆', fc=C_TICK)
+
+    # ── nodes, spine, edges ───────────────────────────────────────────────────
     for nid, node in nodes.items():
-        draw_node(cv, nid, node)
+        draw_node(cv, nid, node, layout)
 
-    # ── vertical chronological spine ──────────────────────────────────────────
-    draw_spine(cv, n_sessions=3)
+    draw_spine(cv, layout, left_nodes)
+    draw_edges(cv, edges, layout)
 
-    # ── horizontal connectors (session → concept) ─────────────────────────────
-    # S001 → DIFFUSION MEMORY  (same row, straight)
-    draw_h_connector(cv,
-        left_y_row  = NODE_ROWS['session-001-the-sharpening'],
-        right_y_row = NODE_ROWS['diffusion-memory'],
-        left_x_end  = LX + LW,
-        right_x_start = RX,
-        color = C_EDGE,
-    )
-    # S002 → STIGMERGY  (same row, straight)
-    draw_h_connector(cv,
-        left_y_row  = NODE_ROWS['session-002-the-event-horizon'],
-        right_y_row = NODE_ROWS['stigmergy'],
-        left_x_end  = LX + LW,
-        right_x_start = RX,
-        color = C_EDGE,
-    )
-    # S003 → DIFFUSION MEMORY  (different rows, L-shape)
-    draw_h_connector(cv,
-        left_y_row  = NODE_ROWS['session-003-the-seam-strike'],
-        right_y_row = NODE_ROWS['diffusion-memory'],
-        left_x_end  = LX + LW,
-        right_x_start = RX,
-        color = C_TICK,
-    )
-    # S002 → DIFFUSION MEMORY  (different rows, L-shape)
-    draw_h_connector(cv,
-        left_y_row  = NODE_ROWS['session-002-the-event-horizon'],
-        right_y_row = NODE_ROWS['diffusion-memory'],
-        left_x_end  = LX + LW,
-        right_x_start = RX,
-        color = C_TICK,
-    )
-    # GRADIENT FLOW → STIGMERGY  (different rows on right, vertical internal)
-    gf_y  = NODE_ROWS['gradient-flow-without-competition']
-    st_y  = NODE_ROWS['stigmergy']
-    gx    = RX + RW // 2
-    # draw a right-column vertical link
-    cv.vline(gx, st_y + NODE_H, gf_y - st_y - NODE_H, '┆', fc=C_DIM)
-    cv.put(gx, st_y + NODE_H - 1, '▼', fc=C_DIM)
-
-    # ── legend and metadata ───────────────────────────────────────────────────
+    # ── legend ────────────────────────────────────────────────────────────────
     draw_legend(cv, len(nodes), len(edges))
-
-    # ── sub-header labels ─────────────────────────────────────────────────────
-    cv.txt(LX + 1, 8, "chronological spine", fc=C_DIM)
-    cv.txt(RX + 1, 8, "concept space", fc=C_DIM)
-    # separator
-    cv.vline(49, 8, 24, '┆', fc=C_TICK)
 
     ansi = cv.to_ansi()
     if print_ansi:
         print(ansi)
-    return ansi
+    return ansi, rows
 
 
-# ── .ans file writer ─────────────────────────────────────────────────────────
+# ── .ans file writer ──────────────────────────────────────────────────────────
 HEADER_TEMPLATE = """\
 # title: Knowledge Graph — terminal-art
 # cols: {cols}
@@ -482,12 +529,12 @@ HEADER_TEMPLATE = """\
 # description: Post-commit knowledge graph. Nodes = posts + concepts, edges = related frontmatter.
 """
 
-def save(ansi, path=OUT):
+def save(ansi, rows, path=OUT):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     header = HEADER_TEMPLATE.format(
         cols=COLS,
-        rows=ROWS,
+        rows=rows,
         date=datetime.now().strftime('%Y-%m-%d'),
     )
     path.write_text(header + "\n" + ansi, encoding='utf-8')
@@ -496,17 +543,18 @@ def save(ansi, path=OUT):
 
 # ── main ──────────────────────────────────────────────────────────────────────
 def main():
-    parser = argparse.ArgumentParser(description="Render knowledge graph as ANSI capture")
+    parser = argparse.ArgumentParser(
+        description="Render knowledge graph as ANSI capture — dynamic layout, auto-rebuilds on commit"
+    )
     parser.add_argument('--print', action='store_true', help='Also dump raw ANSI to stdout')
     parser.add_argument('--out', default=str(OUT), help='Output .ans file path')
     args = parser.parse_args()
 
     nodes, edges = build_graph()
-    ansi = render(nodes, edges, print_ansi=args.print)
-    save(ansi, path=args.out)
+    ansi, rows   = render(nodes, edges, print_ansi=args.print)
+    save(ansi, rows, path=args.out)
 
-    n, e = len(nodes), len(edges)
-    print(f"[graph_viz] {n} nodes, {e} edges", file=sys.stderr)
+    print(f"[graph_viz] {len(nodes)} nodes, {len(edges)} edges, {rows} rows", file=sys.stderr)
 
 
 if __name__ == '__main__':

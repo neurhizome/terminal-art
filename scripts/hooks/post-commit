@@ -1,0 +1,17 @@
+#!/bin/sh
+# .git/hooks/post-commit
+#
+# Rebuild the knowledge graph whenever a post or concept file changes.
+#
+# Install: cp scripts/hooks/post-commit .git/hooks/post-commit
+#          chmod +x .git/hooks/post-commit
+
+changed=$(git diff-tree --no-commit-id -r --name-only HEAD 2>/dev/null \
+          | grep -E '^docs/(_posts|concepts)/.*\.md$')
+
+if [ -n "$changed" ]; then
+    printf '[post-commit] doc change detected — rebuilding knowledge graph\n'
+    python3 tools/graph_viz.py 2>&1
+    git add docs/assets/captures/knowledge-graph.ans
+    printf '[post-commit] knowledge-graph.ans staged for next commit\n'
+fi

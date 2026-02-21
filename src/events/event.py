@@ -265,6 +265,48 @@ class ResourceDepletion(Event):
             walker.modify_vigor(-self.depletion_rate)
 
 
+class EqualTemperament(Event):
+    """
+    Snap all walker hues to the 12-tone equal-tempered chromatic scale.
+
+    Each color_h is rounded to the nearest k/12 (k ∈ 0..11).  After the
+    snap, every inter-walker hue interval is exactly 7/12 ≈ 0.58333 —
+    slightly flat of the Pythagorean fifth (log2(1.5) ≈ 0.58496).
+
+    The consequence: the Pythagorean comma drift that had been slowly
+    accumulating is wiped to zero and immediately restarts from a clean
+    baseline. The second cycle of drift becomes visible as a measurable
+    hue shift relative to the snapped positions — the comma that cannot
+    be made to vanish, only momentarily hidden.
+    """
+
+    def __init__(self, duration: int = 80):
+        """
+        Args:
+            duration: Event duration in ticks (snap happens on first tick)
+        """
+        super().__init__(duration, name="Equal Temperament")
+        self.triggered = False
+
+    def apply(self, system: Dict[str, Any]):
+        """
+        Snap all hues to nearest semitone.
+
+        Expects system['spawner'] to exist.
+        """
+        if self.triggered:
+            return
+
+        if 'spawner' not in system:
+            return
+
+        for walker in system['spawner'].walkers:
+            k = round(walker.genome.color_h * 12) % 12
+            walker.genome.color_h = k / 12.0
+
+        self.triggered = True
+
+
 class FieldPulse(Event):
     """
     Add energy burst to diffusion field.

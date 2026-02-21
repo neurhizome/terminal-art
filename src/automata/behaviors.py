@@ -248,6 +248,38 @@ class Orbit(MovementBehavior):
             return (-dy, dx) if (dx != 0 or dy != 0) else (-1, 0)
 
 
+class FifthSeek(MovementBehavior):
+    """
+    Move one step toward a pre-identified spatial target.
+
+    Used in conjunction with the Pythagorean comma experiment: the caller
+    finds the nearest 'fifth partner' (a walker whose hue is approximately
+    one Pythagorean fifth above self), then passes that partner's position
+    via context so this behavior moves the walker toward it.
+
+    If no target is provided, falls back to a random 8-way step.
+    """
+
+    def __init__(self):
+        self._random = RandomWalk(eight_way=True)
+
+    def get_move(self, x: int, y: int, **context) -> Tuple[int, int]:
+        """
+        Context kwargs:
+            target_x (int): X position of fifth partner
+            target_y (int): Y position of fifth partner
+        """
+        target_x = context.get('target_x')
+        target_y = context.get('target_y')
+
+        if target_x is None or target_y is None:
+            return self._random.get_move(x, y)
+
+        dx = 0 if target_x == x else (1 if target_x > x else -1)
+        dy = 0 if target_y == y else (1 if target_y > y else -1)
+        return (dx, dy)
+
+
 class AvoidEdges(MovementBehavior):
     """
     Bias away from grid boundaries.

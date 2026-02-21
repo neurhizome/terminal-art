@@ -16,6 +16,7 @@ from .event import (
     MutationStorm,
     ResourceDepletion,
     FieldPulse,
+    EqualTemperament,
 )
 
 
@@ -80,6 +81,11 @@ def make_field_pulse(width: int, height: int) -> Event:
         y=random.randint(0, height - 1),
         strength=random.uniform(5.0, 15.0)
     )
+
+
+def make_equal_temperament() -> Event:
+    """Factory: Snap all hues to 12-TET chromatic grid"""
+    return EqualTemperament(duration=80)
 
 
 # Pre-defined event pools for different experiment types

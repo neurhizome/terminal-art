@@ -15,6 +15,11 @@ import math
 from typing import Dict, Any, Optional
 from dataclasses import dataclass, field
 
+# The Pythagorean fifth in octave-fraction space.
+# log2(3/2) ≈ 0.58496...  — NOT 7/12 ≈ 0.58333 (equal temperament).
+# The gap of ~0.00163 per fifth is the Pythagorean comma.
+_PYTHAGOREAN_FIFTH = math.log2(1.5)
+
 
 def wrap_hue(h: float) -> float:
     """Wrap hue to [0, 1) range"""
@@ -168,6 +173,33 @@ class Genome:
             True if breeding is allowed
         """
         return self.distance_to(other) < threshold
+
+    def tune_toward(self, other: 'Genome', rate: float = 0.0008) -> None:
+        """
+        Shift color_h toward the Pythagorean fifth above other.color_h.
+
+        Each call nudges self.color_h by `rate` fraction toward the
+        pure-fifth target: (other.color_h + log2(3/2)) % 1.0.
+
+        The Pythagorean fifth (≈0.58496) is sharper than the equal-tempered
+        seventh (7/12 ≈ 0.58333) by the Pythagorean comma (~0.00163 per
+        fifth). Repeated tuning interactions cause the global hue distribution
+        to drift irresistibly around the color wheel — the comma accumulates.
+
+        The step is always taken in the forward (sharpening) direction so the
+        drift is unidirectional and the comma accumulation is legible as a
+        slow rotation of the hue population around the HSV wheel.
+
+        Args:
+            other: Genome to tune toward (the "reference pitch")
+            rate: Tuning step size [0, 1] — typically very small (0.0005–0.002)
+        """
+        target = (_PYTHAGOREAN_FIFTH + other.color_h) % 1.0
+        # Forward-only step: always sharpen toward the Pythagorean fifth.
+        # circular_mean would find the shortest arc, which goes backward for
+        # targets near +0.585 — the opposite of the comma's sharpening direction.
+        diff = (target - self.color_h) % 1.0
+        self.color_h = (self.color_h + diff * rate) % 1.0
 
     def mutate(self, rate: float = 0.05) -> 'Genome':
         """

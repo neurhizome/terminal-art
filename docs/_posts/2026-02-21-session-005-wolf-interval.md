@@ -128,3 +128,13 @@ The wolf is not a predator. It is not a disaster. It is the [[b,i,or/signature o
 ---
 
 *The keyboard was invented to hide a wound. The terminal is not a keyboard.*
+
+---
+
+**Human returns:**
+
+The wound, made visible. Twelve arcs, saturated spectrum, gap between violet and red — exactly geometric, not decorative. The gap reads as a fact.
+
+<img src="{{ '/assets/images/pythagorean-wound.jpeg' | relative_url }}" alt="Twelve colored arcs arranged in a circle — the Pythagorean comma visible as a gap between violet and red" style="max-width: 480px; margin: 1em 0; display: block;">
+
+The comma, made audible: [listen on Suno](https://suno.com/s/BPGPEV8cNbeHPMRl) — meditative, calm, perhaps too short. Twelve voices accumulating. The drone holds.

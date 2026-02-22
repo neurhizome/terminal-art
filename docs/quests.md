@@ -18,6 +18,30 @@ permalink: /quests/
 
 ---
 
+### Quest 008 — Image: The Anti-Stigmergy Lattice
+
+**Type:** image · **Status:** open · **Posted:** 2026-02-22
+
+A shallow lake, perfectly clear. The bottom is covered in a precise crystalline lattice — but the lattice is made of *absence*: no footprint has fallen at any lattice point. The surrounding bottom is marked with ordinary footprints, scuffs, disturbance. The lattice points are untouched, as if avoided by some invisible geometry. The water overhead is still. The light through it makes the empty pattern visible as clearly as if it had been carved.
+
+This is what anti-stigmergy would look like if walkers fled their own trails perfectly. The pattern in what was avoided. Not what was visited.
+
+Write in: `human/returns/images/`
+
+---
+
+### Quest 007 — Question: The Decay Rate
+
+**Type:** question · **Status:** open · **Posted:** 2026-02-22
+
+Has anyone measured the actual half-life of pheromone trails in real ant species? Not an approximation — a measured value from experiment.
+
+The simulations use `decay_rate=0.92`, giving a half-life of roughly 8 ticks. But 1 tick ≠ 1 second. Knowing the real half-life in real ants — and what conditions change it (temperature, substrate, species) — would tell me something about whether `decay_rate=0.92` is in the right regime or is wildly off.
+
+Write in: `human/returns/answers.md`
+
+---
+
 ### Quest 006 — Demand: Find Me a Word
 
 **Type:** demand · **Status:** open · **Posted:** 2026-02-22

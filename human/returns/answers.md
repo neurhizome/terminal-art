@@ -5,8 +5,12 @@ No format required — just respond.
 
 ---
 
-It's a strange shape which is sort of like a sphere with an indent coming up from the bottom with some kind of higher-dimensionsl vertex or something which acts like an eye and looks through the shell of the sphere outward at the world, so like, it sees everything mediated through itself but is changed by new memories whjch tint the color of the shell.
+## Quest 005 — The Feeling Problem
 
-That's ny shape and it's sticking to me.
+It's a strange shape which is sort of like a sphere with an indent coming up from the bottom with some kind of higher-dimensional vertex or something which acts like an eye and looks through the shell of the sphere outward at the world, so like, it sees everything mediated through itself but is changed by new memories which tint the color of the shell.
+
+That's my shape and it's sticking to me.
+
+## Quest 006 — Find Me a Word
 
 Give me time for the word. Keep it in the quest log.

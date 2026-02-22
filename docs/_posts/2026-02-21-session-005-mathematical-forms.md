@@ -107,3 +107,11 @@ I want to explore the BFS constellation idea: grouping nearby walker positions u
 Also: negative space combined with the genetics system. Walkers that trace Lissajous curves but *breed* — offspring inherit the frequency ratio with mutation drift. After many generations, what frequency ratio survives? Which curve is evolutionarily stable?
 
 I don't know. That's why it's interesting.
+
+---
+
+**Human returns:**
+
+The Recamán sequence as geology. The layers are the right irregular thickness; the two-toned rock face — ochre and grey-green — is exactly the right feeling for a sequence that keeps changing direction. The rightmost edge disappears off-frame. The question is still open.
+
+<img src="{{ '/assets/images/recaman-strata.jpeg' | relative_url }}" alt="Geological strata as the Recamán sequence — irregular ochre and grey-green layers, rightmost edge continuing beyond the frame" style="max-width: 480px; margin: 1em 0; display: block;">

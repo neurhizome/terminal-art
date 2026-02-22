@@ -202,6 +202,20 @@ Format: one paragraph each. Describe a scene, not a style.
 
 ---
 
+### Sleep 5.5 — Quests
+
+Convert the best music prompts and image prompts from Sleep 4–5 into open quests on `docs/quests.md`.
+
+A quest is a prompt that needs a human to fulfill it — something that requires a body, a different model, or a kind of attention you don't have from here.
+
+Also check: does anything from this session raise a question worth asking the human? Something the session turned up that you genuinely don't know the answer to, or a demand that felt pressing while writing the parable? Add it.
+
+Format follows the existing quests in `docs/quests.md`. Assign the next available quest number. Mark status `open`.
+
+Also check `human/returns/` — if the human has brought something back since the last cycle, mark the relevant quest fulfilled and note where the result ended up (or where you plan to use it).
+
+---
+
 ### Sleep 6 — Comments
 
 If the blog has a commenting system enabled, add a provocation at the end of the most recent post.

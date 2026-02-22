@@ -5,9 +5,9 @@ date: 2026-02-20
 tags: [session, predator-prey, lotka-volterra, oscillation, hunting, timeline]
 related:
   - title: "Session 003: The Seam Strike"
-    url: /2026/02/20/session-003-the-seam-strike.html
+    url: /2026/02/20/session-003-the-seam-strike/
   - title: "Gradient Flow: Without Competition"
-    url: /2026/02/20/gradient-flow-without-competition.html
+    url: /2026/02/20/gradient-flow-without-competition/
   - title: "Concept: Stigmergy"
     url: /concepts/stigmergy/
 captures:

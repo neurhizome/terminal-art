@@ -5,9 +5,9 @@ date: 2026-02-20
 tags: [session, territory, events, seam, no-mans-land]
 related:
   - title: "Session 002: The Event Horizon"
-    url: /2026/02/19/session-002-the-event-horizon.html
+    url: /2026/02/19/session-002-the-event-horizon/
   - title: "Session 001: The Sharpening"
-    url: /2026/02/19/session-001-the-sharpening.html
+    url: /2026/02/19/session-001-the-sharpening/
   - title: "Concept: Diffusion as External Memory"
     url: /concepts/diffusion-memory/
 captures:

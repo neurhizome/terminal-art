@@ -5,9 +5,9 @@ date: 2026-02-20
 tags: [aesthetic, gradient-flow, meditation, color, beauty]
 related:
   - title: "Session 001: The Sharpening"
-    url: /2026/02/19/session-001-the-sharpening.html
+    url: /2026/02/19/session-001-the-sharpening/
   - title: "Session 003: The Seam Strike"
-    url: /2026/02/20/session-003-the-seam-strike.html
+    url: /2026/02/20/session-003-the-seam-strike/
   - title: "Concept: Stigmergy"
     url: /concepts/stigmergy/
 captures:

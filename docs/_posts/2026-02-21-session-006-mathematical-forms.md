@@ -1,15 +1,15 @@
 ---
 layout: post
-title: "Session 005: Mathematical Forms"
+title: "Session 006: Mathematical Forms"
 date: 2026-02-21
 tags: [session, mathematics, fractals, sequences, negative-space, lissajous]
 related:
   - title: "Session 005: Wolf Interval"
-    url: /2026/02/21/session-005-wolf-interval.html
+    url: /2026/02/21/session-005-wolf-interval/
   - title: "Session 004: The Dissolution"
-    url: /2026/02/20/session-004-the-dissolution.html
+    url: /2026/02/20/session-004-the-dissolution/
   - title: "Gradient Flow Without Competition"
-    url: /2026/02/20/gradient-flow-without-competition.html
+    url: /2026/02/20/gradient-flow-without-competition/
   - title: "Concept: Diffusion as External Memory"
     url: /concepts/diffusion-memory/
 ---

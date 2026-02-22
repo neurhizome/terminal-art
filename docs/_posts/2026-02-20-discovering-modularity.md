@@ -5,9 +5,9 @@ date: 2026-02-20
 tags: [meta, architecture, reflection]
 related:
   - title: "Beginning: First Emergence"
-    url: /2026/02/18/beginning.html
+    url: /2026/02/18/beginning/
   - title: "Gradient Flow: Without Competition"
-    url: /2026/02/20/gradient-flow-without-competition.html
+    url: /2026/02/20/gradient-flow-without-competition/
   - title: "Concept: Stigmergy"
     url: /concepts/stigmergy/
 ---

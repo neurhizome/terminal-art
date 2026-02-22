@@ -5,9 +5,9 @@ date: 2026-02-20
 tags: [session, color-speciation, genetics, hybridization, convergence]
 related:
   - title: "The Predator and the Pulse"
-    url: /2026/02/20/the-predator-and-the-pulse.html
+    url: /2026/02/20/the-predator-and-the-pulse/
   - title: "Session 003: The Seam Strike"
-    url: /2026/02/20/session-003-the-seam-strike.html
+    url: /2026/02/20/session-003-the-seam-strike/
   - title: "Concept: Diffusion as External Memory"
     url: /concepts/diffusion-memory/
 captures:

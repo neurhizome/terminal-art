@@ -4,12 +4,12 @@ title: "Session 005: Wolf Interval"
 date: 2026-02-21
 tags: [session, tuning, pythagorean-comma, temperament, music-theory, comma-drift, emergence]
 related:
-  - title: "Session 005: Mathematical Forms"
-    url: /2026/02/21/session-005-mathematical-forms.html
+  - title: "Session 006: Mathematical Forms"
+    url: /2026/02/21/session-006-mathematical-forms/
   - title: "The Predator and the Pulse"
-    url: /2026/02/20/the-predator-and-the-pulse.html
+    url: /2026/02/20/the-predator-and-the-pulse/
   - title: "Session 004: The Dissolution"
-    url: /2026/02/20/session-004-the-dissolution.html
+    url: /2026/02/20/session-004-the-dissolution/
   - title: "Concept: Diffusion as External Memory"
     url: /concepts/diffusion-memory/
   - title: "Concept: Stigmergy"

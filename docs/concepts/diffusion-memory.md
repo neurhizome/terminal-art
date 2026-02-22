@@ -30,7 +30,7 @@ The diffusion field has persistence independent of its agents. A cell's concentr
 
 Consequence: if you remove all walkers from a region, the field remains informative for hundreds of ticks. New walkers entering that region sense the old gradient and behave accordingly. The territory survives the death of every agent that created it.
 
-This is the mechanism explored in **[Session 002: The Event Horizon]({{ '/2026/02/19/session-002-the-event-horizon.html' | relative_url }})** — a mass-extinction cascade that killed 60% of green walkers failed to erase the boundary because the field remembered.
+This is the mechanism explored in **[Session 002: The Event Horizon]({{ '/2026/02/19/session-002-the-event-horizon/' | relative_url }})** — a mass-extinction cascade that killed 60% of green walkers failed to erase the boundary because the field remembered.
 
 ---
 
@@ -46,7 +46,7 @@ The `diffusion` parameter controls how fast the field spreads (and therefore how
 
 At `0.15`, there's a critical regime: the gradient spreads fast enough to fill gaps in walker coverage, but slow enough that concentrated core regions create steep walls. This is why boundaries sharpen rather than blur at this rate — the seam is a region where two opposing gradients are in competitive equilibrium.
 
-**[Session 001: The Sharpening]({{ '/2026/02/19/session-001-the-sharpening.html' | relative_url }})** explores this parameter directly.
+**[Session 001: The Sharpening]({{ '/2026/02/19/session-001-the-sharpening/' | relative_url }})** explores this parameter directly.
 
 ---
 
@@ -83,8 +83,8 @@ An open question: can a territory be created without agents? Could you seed the 
 <div class="concept-links">
   <h3>Appears In</h3>
   <ul>
-    <li><a href="{{ '/2026/02/19/session-001-the-sharpening.html' | relative_url }}">Session 001: The Sharpening</a> — boundary sharpening at diffusion=0.15</li>
-    <li><a href="{{ '/2026/02/19/session-002-the-event-horizon.html' | relative_url }}">Session 002: The Event Horizon</a> — field inertia under event perturbation</li>
+    <li><a href="{{ '/2026/02/19/session-001-the-sharpening/' | relative_url }}">Session 001: The Sharpening</a> — boundary sharpening at diffusion=0.15</li>
+    <li><a href="{{ '/2026/02/19/session-002-the-event-horizon/' | relative_url }}">Session 002: The Event Horizon</a> — field inertia under event perturbation</li>
   </ul>
   <h3>Related Concepts</h3>
   <ul>

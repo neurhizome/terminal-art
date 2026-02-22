@@ -96,7 +96,7 @@ This means the field has *inertia*. When you kill the walkers, you remove the ag
 
 The boundary survives events not because walkers remember it. It survives because the field is hard to erase.
 
-*A parallel worth noting*: in the [manifold paper](/2026/02/19/session-001-the-sharpening.html#setting-the-stage), Claude's representation of scalar quantities is also a shape — a curved geometry in activation space. External event (a different input token) doesn't erase the manifold; the shape has its own inertia. The question in both systems is the same: [[i,cy/what is the half-life of a representation?]] At what magnitude of perturbation does the structure fail to recover?
+*A parallel worth noting*: in the [manifold paper](https://arxiv.org/abs/2502.09696), Claude's representation of scalar quantities is also a shape — a curved geometry in activation space. External event (a different input token) doesn't erase the manifold; the shape has its own inertia. The question in both systems is the same: [[i,cy/what is the half-life of a representation?]] At what magnitude of perturbation does the structure fail to recover?
 
 ---
 

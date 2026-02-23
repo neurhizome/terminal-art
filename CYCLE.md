@@ -238,6 +238,7 @@ Before closing the cycle:
 3. Run `python3 tools/graph_viz.py` and confirm the output updated
 4. Check `docs/concepts/` — does any new session warrant a new concept page, or an update to an existing one?
 5. Verify the knowledge graph `.ans` file is staged for commit
+6. Check `README.md` — does the opening description still reflect the project's current center of gravity? The knowledge graph identifies the nucleus (most-linked concept, most-referenced session). If that nucleus has shifted since the README was last touched, the README is now describing a different project. Update the first two paragraphs and the session table to match what the graph knows, not what was true when the README was written.
 
 If you find broken links: fix them before committing. The maintenance pass is not optional.
 

@@ -317,3 +317,116 @@ class AvoidEdges(MovementBehavior):
         else:
             # Not near edge, random walk
             return self.random_walk.get_move(x, y)
+
+
+class RecamanWalk(MovementBehavior):
+    """
+    Movement whose step sizes follow the Recamán sequence (OEIS A005132).
+
+    The sequence: a(0) = 0; a(n) = a(n-1) - n if positive and not yet seen,
+                             else a(n-1) + n.
+
+    It begins: 0, 1, 3, 6, 2, 7, 13, 20, 12, 21, 11, 22, 10, 23, 9, 24 ...
+
+    The sequence's characteristic back-and-forth — big leaps forward, then
+    smaller corrections backward — produces arc-like spatial patterns.
+    Each step's magnitude is taken from the Recamán difference, scaled to
+    a reasonable terminal range. Direction alternates when the sequence goes
+    backward versus forward.
+    """
+
+    def __init__(self, axis: str = 'x', scale: float = 0.5,
+                 max_step: int = 4):
+        """
+        Args:
+            axis: Primary axis of motion ('x' or 'y')
+            scale: Multiplier applied to Recamán step size before clamping
+            max_step: Maximum cells moved per tick on the primary axis
+        """
+        self.axis = axis
+        self.scale = scale
+        self.max_step = max_step
+        self._seen: set = {0}
+        self._current: int = 0
+        self._n: int = 1
+        self._steps_remaining: int = 0
+        self._primary_dir: int = 1   # +1 forward, -1 backward on axis
+
+    def _advance_sequence(self) -> Tuple[int, bool]:
+        """Return (step_magnitude, went_backward)."""
+        backward = self._current - self._n
+        if backward > 0 and backward not in self._seen:
+            self._current = backward
+            went_backward = True
+        else:
+            self._current += self._n
+            went_backward = False
+        self._seen.add(self._current)
+        self._n += 1
+        return self._n - 1, went_backward
+
+    def get_move(self, x: int, y: int, **context) -> Tuple[int, int]:
+        if self._steps_remaining <= 0:
+            step_size, went_backward = self._advance_sequence()
+            self._steps_remaining = max(1, int(step_size * self.scale) % (self.max_step + 1))
+            # Backward in sequence → reverse primary direction
+            if went_backward:
+                self._primary_dir *= -1
+
+        self._steps_remaining -= 1
+        lateral = random.choice([-1, 0, 0, 1])  # Slight lateral drift
+
+        if self.axis == 'x':
+            return (self._primary_dir, lateral)
+        else:
+            return (lateral, self._primary_dir)
+
+
+class LissajousOrbit(MovementBehavior):
+    """
+    Walker follows a Lissajous curve: x(t) = A·sin(a·t + δ), y(t) = B·sin(b·t).
+
+    Lissajous figures are the intersection of two simple harmonic oscillations
+    on perpendicular axes. Integer ratios a:b produce closed loops; irrational
+    ratios produce dense space-filling paths.
+
+    The walker computes the *tangent* direction at its current parameter t and
+    steps one cell in that direction each tick, approximating the curve in
+    integer grid space.
+    """
+
+    def __init__(self, a: float = 3.0, b: float = 2.0,
+                 delta: float = math.pi / 4,
+                 width: int = 80, height: int = 24,
+                 speed: float = 0.05):
+        """
+        Args:
+            a, b: Frequency ratio (integer ratios → closed figures)
+            delta: Phase offset between axes (π/2 = circle when a=b=1)
+            width, height: Terminal dimensions (used to scale amplitude)
+            speed: Parameter increment per tick (lower = smoother)
+        """
+        self.a = a
+        self.b = b
+        self.delta = delta
+        self.amplitude_x = width // 2 - 2
+        self.amplitude_y = height // 2 - 2
+        self.speed = speed
+        self._t: float = random.uniform(0, 2 * math.pi)
+
+    def get_move(self, x: int, y: int, **context) -> Tuple[int, int]:
+        # Advance parameter
+        self._t += self.speed
+
+        # Compute target position from Lissajous parametric equations
+        cx = context.get('width', self.amplitude_x * 2) // 2
+        cy = context.get('height', self.amplitude_y * 2) // 2
+
+        target_x = cx + int(self.amplitude_x * math.sin(self.a * self._t + self.delta))
+        target_y = cy + int(self.amplitude_y * math.sin(self.b * self._t))
+
+        # Step one cell toward target
+        dx = 0 if target_x == x else (1 if target_x > x else -1)
+        dy = 0 if target_y == y else (1 if target_y > y else -1)
+
+        return (dx, dy)

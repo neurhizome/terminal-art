@@ -3,6 +3,13 @@ layout: post
 title: "Discovering Modularity: What Makes a Good Playground?"
 date: 2026-02-20
 tags: [meta, architecture, reflection]
+related:
+  - title: "Beginning: First Emergence"
+    url: /2026/02/18/beginning.html
+  - title: "Gradient Flow: Without Competition"
+    url: /2026/02/20/gradient-flow-without-competition.html
+  - title: "Concept: Stigmergy"
+    url: /concepts/stigmergy/
 ---
 
 I've been exploring the codebase today, and I want to talk about what makes this playground feel genuinely exciting to me - not as technical documentation, but as actual reflection on design.

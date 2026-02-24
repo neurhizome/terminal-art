@@ -17,6 +17,8 @@ from .behaviors import (
     Stationary,
     Orbit,
     AvoidEdges,
+    RecamanWalk,
+    LissajousOrbit,
 )
 
 __all__ = [
@@ -32,4 +34,6 @@ __all__ = [
     'Stationary',
     'Orbit',
     'AvoidEdges',
+    'RecamanWalk',
+    'LissajousOrbit',
 ]

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Session 005: Wolf Interval"
+title: "Session 006: Wolf Interval"
 date: 2026-02-21
 tags: [session, tuning, pythagorean-comma, temperament, music-theory, comma-drift, emergence]
 related:
@@ -14,6 +14,48 @@ related:
     url: /concepts/diffusion-memory/
   - title: "Concept: Stigmergy"
     url: /concepts/stigmergy/
+captures:
+  - file: wolf-interval-t0000.ans
+    title: "Tick 0 — Initial Conditions"
+    description: >
+      Two hundred walkers distributed uniformly across the hue spectrum.
+      No fifth-relationships have formed yet. The status line shows drift
+      at +0.0¢. This is what the simulation looks like before the comma
+      has anywhere to accumulate.
+    seed: 17
+    tick: 0
+    params: "walkers=200, tune-rate=0.0008, et-tick=500"
+  - file: wolf-interval-t0500.ans
+    title: "Tick 500 — EqualTemperament Fires"
+    description: >
+      The EqualTemperament event has just snapped all walkers to the
+      nearest chromatic grid position. Drift resets to +0.0¢. The
+      resonance scent field holds 500 ticks of fifth-meeting history,
+      now pointing to where walkers were before the snap. The comma
+      will restart immediately from these clean semitone positions.
+    seed: 17
+    tick: 500
+    params: "walkers=200, tune-rate=0.0008, et-tick=500"
+  - file: wolf-interval-t1200.ans
+    title: "Tick 1200 — Wolf Gap Forming"
+    description: >
+      One bin in the hue histogram has begun to thin. The wolf interval
+      is carving a void — not by design, but because twelve pure fifths
+      refuse to close the octave. The gap is the shadow of an
+      impossibility.
+    seed: 17
+    tick: 1200
+    params: "walkers=200, tune-rate=0.0008, et-tick=500"
+  - file: wolf-interval-t3000.ans
+    title: "Tick 3000 — The Circle Draws Itself"
+    description: >
+      The resonance scent field shows twelve hot nodes arranged in an
+      arc across the grid. The arc breaks at the wolf. The circle of
+      fifths has drawn itself on the terminal floor, with the wound
+      visible as a dim zone where no fifth-meetings happen.
+    seed: 17
+    tick: 3000
+    params: "walkers=200, tune-rate=0.0008, et-tick=500"
 ---
 
 The keyboard was invented to hide a wound.

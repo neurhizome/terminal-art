@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "Session 006: The Seam as Comma"
+title: "Session 007: The Seam as Comma"
 date: 2026-02-23
 tags: [session, quaternion, non-commutative, seam, comma, resonance, coupling, bluecow009]
 related:
-  - title: "Session 005: Wolf Interval"
-    url: /2026/02/21/session-005-wolf-interval.html
+  - title: "Session 006: Wolf Interval"
+    url: /2026/02/21/session-006-wolf-interval.html
   - title: "Session 001: The Sharpening"
     url: /2026/02/19/session-001-the-sharpening.html
   - title: "Session 003: The Seam Strike"

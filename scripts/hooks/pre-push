@@ -1,0 +1,65 @@
+#!/bin/sh
+#
+# pre-push — Blog integrity validation gate
+#
+# Runs before every `git push`.  Behaviour depends on target branch:
+#
+#   → main          run validate_blog.py --strict --branches
+#                   Any error OR warning blocks the push.
+#                   All captures must exist; no session collisions across branches.
+#
+#   → anything else run validate_blog.py (warnings allowed, errors block)
+#
+# Install once per clone:
+#   cp scripts/hooks/pre-push .git/hooks/pre-push
+#   chmod +x .git/hooks/pre-push
+#
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+VALIDATOR="$REPO_ROOT/tools/validate_blog.py"
+
+if [ ! -f "$VALIDATOR" ]; then
+    echo "pre-push: validate_blog.py not found at $VALIDATOR — skipping" >&2
+    exit 0
+fi
+
+# Check pyyaml is available; if not, warn and let the push through
+python3 -c "import yaml" 2>/dev/null
+if [ $? -ne 0 ]; then
+    echo "pre-push: PyYAML not installed (pip install pyyaml) — skipping validation" >&2
+    exit 0
+fi
+
+# Read what is being pushed (stdin: local_ref local_sha remote_ref remote_sha)
+while read local_ref local_sha remote_ref remote_sha; do
+    TARGET_BRANCH=$(echo "$remote_ref" | sed 's|refs/heads/||')
+
+    if [ "$TARGET_BRANCH" = "main" ]; then
+        echo ""
+        echo "  ── pre-push: validating for MAIN (strict mode) ──────────────────"
+        python3 "$VALIDATOR" --strict --branches
+        EXIT=$?
+        if [ $EXIT -ne 0 ]; then
+            echo ""
+            echo "  Push to main blocked: fix all errors before merging."
+            echo "  Run:  python3 tools/validate_blog.py --strict --branches"
+            echo ""
+            exit 1
+        fi
+    else
+        echo ""
+        echo "  ── pre-push: validating for branch '$TARGET_BRANCH' ─────────────"
+        python3 "$VALIDATOR"
+        EXIT=$?
+        if [ $EXIT -ne 0 ]; then
+            echo ""
+            echo "  Push blocked: fix errors before pushing."
+            echo "  (Warnings are OK on feature branches — captures may be pending.)"
+            echo "  Run:  python3 tools/validate_blog.py"
+            echo ""
+            exit 1
+        fi
+    fi
+done
+
+exit 0

@@ -1,0 +1,5 @@
+# Development and CI dependencies
+# Install with: pip install -r requirements-dev.txt
+
+# Blog validation (tools/validate_blog.py)
+pyyaml>=6.0

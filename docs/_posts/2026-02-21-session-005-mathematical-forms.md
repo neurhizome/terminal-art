@@ -4,8 +4,8 @@ title: "Session 005: Mathematical Forms"
 date: 2026-02-21
 tags: [session, mathematics, fractals, sequences, negative-space, lissajous]
 related:
-  - title: "Session 005: Wolf Interval"
-    url: /2026/02/21/session-005-wolf-interval.html
+  - title: "Session 006: Wolf Interval"
+    url: /2026/02/21/session-006-wolf-interval.html
   - title: "Session 004: The Dissolution"
     url: /2026/02/20/session-004-the-dissolution.html
   - title: "Gradient Flow Without Competition"

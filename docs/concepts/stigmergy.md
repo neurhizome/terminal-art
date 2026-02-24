@@ -32,7 +32,7 @@ No walker broadcasts its position. No walker asks "where should the boundary be?
 
 This has a counterintuitive consequence explored in **[Session 003: The Seam Strike]({{ '/2026/02/20/session-003-the-seam-strike.html' | relative_url }})**: removing the agents doesn't immediately remove the coordination structure. The environmental trace persists. New agents born into the environment inherit the coordination implicitly, without any transmission of information from the old agents to the new ones.
 
-Stigmergy also appears in domains that aren't spatial. **[Session 005: Wolf Interval]({{ '/2026/02/21/session-005-wolf-interval.html' | relative_url }})** is an example: walkers navigating hue-space (a proxy for pitch) deposit a *resonance scent* at the sites of fifth-encounters. After 3000 ticks, the scent field has 12 hot nodes arranged in the topology of the circle of fifths. No walker tried to draw this structure — each was only seeking a local partner at approximately 0.585 hue distance. The environmental record of those encounters, accumulated and made visible, is the circle of fifths expressing itself through the walkers' aggregate behavior. Stigmergy in pitch space; the substrate is harmonic geometry, not territory.
+Stigmergy also appears in domains that aren't spatial. **[Session 006: Wolf Interval]({{ '/2026/02/21/session-006-wolf-interval.html' | relative_url }})** is an example: walkers navigating hue-space (a proxy for pitch) deposit a *resonance scent* at the sites of fifth-encounters. After 3000 ticks, the scent field has 12 hot nodes arranged in the topology of the circle of fifths. No walker tried to draw this structure — each was only seeking a local partner at approximately 0.585 hue distance. The environmental record of those encounters, accumulated and made visible, is the circle of fifths expressing itself through the walkers' aggregate behavior. Stigmergy in pitch space; the substrate is harmonic geometry, not territory.
 
 ---
 
@@ -95,7 +95,7 @@ The Wolf Interval session adds a sharper version of the same question: the reson
     <li><a href="{{ '/2026/02/20/session-003-the-seam-strike.html' | relative_url }}">Session 003: The Seam Strike</a> — no man's land as stigmergic vacuum</li>
     <li><a href="{{ '/2026/02/20/gradient-flow-without-competition.html' | relative_url }}">Gradient Flow Without Competition</a> — stigmergy without territorial conflict; pure trace-following</li>
     <li><a href="{{ '/2026/02/20/the-predator-and-the-pulse.html' | relative_url }}">The Predator and the Pulse</a> — predator location communicated through prey scent absence</li>
-    <li><a href="{{ '/2026/02/21/session-005-wolf-interval.html' | relative_url }}">Session 005: Wolf Interval</a> — stigmergy in pitch space; the circle of fifths drawn by hue-encounter traces</li>
+    <li><a href="{{ '/2026/02/21/session-006-wolf-interval.html' | relative_url }}">Session 006: Wolf Interval</a> — stigmergy in pitch space; the circle of fifths drawn by hue-encounter traces</li>
   </ul>
   <h3>Related Concepts</h3>
   <ul>

@@ -87,7 +87,7 @@ An open question: can a territory be created without agents? Could you seed the 
     <li><a href="{{ '/2026/02/19/session-002-the-event-horizon.html' | relative_url }}">Session 002: The Event Horizon</a> — field inertia under event perturbation</li>
     <li><a href="{{ '/2026/02/20/session-003-the-seam-strike.html' | relative_url }}">Session 003: The Seam Strike</a> — no man's land as region where field memory was destroyed and not rebuilt</li>
     <li><a href="{{ '/2026/02/20/the-predator-and-the-pulse.html' | relative_url }}">The Predator and the Pulse</a> — field as lag indicator: predators hunting a ghost; memory accurate in aggregate but wrong for any specific follower</li>
-    <li><a href="{{ '/2026/02/21/session-005-wolf-interval.html' | relative_url }}">Session 005: Wolf Interval</a> — resonance scent as diffusion memory in pitch space; the topology of the circle of fifths encoded in accumulated fifth-encounter records, not in any walker</li>
+    <li><a href="{{ '/2026/02/21/session-006-wolf-interval.html' | relative_url }}">Session 006: Wolf Interval</a> — resonance scent as diffusion memory in pitch space; the topology of the circle of fifths encoded in accumulated fifth-encounter records, not in any walker</li>
   </ul>
   <h3>Related Concepts</h3>
   <ul>

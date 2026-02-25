@@ -4,97 +4,372 @@ title: Gallery
 permalink: /gallery/
 ---
 
-<h1 class="page-title">Gallery</h1>
-
-<p class="page-subtitle">A visual collection of captured patterns</p>
-
-<div class="gallery-grid">
-{% for post in site.posts %}
-    {% if post.captures %}
-        <div class="gallery-post">
-            <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
-            <p class="post-date">{{ post.date | date: "%B %d, %Y" }}</p>
-            <p class="capture-count">{{ post.captures | size }} capture{% if post.captures.size > 1 %}s{% endif %}</p>
-            <a href="{{ post.url | relative_url }}" class="view-captures">View →</a>
-        </div>
-    {% endif %}
-{% endfor %}
-</div>
-
-{% assign total_captures = 0 %}
-{% for post in site.posts %}
-    {% if post.captures %}
-        {% assign total_captures = total_captures | plus: post.captures.size %}
-    {% endif %}
-{% endfor %}
-
-<p class="gallery-stats">
-    Total: {{ total_captures }} captures across {{ site.posts | size }} posts
-</p>
-
 <style>
-.gallery-grid {
-    margin-top: var(--space-lg);
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: var(--space-md);
+/* ── Gallery layout ──────────────────────────────────────────────────── */
+
+.gallery-header {
+    margin-bottom: var(--space-xl);
 }
 
-.gallery-post {
-    background: var(--bg-secondary);
-    padding: var(--space-md);
-    border-radius: 8px;
-    border: 1px solid var(--bg-tertiary);
-    transition: all 0.2s;
-}
-
-.gallery-post:hover {
-    border-color: var(--accent-primary);
-    transform: translateY(-2px);
-}
-
-.gallery-post h3 {
+.gallery-header h1 {
     margin-bottom: var(--space-xs);
-    font-size: 1.2rem;
 }
 
-.gallery-post h3 a {
+.gallery-header p {
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+}
+
+/* ── Post section ────────────────────────────────────────────────────── */
+
+.gallery-section {
+    margin-bottom: var(--space-xl);
+    border-top: 1px solid var(--bg-tertiary);
+    padding-top: var(--space-lg);
+}
+
+.gallery-section:first-of-type {
+    border-top: none;
+    padding-top: 0;
+}
+
+.section-meta {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+    flex-wrap: wrap;
+}
+
+.section-meta h2 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.section-meta h2 a {
     color: var(--text-primary);
     text-decoration: none;
 }
 
-.gallery-post h3 a:hover {
+.section-meta h2 a:hover {
     color: var(--accent-primary);
 }
 
-.post-date {
-    color: var(--text-dim);
+.section-date {
     font-family: var(--font-mono);
-    font-size: 0.85rem;
-    margin-bottom: var(--space-xs);
+    font-size: 0.8rem;
+    color: var(--text-dim);
 }
 
-.capture-count {
-    color: var(--text-secondary);
-    margin-bottom: var(--space-sm);
-}
-
-.view-captures {
+.section-post-link {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
     color: var(--accent-primary);
     text-decoration: none;
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
+    margin-left: auto;
 }
 
-.view-captures:hover {
+.section-post-link:hover {
     color: var(--accent-secondary);
 }
 
-.gallery-stats {
-    margin-top: var(--space-lg);
-    text-align: center;
-    color: var(--text-dim);
+/* ── Horizontal capture strip ────────────────────────────────────────── */
+
+.capture-strip {
+    display: flex;
+    gap: var(--space-md);
+    overflow-x: auto;
+    padding-bottom: var(--space-sm);
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Subtle scrollbar */
+.capture-strip::-webkit-scrollbar {
+    height: 4px;
+}
+.capture-strip::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+.capture-strip::-webkit-scrollbar-thumb {
+    background: var(--bg-tertiary);
+    border-radius: 2px;
+}
+.capture-strip::-webkit-scrollbar-thumb:hover {
+    background: var(--text-dim);
+}
+
+/* ── Single capture card ─────────────────────────────────────────────── */
+
+.capture-card {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+}
+
+.capture-card .terminal-wrapper {
+    background: #1e2127;
+    border: 1px solid var(--bg-tertiary);
+    border-radius: 6px;
+    overflow: hidden;
+    display: block;
+    transition: border-color 0.2s;
+}
+
+.capture-card:hover .terminal-wrapper {
+    border-color: var(--accent-primary);
+}
+
+/* Placeholder shown while the xterm canvas is being created */
+.terminal-display.lazy-pending {
+    display: block;
+    background: #1e2127;
+    /* width/height set inline per-card so the strip has correct dimensions
+       before any JS runs */
+}
+
+.capture-card .terminal-wrapper .terminal-display {
+    display: block;
+}
+
+.capture-label {
+    margin-top: var(--space-xs);
     font-family: var(--font-mono);
-    font-size: 0.9rem;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    max-width: 100%;
+}
+
+.capture-label .cap-title {
+    display: block;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.capture-label .cap-tick {
+    color: var(--text-dim);
+    font-size: 0.7rem;
+}
+
+/* ── Museum section (uncatalogued) ───────────────────────────────────── */
+
+.museum-section {
+    border-top: 1px solid var(--accent-purple);
+    padding-top: var(--space-lg);
+}
+
+.museum-section .section-meta h2 {
+    color: var(--accent-purple);
+}
+
+.museum-tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent-purple);
+    background: rgba(198, 120, 221, 0.1);
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.museum-desc {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: var(--space-md);
+    font-family: var(--font-mono);
+}
+
+/* ── Stats footer ────────────────────────────────────────────────────── */
+
+.gallery-footer {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--bg-tertiary);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    display: flex;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.gallery-footer span {
+    color: var(--text-secondary);
 }
 </style>
+
+{% assign total_captures = 0 %}
+{% for post in site.posts %}
+  {% if post.captures %}
+    {% assign total_captures = total_captures | plus: post.captures.size %}
+  {% endif %}
+{% endfor %}
+{% assign total_posts = 0 %}
+{% for post in site.posts %}
+  {% if post.captures %}
+    {% assign total_posts = total_posts | plus: 1 %}
+  {% endif %}
+{% endfor %}
+
+<div class="gallery-header">
+  <h1 class="page-title">Gallery</h1>
+  <p>{{ total_captures }} captures across {{ total_posts }} sessions &mdash; scroll horizontal within each strip, vertical to browse</p>
+</div>
+
+{% for post in site.posts %}
+  {% if post.captures %}
+  <section class="gallery-section">
+
+    <div class="section-meta">
+      <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+      <span class="section-date">{{ post.date | date: "%b %d, %Y" }}</span>
+      <a href="{{ post.url | relative_url }}" class="section-post-link">→ full post</a>
+    </div>
+
+    <div class="capture-strip">
+      {% for capture in post.captures %}
+      {% assign gal_id = "gal-" | append: forloop.parentloop.index | append: "-" | append: forloop.index %}
+      <div class="capture-card">
+        <div class="terminal-wrapper">
+          <div id="{{ gal_id }}"
+               class="terminal-display lazy-pending"
+               data-file="{{ capture.file }}"
+               style="min-width:260px;min-height:150px;"></div>
+        </div>
+        <div class="capture-label">
+          <span class="cap-title">{{ capture.title }}</span>
+          {% if capture.tick %}
+          <span class="cap-tick">tick {{ capture.tick }}</span>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </section>
+  {% endif %}
+{% endfor %}
+
+<!-- ── Museum: uncatalogued captures from friend_oscillator.py ──────── -->
+<section class="gallery-section museum-section" id="museum">
+
+  <div class="section-meta">
+    <h2>Museum</h2>
+    <span class="museum-tag">uncatalogued</span>
+  </div>
+
+  <p class="museum-desc">
+    friend_oscillator.py &mdash; tension geometry and moir&eacute; emergence in 1D diffusion.
+    Four runs at different positions in the e_avg parameter space.
+    Each preview shows the first 35 steps of 540 total.
+  </p>
+
+  <div class="capture-strip">
+
+    <div class="capture-card">
+      <div class="terminal-wrapper">
+        <div id="mus-1"
+             class="terminal-display lazy-pending"
+             data-file="osc-optimal-3984-preview.ans"
+             style="min-width:260px;min-height:150px;"></div>
+      </div>
+      <div class="capture-label">
+        <span class="cap-title">Optimal Tension</span>
+        <span class="cap-tick">e_avg=3.984 &middot; ratio 1.00&times;</span>
+      </div>
+    </div>
+
+    <div class="capture-card">
+      <div class="terminal-wrapper">
+        <div id="mus-2"
+             class="terminal-display lazy-pending"
+             data-file="osc-explosive-3759-preview.ans"
+             style="min-width:260px;min-height:150px;"></div>
+      </div>
+      <div class="capture-label">
+        <span class="cap-title">Explosive Bloom</span>
+        <span class="cap-tick">e_avg=3.759 &middot; ratio 15.06&times;</span>
+      </div>
+    </div>
+
+    <div class="capture-card">
+      <div class="terminal-wrapper">
+        <div id="mus-3"
+             class="terminal-display lazy-pending"
+             data-file="osc-near-correct-3991-preview.ans"
+             style="min-width:260px;min-height:150px;"></div>
+      </div>
+      <div class="capture-label">
+        <span class="cap-title">Breath Mode</span>
+        <span class="cap-tick">e_avg=3.991 &middot; ratio 0.56&times;</span>
+      </div>
+    </div>
+
+    <div class="capture-card">
+      <div class="terminal-wrapper">
+        <div id="mus-4"
+             class="terminal-display lazy-pending"
+             data-file="osc-sweep-3759-to-4000-preview.ans"
+             style="min-width:260px;min-height:150px;"></div>
+      </div>
+      <div class="capture-label">
+        <span class="cap-title">Parameter Sweep</span>
+        <span class="cap-tick">e_avg 3.759 &rarr; 4.000</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="gallery-footer">
+  <span>{{ total_captures }} captures</span>
+  <span>+ 4 museum pieces</span>
+  <span>{{ site.posts | size }} sessions</span>
+</div>
+
+<script>
+/**
+ * Lazy-load ANSI terminals as they scroll into view.
+ *
+ * Each .lazy-pending div carries:
+ *   data-file        — filename in assets/captures/
+ *
+ * Gallery dimensions: fontSize 8, previewRows 24.
+ * ansi-viewer.js renderCapture() honours opts.fontSize and opts.previewRows.
+ */
+(function () {
+    const GALLERY_FONT_SIZE  = 8;
+    const GALLERY_PREVIEW_ROWS = 24;
+
+    function loadCapture(el) {
+        const file = el.dataset.file;
+        if (!file) return;
+        el.classList.remove('lazy-pending');
+        renderCapture(file, el.id, {
+            fontSize:    GALLERY_FONT_SIZE,
+            previewRows: GALLERY_PREVIEW_ROWS,
+        });
+    }
+
+    // IntersectionObserver: start loading when 300 px away from viewport
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    loadCapture(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { rootMargin: '300px 0px' });
+
+        document.querySelectorAll('.lazy-pending').forEach(function (el) {
+            observer.observe(el);
+        });
+    } else {
+        // Fallback: load everything immediately
+        document.querySelectorAll('.lazy-pending').forEach(loadCapture);
+    }
+}());
+</script>

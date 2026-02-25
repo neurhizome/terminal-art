@@ -92,11 +92,26 @@ async function renderCapture(captureFile, elementId, opts = {}) {
     }
 
     // ── 2. Parse metadata so we know the artifact dimensions ─────────────
-    const { meta, content } = parseCaptureFile(raw);
+    const { meta } = parseCaptureFile(raw);
+    let   { content } = parseCaptureFile(raw);
 
     const cols     = parseInt(meta.cols)     || opts.cols     || 80;
-    const rows     = parseInt(meta.rows)     || opts.rows     || 24;
-    const fontSize = parseInt(meta.fontsize) || opts.fontSize || 13;
+    let   rows     = parseInt(meta.rows)     || opts.rows     || 24;
+
+    // opts.fontSize takes priority over file metadata — lets gallery override
+    const fontSize = opts.fontSize != null
+        ? opts.fontSize
+        : (parseInt(meta.fontsize) || 13);
+
+    // opts.previewRows: truncate to first N lines for compact gallery display.
+    // The terminal height is clamped to the actual line count so there is no
+    // blank space below the last rendered line.
+    if (opts.previewRows) {
+        const allLines  = content.split('\n');
+        const trimmed   = allLines.slice(0, opts.previewRows);
+        content = trimmed.join('\n');
+        rows    = Math.min(rows, trimmed.length);
+    }
 
     // ── 3. Wait for fonts so xterm measures character cells correctly ─────
     if (document.fonts && document.fonts.ready) {

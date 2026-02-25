@@ -1,0 +1,4 @@
+INFO  2025-10-05T06:07:39.022 28    patch_terminfo_bugs:1608: Disabling smglr with TERM=xterm for non-xterm.
+INFO  2025-10-05T06:07:39.297 28    main:578: starting main loop
+INFO  2025-10-05T06:08:48.370 28    on_process_exit:392: exited: pid=30 status=2 stoptime=0
+INFO  2025-10-05T06:20:48.676 28    mch_exit:99: Nvim exit: 0

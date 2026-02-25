@@ -410,46 +410,56 @@ class Line:
         chars[pos_evolve]  = BAND_CHAR_EVOLVE
         chars[pos_devolve] = BAND_CHAR_DEVOLVE
 
-        out = []
-        for i, ch in enumerate(chars):
-            # x in [-1, 1]: negative = deficit side, positive = surplus side
+        # ── Build per-cell fg/bg colors ──────────────────────────────────
+        cell_fg = []
+        cell_bg = []
+        for i in range(w):
             x = (i / w - (pos_correct / w)) * 2.0
-
-            # Red (deficit/tension) ↔ cyan (surplus/damping)
-            # At alignment peak: flash white
             if alignment > 0.95 and abs(i - pos_evolve) < 4:
-                r, g, b = 255, 255, 255   # alignment flash
+                r, g, b = 255, 255, 255
             elif x < 0:
-                # Left of correct: deficit territory, red-orange gradient
                 t = min(1.0, -x)
                 r = int(180 + 75 * t)
                 g = int(80  - 60 * t)
-                b = int(40  + 20 * t * ratio / 2)
+                b = max(0, int(40 + 20 * t * max(ratio, 0) / 2))
             else:
-                # Right of correct: surplus territory, cyan-blue gradient
                 t = min(1.0, x * 3)
                 r = int(30  + 20 * (1 - t))
                 g = int(140 + 60 * (1 - t))
                 b = int(200 + 55 * t)
+            cell_fg.append((r, g, b))
+            cell_bg.append((max(0, r - 60), max(0, g - 60), max(0, b - 60)))
 
-            # Background slightly darker
-            br2 = max(0, r - 60)
-            bg2 = max(0, g - 60)
-            bb2 = max(0, b - 60)
-            out.append(
-                f"\x1b[38;2;{r};{g};{b}m"
-                f"\x1b[48;2;{br2};{bg2};{bb2}m"
-                f"{ch}\x1b[0m"
-            )
-
-        # Info suffix (fits if terminal wide enough)
-        ratio_str = f"{ratio:.2f}×"
+        # ── Info text overlaid RIGHT-ALIGNED within the band ─────────────
+        # Keeping total width = w avoids overflow onto a second terminal row.
+        ratio_str = f"{ratio:.2f}\u00d7"          # × as unicode escape
         net_str   = f"net:{state.net_gain_per_cycle:.4f}"
         align_str = f"aln:{alignment:.2f}"
         tick_str  = f"T{state.tick:04d}"
-        info = f" {ratio_str} {net_str} {align_str} {tick_str}"
+        info = f" {ratio_str} {net_str} {align_str} {tick_str} "
+        info = info[: w - 4]                       # cap; leave 4 landmark chars
+        info_start = w - len(info)
 
-        return "".join(out) + info + "\n"
+        out = []
+        for i, ch in enumerate(chars):
+            r, g, b = cell_fg[i]
+            br2, bg2, bb2 = cell_bg[i]
+            if i >= info_start:
+                # White text on band background — readable at any colour
+                display = info[i - info_start]
+                out.append(
+                    f"\x1b[38;2;255;255;255m"
+                    f"\x1b[48;2;{br2};{bg2};{bb2}m"
+                    f"{display}\x1b[0m"
+                )
+            else:
+                out.append(
+                    f"\x1b[38;2;{r};{g};{b}m"
+                    f"\x1b[48;2;{br2};{bg2};{bb2}m"
+                    f"{ch}\x1b[0m"
+                )
+
+        return "".join(out) + "\n"
 
 
 # ---------------------------------------------------------------------------

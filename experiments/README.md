@@ -88,6 +88,35 @@ python3 experiments/gradient_flow.py --walkers 200 --mutation-rate 0.03 --delay 
 
 **Modules used:** `automata`, `genetics`, `fields`, `events`, `renderers`
 
+### Rhizomatic Walker — Discordian Chaos Engine (NEW!)
+Acentric walkers form plateaus, then Eris arrives every fifth tick and inverts everything.
+
+```bash
+# Default: 45 walkers, Discordian Collapse every 5 ticks
+python3 experiments/rhizomatic_walker.py
+
+# More walkers, faster lines of flight
+python3 experiments/rhizomatic_walker.py --walkers 80 --flight-prob 0.04 --delay 0.03
+
+# Reproducible run (seed 23 = documented session)
+python3 experiments/rhizomatic_walker.py --walkers 45 --seed 23
+```
+
+**What to watch for:**
+- Three plateau ecologies self-organizing from acentric spawn
+- ◉ glyph marks convergence points where five walkers meet (Collapse trigger)
+- ⁕ ✦ ⊛ glyphs mark the Discordian inversion zone during Collapse
+- Warm zones (reds) developing cold-zone negatives (cyans) through hue-inversion scatter
+- Volatile center zone where Collapses cluster — the most alive region
+
+**Key mechanic:** `RhizomaticWalk` — Lévy flight with periodic *lines of flight*: abrupt teleportations to random grid positions. No walker has a home. Every walker has been to every part of the grid.
+
+**The Law of Fives:** Every 5th tick OR when 5 walkers converge → Discordian Collapse fires. Caught walkers get genome hue inverted (+0.5) and scatter to new positions, seeding inverted-color territory elsewhere.
+
+**Modules used:** `automata`, `genetics`, `fields`, `renderers`
+
+---
+
 ### Predator-Prey Dynamics (NEW!)
 Classic Lotka-Volterra: Green prey vs red predators with population cycles.
 

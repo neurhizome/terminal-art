@@ -21,6 +21,12 @@ Format: `- [ ]` pending, `- [~]` in progress, `- [x]` completed (with link to re
 - [ ] Comma without temperament: run `wolf_interval.py` with `--et-tick` set high enough that `EqualTemperament` never fires. Does the population self-organize into a scale? Does hue drift forever with no attractor? Or does stigmergy produce its own equilibrium without the external snap? (source: Session 005 Wolf Interval, Phase 1 predictable follow-through)
 - [ ] Anti-stigmergy: walkers that flee their own scent trails — negative chemotaxis. Every experiment so far has agents following or reinforcing trails. The opposite assumption hasn't been tried. Do fleeing walkers crystallize into a lattice? Scatter to maximum entropy? Form unexpected attractors? (source: Phase 1, gravity check against the project's own assumptions — unpredictable direction)
 
+## 2026-02-26
+
+- [x] Rhizomatic walkers: abandon arborescent (tree/center) logic. Walkers form plateaus, break into lines of flight, restart anywhere. Discordian Variable (Law of Fives) inverts colors and scatters walkers on every 5th tick or when 5 walkers converge. Does structured chaos enable richer ecology than clean stability? (source: external invitation — Session 009: The Rhizome and Eris)
+- [ ] Negative-image reterritorialization: run the rhizomatic walker long enough (1000+ ticks) to observe whether the warm-zone and cold-zone (inverted) territories ever fully merge or if they maintain complementary separation indefinitely. Is the hue-inversion a permanent genetic mark or does drift erase it? (source: Session 009 open question)
+- [ ] Discordian event chaining: when a Collapse fires, make some of the scattered walkers carry a "Discordian trait" that raises their probability of triggering the *next* Collapse. Does this produce Collapse cascades, or does the rhizome self-regulate? (source: Session 009 — the convergence Collapses felt qualitatively different from periodic ones)
+
 ## 2026-02-22
 
 - [ ] Cross-session field seeding: import the resonance scent field from `wolf_interval.py` as the initial state of a `DiffusionField` in `memetic_territories.py`. Do walkers navigating a space pre-shaped by harmonic geometry inherit the circle-of-fifths topology in their territorial behavior? Does Pythagorean structure persist as spatial influence? (source: Phase 1, connecting wolf_interval to memetic_territories — the resonance field is a stigmergic record that could seed a different kind of memory)

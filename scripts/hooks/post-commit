@@ -13,5 +13,6 @@ if [ -n "$changed" ]; then
     printf '[post-commit] doc change detected — rebuilding knowledge graph\n'
     python3 tools/graph_viz.py 2>&1
     git add docs/assets/captures/knowledge-graph.ans
-    printf '[post-commit] knowledge-graph.ans staged for next commit\n'
+    git add docs/assets/captures/knowledge-graph.json
+    printf '[post-commit] knowledge-graph.ans + .json staged for next commit\n'
 fi

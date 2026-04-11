@@ -17,6 +17,7 @@ docs/concepts/ files change.
 """
 
 import argparse
+import json
 import re
 import sys
 from datetime import datetime
@@ -27,6 +28,7 @@ ROOT      = Path(__file__).resolve().parent.parent
 POSTS_DIR = ROOT / "docs" / "_posts"
 CONC_DIR  = ROOT / "docs" / "concepts"
 OUT       = ROOT / "docs" / "assets" / "captures" / "knowledge-graph.ans"
+JSON_OUT  = ROOT / "docs" / "assets" / "captures" / "knowledge-graph.json"
 
 # ── canvas geometry ───────────────────────────────────────────────────────────
 COLS     = 96
@@ -177,14 +179,19 @@ def build_graph():
 
     # ─ load posts ─
     for md in sorted(POSTS_DIR.glob('*.md')):
-        fm  = _parse_file(md)
-        nid = node_id(md, fm)
-        t   = classify(fm, md)
+        fm   = _parse_file(md)
+        nid  = node_id(md, fm)
+        t    = classify(fm, md)
+        # Reconstruct permalink: YYYY-MM-DD-slug → /YYYY/MM/DD/slug/
+        parts = md.stem.split('-', 3)
+        post_url = (f"/{parts[0]}/{parts[1]}/{parts[2]}/{parts[3]}/"
+                    if len(parts) == 4 else f"/{md.stem}/")
         nodes[nid] = {
             'label':   short_title(fm.get('title', nid)),
             'sub':     str(fm.get('date', ''))[:10],
             'type':    t,
             'related': fm.get('related', []),
+            'url':     post_url,
         }
 
     # ─ load concepts (skip index) ─
@@ -198,6 +205,7 @@ def build_graph():
             'sub':     'concept',
             'type':    'concept',
             'related': fm.get('related', []),
+            'url':     f"/concepts/{nid}/",
         }
 
     # ─ build edges from related lists ─
@@ -541,18 +549,68 @@ def save(ansi, rows, path=OUT):
     print(f"[graph_viz] wrote {path.stat().st_size:,} bytes → {path}", file=sys.stderr)
 
 
+# ── JSON export for 3D web visualisation ─────────────────────────────────────
+def export_json(nodes, edges, path=JSON_OUT):
+    """
+    Write graph data as JSON for the Three.js force-directed visualisation.
+
+    Schema:
+      { generated, nodes: [{id, label, type, date, url, connections}],
+                   links: [{source, target}] }
+    """
+    # Degree count so node size can encode centrality
+    conn = {nid: 0 for nid in nodes}
+    for edge in edges:
+        pair = list(edge)
+        if len(pair) == 2:
+            conn[pair[0]] += 1
+            conn[pair[1]] += 1
+
+    node_list = [
+        {
+            'id':          nid,
+            'label':       node['label'],
+            'type':        node['type'],
+            'date':        node['sub'] if node['type'] != 'concept' else None,
+            'url':         node.get('url', ''),
+            'connections': conn.get(nid, 0),
+        }
+        for nid, node in nodes.items()
+    ]
+
+    link_list = [
+        {'source': list(edge)[0], 'target': list(edge)[1]}
+        for edge in edges
+        if len(edge) == 2
+    ]
+
+    data = {
+        'generated': datetime.now().isoformat(timespec='seconds'),
+        'nodes':     node_list,
+        'links':     link_list,
+    }
+
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding='utf-8')
+    print(f"[graph_viz] wrote JSON  → {path}  ({len(node_list)} nodes, {len(link_list)} links)",
+          file=sys.stderr)
+
+
 # ── main ──────────────────────────────────────────────────────────────────────
 def main():
     parser = argparse.ArgumentParser(
         description="Render knowledge graph as ANSI capture — dynamic layout, auto-rebuilds on commit"
     )
-    parser.add_argument('--print', action='store_true', help='Also dump raw ANSI to stdout')
-    parser.add_argument('--out', default=str(OUT), help='Output .ans file path')
+    parser.add_argument('--print',    action='store_true', help='Also dump raw ANSI to stdout')
+    parser.add_argument('--out',      default=str(OUT),      help='Output .ans file path')
+    parser.add_argument('--json-out', default=str(JSON_OUT), help='Output .json file path')
     args = parser.parse_args()
 
     nodes, edges = build_graph()
     ansi, rows   = render(nodes, edges, print_ansi=args.print)
     save(ansi, rows, path=args.out)
+    export_json(nodes, edges, path=args.json_out)
 
     print(f"[graph_viz] {len(nodes)} nodes, {len(edges)} edges, {rows} rows", file=sys.stderr)
 

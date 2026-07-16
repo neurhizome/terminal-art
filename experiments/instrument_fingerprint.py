@@ -34,7 +34,7 @@ import torch
 from safetensors import safe_open
 from transformers import AutoTokenizer
 
-LENSES = "/mnt/checkpoints/lens/gemma4-e2b/lenses"
+DEFAULT_LENSES = "/mnt/checkpoints/lens/gemma4-e2b/lenses"
 SNAP = sorted(glob.glob(
     "/home/dusty/.cache/huggingface/hub/models--google--gemma-4-e2b-it"
     "/snapshots/*/model.safetensors"))[0]
@@ -52,10 +52,12 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--cols", type=int, default=100)
     ap.add_argument("--out", default=None, help="also write ANSI capture here")
+    ap.add_argument("--lens-dir", default=DEFAULT_LENSES,
+                    help="lens checkpoint dir (needs lens.pt + calibration.json)")
     args = ap.parse_args()
 
-    d = torch.load(f"{LENSES}/lens.pt", map_location="cpu", weights_only=True)
-    cal = json.load(open(f"{LENSES}/calibration.json"))["layers"]
+    d = torch.load(f"{args.lens_dir}/lens.pt", map_location="cpu", weights_only=True)
+    cal = json.load(open(f"{args.lens_dir}/calibration.json"))["layers"]
     with safe_open(SNAP, framework="pt") as f:
         W_U = f.get_tensor("model.language_model.embed_tokens.weight").float()
         norm_w = f.get_tensor("model.language_model.norm.weight").float()

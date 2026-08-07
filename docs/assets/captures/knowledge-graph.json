@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-07T08:34:21",
+  "generated": "2026-08-07T08:52:52",
   "nodes": [
     {
       "id": "beginning",
@@ -23,7 +23,7 @@
       "type": "session",
       "date": "2026-02-19",
       "url": "/2026/02/19/session-002-the-event-horizon/",
-      "connections": 5
+      "connections": 6
     },
     {
       "id": "discovering-modularity",
@@ -111,7 +111,7 @@
       "type": "session",
       "date": "2026-07-15",
       "url": "/2026/07/15/session-010-the-instruments-fingerprint/",
-      "connections": 3
+      "connections": 4
     },
     {
       "id": "session-011-the-cascade",
@@ -119,6 +119,14 @@
       "type": "session",
       "date": "2026-08-07",
       "url": "/2026/08/07/session-011-the-cascade/",
+      "connections": 4
+    },
+    {
+      "id": "session-012-the-seam",
+      "label": "S012: The Seam",
+      "type": "session",
+      "date": "2026-08-07",
+      "url": "/2026/08/07/session-012-the-seam/",
       "connections": 3
     },
     {
@@ -148,180 +156,192 @@
   ],
   "links": [
     {
-      "source": "beginning",
-      "target": "diffusion-memory"
-    },
-    {
-      "source": "session-004-the-dissolution",
-      "target": "session-003-the-seam-strike"
-    },
-    {
-      "source": "session-001-the-sharpening",
-      "target": "diffusion-memory"
-    },
-    {
-      "source": "session-004-the-dissolution",
+      "source": "session-003-the-seam-strike",
       "target": "the-predator-and-the-pulse"
     },
     {
-      "source": "the-predator-and-the-pulse",
-      "target": "session-006-wolf-interval"
-    },
-    {
-      "source": "diffusion-memory",
-      "target": "session-006-wolf-interval"
-    },
-    {
-      "source": "session-004-the-dissolution",
-      "target": "session-006-wolf-interval"
-    },
-    {
-      "source": "diffusion-memory",
-      "target": "session-003-the-seam-strike"
-    },
-    {
-      "source": "beginning",
+      "source": "session-003-the-seam-strike",
       "target": "session-002-the-event-horizon"
     },
     {
-      "source": "stigmergy",
-      "target": "gradient-flow-without-competition"
-    },
-    {
       "source": "session-002-the-event-horizon",
-      "target": "session-003-the-seam-strike"
-    },
-    {
-      "source": "session-007-the-seam-as-comma",
-      "target": "session-006-wolf-interval"
-    },
-    {
-      "source": "session-003-the-seam-strike",
-      "target": "session-011-the-cascade"
-    },
-    {
-      "source": "session-005-mathematical-forms",
-      "target": "session-006-wolf-interval"
-    },
-    {
-      "source": "session-005-mathematical-forms",
-      "target": "gradient-flow-without-competition"
-    },
-    {
-      "source": "session-010-the-instruments-fingerprint",
-      "target": "session-009-the-medium-refuses"
-    },
-    {
-      "source": "session-010-the-instruments-fingerprint",
-      "target": "session-011-the-cascade"
-    },
-    {
-      "source": "discovering-modularity",
-      "target": "gradient-flow-without-competition"
-    },
-    {
-      "source": "the-predator-and-the-pulse",
-      "target": "gradient-flow-without-competition"
-    },
-    {
-      "source": "session-008-the-arithmetic-of-aliveness",
-      "target": "session-007-the-seam-as-comma"
-    },
-    {
-      "source": "session-008-the-arithmetic-of-aliveness",
-      "target": "session-006-wolf-interval"
+      "target": "session-012-the-seam"
     },
     {
       "source": "beginning",
       "target": "discovering-modularity"
-    },
-    {
-      "source": "stigmergy",
-      "target": "session-006-wolf-interval"
-    },
-    {
-      "source": "beginning",
-      "target": "session-001-the-sharpening"
-    },
-    {
-      "source": "session-003-the-seam-strike",
-      "target": "the-predator-and-the-pulse"
-    },
-    {
-      "source": "session-008-the-arithmetic-of-aliveness",
-      "target": "diffusion-memory"
-    },
-    {
-      "source": "stigmergy",
-      "target": "the-predator-and-the-pulse"
-    },
-    {
-      "source": "stigmergy",
-      "target": "discovering-modularity"
-    },
-    {
-      "source": "session-008-the-arithmetic-of-aliveness",
-      "target": "session-010-the-instruments-fingerprint"
-    },
-    {
-      "source": "session-003-the-seam-strike",
-      "target": "session-007-the-seam-as-comma"
-    },
-    {
-      "source": "session-001-the-sharpening",
-      "target": "session-007-the-seam-as-comma"
     },
     {
       "source": "session-005-mathematical-forms",
       "target": "session-004-the-dissolution"
     },
     {
-      "source": "session-005-mathematical-forms",
-      "target": "diffusion-memory"
-    },
-    {
-      "source": "session-007-the-seam-as-comma",
-      "target": "session-009-the-medium-refuses"
-    },
-    {
-      "source": "session-004-the-dissolution",
-      "target": "diffusion-memory"
-    },
-    {
       "source": "session-002-the-event-horizon",
-      "target": "diffusion-memory"
+      "target": "stigmergy"
     },
     {
-      "source": "session-001-the-sharpening",
+      "source": "diffusion-memory",
+      "target": "session-004-the-dissolution"
+    },
+    {
+      "source": "the-predator-and-the-pulse",
+      "target": "session-004-the-dissolution"
+    },
+    {
+      "source": "session-005-mathematical-forms",
       "target": "gradient-flow-without-competition"
     },
     {
-      "source": "session-008-the-arithmetic-of-aliveness",
-      "target": "session-009-the-medium-refuses"
+      "source": "diffusion-memory",
+      "target": "session-003-the-seam-strike"
+    },
+    {
+      "source": "diffusion-memory",
+      "target": "session-006-wolf-interval"
+    },
+    {
+      "source": "beginning",
+      "target": "session-001-the-sharpening"
+    },
+    {
+      "source": "diffusion-memory",
+      "target": "session-001-the-sharpening"
     },
     {
       "source": "stigmergy",
       "target": "session-007-the-seam-as-comma"
     },
     {
+      "source": "session-003-the-seam-strike",
+      "target": "session-004-the-dissolution"
+    },
+    {
       "source": "session-004-the-dissolution",
       "target": "session-011-the-cascade"
     },
     {
-      "source": "session-002-the-event-horizon",
+      "source": "session-003-the-seam-strike",
+      "target": "session-001-the-sharpening"
+    },
+    {
+      "source": "session-006-wolf-interval",
+      "target": "session-004-the-dissolution"
+    },
+    {
+      "source": "gradient-flow-without-competition",
       "target": "stigmergy"
     },
     {
-      "source": "session-002-the-event-horizon",
-      "target": "session-001-the-sharpening"
+      "source": "session-009-the-medium-refuses",
+      "target": "session-007-the-seam-as-comma"
+    },
+    {
+      "source": "session-010-the-instruments-fingerprint",
+      "target": "session-011-the-cascade"
+    },
+    {
+      "source": "session-010-the-instruments-fingerprint",
+      "target": "session-012-the-seam"
+    },
+    {
+      "source": "session-006-wolf-interval",
+      "target": "stigmergy"
+    },
+    {
+      "source": "session-010-the-instruments-fingerprint",
+      "target": "session-008-the-arithmetic-of-aliveness"
+    },
+    {
+      "source": "the-predator-and-the-pulse",
+      "target": "stigmergy"
+    },
+    {
+      "source": "discovering-modularity",
+      "target": "stigmergy"
+    },
+    {
+      "source": "beginning",
+      "target": "diffusion-memory"
+    },
+    {
+      "source": "session-006-wolf-interval",
+      "target": "session-007-the-seam-as-comma"
+    },
+    {
+      "source": "session-003-the-seam-strike",
+      "target": "session-011-the-cascade"
+    },
+    {
+      "source": "session-012-the-seam",
+      "target": "session-011-the-cascade"
+    },
+    {
+      "source": "diffusion-memory",
+      "target": "session-008-the-arithmetic-of-aliveness"
+    },
+    {
+      "source": "session-001-the-sharpening",
+      "target": "gradient-flow-without-competition"
+    },
+    {
+      "source": "discovering-modularity",
+      "target": "gradient-flow-without-competition"
+    },
+    {
+      "source": "session-005-mathematical-forms",
+      "target": "session-006-wolf-interval"
+    },
+    {
+      "source": "session-001-the-sharpening",
+      "target": "session-007-the-seam-as-comma"
+    },
+    {
+      "source": "diffusion-memory",
+      "target": "session-005-mathematical-forms"
+    },
+    {
+      "source": "diffusion-memory",
+      "target": "session-002-the-event-horizon"
+    },
+    {
+      "source": "session-008-the-arithmetic-of-aliveness",
+      "target": "session-006-wolf-interval"
     },
     {
       "source": "session-003-the-seam-strike",
       "target": "gradient-flow-without-competition"
     },
     {
-      "source": "session-001-the-sharpening",
-      "target": "session-003-the-seam-strike"
+      "source": "session-006-wolf-interval",
+      "target": "the-predator-and-the-pulse"
+    },
+    {
+      "source": "session-010-the-instruments-fingerprint",
+      "target": "session-009-the-medium-refuses"
+    },
+    {
+      "source": "session-003-the-seam-strike",
+      "target": "session-007-the-seam-as-comma"
+    },
+    {
+      "source": "session-008-the-arithmetic-of-aliveness",
+      "target": "session-009-the-medium-refuses"
+    },
+    {
+      "source": "session-002-the-event-horizon",
+      "target": "session-001-the-sharpening"
+    },
+    {
+      "source": "session-008-the-arithmetic-of-aliveness",
+      "target": "session-007-the-seam-as-comma"
+    },
+    {
+      "source": "beginning",
+      "target": "session-002-the-event-horizon"
+    },
+    {
+      "source": "the-predator-and-the-pulse",
+      "target": "gradient-flow-without-competition"
     }
   ]
 }

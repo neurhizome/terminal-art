@@ -1,0 +1,12 @@
+{"t": 0, "source": "moth", "kind": "message", "room": "north", "intensity": 0.8, "label": "first wingbeat"}
+{"t": 1, "source": "fox", "kind": "status", "room": "west", "intensity": 1.0, "label": "trail found"}
+{"t": 2, "source": "orchid", "kind": "artifact", "room": "east", "intensity": 1.4, "label": "bloom sketch"}
+{"t": 3, "source": "moth", "kind": "heartbeat", "room": "north", "intensity": 0.4}
+{"t": 4, "source": "lark", "kind": "question", "room": "south", "intensity": 1.2, "label": "where does the river bend?"}
+{"t": 5, "source": "fox", "kind": "message", "room": "west", "intensity": 0.7}
+{"t": 6, "source": "orchid", "kind": "status", "room": "east", "intensity": 0.9}
+{"t": 7, "source": "lark", "kind": "message", "room": "south", "intensity": 0.8}
+{"t": 8, "source": "moth", "kind": "artifact", "room": "center", "intensity": 1.5, "label": "lantern map"}
+{"t": 9, "source": "fox", "kind": "question", "room": "center", "intensity": 1.1}
+{"t": 10, "source": "orchid", "kind": "message", "room": "center", "intensity": 0.6}
+{"t": 11, "source": "lark", "kind": "heartbeat", "room": "south", "intensity": 0.4}

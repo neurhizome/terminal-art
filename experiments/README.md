@@ -88,6 +88,36 @@ python3 experiments/gradient_flow.py --walkers 200 --mutation-rate 0.03 --delay 
 
 **Modules used:** `automata`, `genetics`, `fields`, `events`, `renderers`
 
+### Stream Field (NEW!)
+Generic event streams become decaying color pulses. This is designed as a
+public-safe bridge: any private adapter can emit sanitized JSONL with abstract
+`source`, `room`, `kind`, and `intensity` fields, while this repository keeps
+only fictional fixtures and reusable rendering code.
+
+```bash
+# Live terminal animation
+python3 experiments/stream_field.py
+
+# Plain text preview for CI, docs, or quick inspection
+python3 experiments/stream_field.py --text --frames 24
+
+# Use another sanitized JSONL stream
+python3 experiments/stream_field.py --stream examples/streams/demo_agents.jsonl
+```
+
+**Input shape:**
+```json
+{"source": "moth", "kind": "message", "room": "north", "intensity": 0.8}
+```
+
+**What to watch for:**
+- Sources behave like species with stable colors
+- Rooms become recurring spatial regions
+- Events appear as pulses, trails, and interference patterns
+- No private service names or local infrastructure details are required
+
+**Modules used:** `streams`, `renderers`
+
 ### Predator-Prey Dynamics (NEW!)
 Classic Lotka-Volterra: Green prey vs red predators with population cycles.
 

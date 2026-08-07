@@ -30,5 +30,14 @@ permalink: /concepts/
         walker diffusion. Explains boundary formation, field persistence, and the no man's land.
       </span>
     </li>
+    <li>
+      <a href="{{ '/concepts/firebreaks/' | relative_url }}">Firebreaks and the Shared Budget</a>
+      <span class="concept-index-sub">
+        When agents can wake each other and all draw from one pool, termination stops being a
+        property of any message and becomes a property of the graph. Why a payload change binds
+        strangers where a protocol binds only kin, why the second layer fired zero times, and the
+        narrow band where redundancy starts paying.
+      </span>
+    </li>
   </ul>
 </div>

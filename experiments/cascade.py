@@ -53,6 +53,7 @@ import random
 import sys
 import time
 from dataclasses import dataclass, field
+from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -294,6 +295,67 @@ def run_live(regime, ticks, seed, delay, **kw):
         return colony
 
 
+def record_frames(regime, ticks, seed, out_dir, *, width=104, height=30,
+                 every=2, **kw):
+    """Write one .ans per sampled tick so ansi_render.py can encode a video.
+
+    Headless on purpose: the live view needs a TTY, and a burn that only
+    exists while someone is watching it cannot be published.
+    """
+    import math
+    out_dir.mkdir(parents=True, exist_ok=True)
+    colony = Colony(regime, width=width, height=height,
+                    rng=random.Random(seed), **kw)
+    heat = DiffusionField(width, height, diffusion_rate=0.18, decay_rate=0.90)
+    n = 0
+    for t in range(ticks):
+        colony.tick(t)
+        for seat in colony.seats.values():
+            if seat.recent > 0.05:
+                heat.deposit(seat.x, seat.y, seat.recent * 2.5)
+        heat.update()
+        if t % every:
+            continue
+        # Heat ramps cool->hot so a spreading burn reads as temperature
+        # rather than as density. Colour is the whole reason the video is
+        # more legible than the numbers.
+        ramp = ["\033[38;5;24m", "\033[38;5;31m", "\033[38;5;38m",
+                "\033[38;5;73m", "\033[38;5;179m", "\033[38;5;208m",
+                "\033[38;5;203m", "\033[38;5;197m"]
+        grid = [[" "] * width for _ in range(height)]
+        for y in range(height):
+            for x in range(width):
+                v = heat.get(x, y)
+                if v > 0.02:
+                    i = min(len(GLYPHS) - 1, int(v * 6))
+                    grid[y][x] = f"{ramp[min(len(ramp) - 1, i)]}{GLYPHS[i]}\033[0m"
+        for seat in colony.seats.values():
+            mark = "\u25c8" if seat.lane == "cc" else "\u25c7"
+            # Bright while burning, dim while idle — a woken seat should be
+            # visibly the thing that just cost something.
+            hot = seat.recent > 0.25
+            col = ("\033[38;5;231m" if hot else
+                   ("\033[38;5;117m" if seat.lane == "cc" else "\033[38;5;215m"))
+            label = f"{mark} {seat.name}"
+            for i, chx in enumerate(label):
+                if 0 <= seat.x + i < width and 0 <= seat.y < height:
+                    grid[seat.y][seat.x + i] = f"{col}{chx}\033[0m"
+        filled = int(30 * max(0.0, colony.pool) / colony.pool_start)
+        bar = "\u2588" * filled + "\u2591" * (30 - filled)
+        frac = max(0.0, colony.pool) / colony.pool_start
+        pool_col = ("\033[38;5;79m" if frac > 0.5 else
+                    "\033[38;5;215m" if frac > 0.15 else "\033[38;5;203m")
+        head = (f"\033[38;5;255mTHE CASCADE\033[0m  \033[38;5;250mregime="
+                f"{regime:<7}\033[0m \033[38;5;240mt={t:<5}\033[0m "
+                f"{pool_col}[{bar}] {max(0.0, colony.pool):6.1f}\033[0m  "
+                f"\033[38;5;240msummons={colony.stats.summons}\033[0m")
+        body = "\n".join("".join(r) for r in grid)
+        (out_dir / f"f{n:05d}.ans").write_text(head + "\n" + body + "\n",
+                                               encoding="utf-8")
+        n += 1
+    return n
+
+
 def sweep(ticks, seeds, **kw):
     print(f"\nTHE CASCADE — {len(seeds)} seeds x {ticks} ticks, "
           f"pool={kw.get('pool', 240.0):.0f}, cost={TURN_COST}/turn\n")
@@ -336,10 +398,17 @@ def main():
     p.add_argument("--delay", type=float, default=0.04)
     p.add_argument("--headless", action="store_true")
     p.add_argument("--sweep", action="store_true")
+    p.add_argument("--record", type=Path,
+                   help="write .ans frames to this directory")
     a = p.parse_args()
 
     kw = dict(pool=a.pool, rate_cap=a.rate_cap, human_rate=a.human_rate,
               regen=a.regen, defang_miss=a.defang_miss)
+
+    if a.record:
+        n = record_frames(a.regime, a.ticks, a.seed, a.record, **kw)
+        print(f"wrote {n} frames to {a.record}")
+        return
 
     if a.sweep:
         sweep(a.ticks, list(range(a.seeds)), **kw)

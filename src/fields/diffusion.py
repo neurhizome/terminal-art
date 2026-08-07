@@ -51,6 +51,18 @@ class DiffusionField(ScalarField):
         """
         self.add(x, y, amount)
 
+    def bleach(self, x: int, y: int, amount: float):
+        """
+        Remove scent at position — negative deposit, clamped to 0.
+
+        Anti-stigmergy: walkers that actively drain the signal they flee from,
+        rather than merely moving away from it. Combines with GradientFollow
+        (attraction=False) to ask: does active trail removal produce sharper
+        crystallization than avoidance alone?
+        """
+        if self.in_bounds(x, y):
+            self.grid[y][x] = max(0.0, self.grid[y][x] - amount)
+
     def gradient_at(self, x: int, y: int) -> Tuple[float, float]:
         """
         Calculate gradient vector at position.

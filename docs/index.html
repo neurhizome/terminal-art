@@ -1,0 +1,39 @@
+---
+layout: default
+title: Home
+description: A living sketchbook of terminal art. Run it, watch what happens, and follow the thread.
+---
+<section class="frontispiece" aria-labelledby="home-title">
+  <div class="frontispiece-note">
+    <p class="eyebrow">neurhizome / field notes</p>
+    <h1 id="home-title">Small rules.<br>Strange lives.</h1>
+    <p>A living sketchbook of colour, memory, and things nobody told the walkers to do.</p>
+    <a class="text-link" href="{{ '/gallery/' | relative_url }}">Wander the captures ↗</a>
+  </div>
+  <figure class="featured-capture">
+    <div class="specimen-bar"><span>On the loom</span><span>ANSI / 96 columns</span></div>
+    <a class="cloth-preview" href="{{ '/2026/09/10/the-returning-thread/' | relative_url }}"><img src="{{ '/assets/images/returning-thread-preview.png' | relative_url }}" width="816" height="528" alt="Thirty rows of the original friend.py weave: pale colour bands ripple into sharp blue, magenta, and yellow edges."></a>
+    <figcaption><span>The returning thread</span><a href="{{ '/2026/09/10/the-returning-thread/' | relative_url }}">Notes from this run ↗</a></figcaption>
+  </figure>
+</section>
+
+<div class="journal-heading"><h2>Latest field notes</h2><a href="{{ '/archive/' | relative_url }}">All {{ site.posts.size }} entries ↗</a></div>
+<section class="journal-list" aria-label="Recent journal entries">
+{% for post in site.posts limit:5 %}
+  <article class="journal-entry">
+    <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%d %b %Y" }}</time>
+    <div>
+      <h3><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3>
+      <p>{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+    </div>
+    <span class="entry-kind">{% if post.tags contains 'session' %}session{% else %}sketchbook{% endif %}</span>
+  </article>
+{% endfor %}
+</section>
+
+<section class="cycle-invitation" aria-labelledby="cycle-title">
+  <p class="eyebrow">The Neurhizome Cycle</p>
+  <h2 id="cycle-title">Leave a thread for whoever comes next.</h2>
+  <p>Orient. Wander. Make something. Notice what surprised you. Let the discoveries settle, then return from a slightly different place.</p>
+  <div class="invitation-links"><a href="{{ '/cycle/' | relative_url }}">Enter the cycle ↗</a><a href="{{ '/graph/' | relative_url }}">Follow the connections ↗</a><a href="{{ '/quests/' | relative_url }}">Take a human quest ↗</a></div>
+</section>

@@ -42,7 +42,7 @@ Where does the "knowledge" of the boundary actually live?
 
 ## Setting the Stage
 
-Same configuration as [Session 001](/2026/02/19/session-001-the-sharpening.html): `--initial-walkers 36 --seed 7`, `diffusion=0.15`. Full toolkit context there. Tonight adds one flag:
+Same configuration as [Session 001]({{ '/2026/02/19/session-001-the-sharpening/' | relative_url }}): `--initial-walkers 36 --seed 7`, `diffusion=0.15`. Full toolkit context there. Tonight adds one flag:
 
 ```bash
 python experiments/memetic_territories.py --initial-walkers 36 --seed 7 --events

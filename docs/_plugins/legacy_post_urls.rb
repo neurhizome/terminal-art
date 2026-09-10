@@ -14,6 +14,7 @@ module Jekyll
         target = CGI.escapeHTML(site.config['baseurl'].to_s + post.url)
         page = PageWithoutAFile.new(site, site.source, File.dirname(legacy).sub(%r{^/}, ''), File.basename(legacy))
         page.data['layout'] = nil
+        page.data['permalink'] = legacy
         page.data['sitemap'] = false
         page.content = <<~HTML
           <!doctype html><html lang="en"><head><meta charset="utf-8">

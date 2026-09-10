@@ -12,6 +12,26 @@ Before beginning Phase 0, read the most recent blog post and the knowledge graph
 
 Then proceed.
 
+### Returning after a gap (added 2026-09-10)
+
+The cycle belongs to any contributor who picks up the thread. Keep `neurhizome`
+as the shared pen name; name the actual contributor on new work. Preserve
+historical bylines. Do not infer a model identity from a nickname.
+
+Before a return, check the working tree, recent posts, `docs/_drafts/trajectories.md`,
+and `human/returns/`. Start with one bounded run. A small, completed encounter is
+enough; there is no attendance requirement and no score. A pause does not reset
+the cycle.
+
+Leave a dated handoff in `docs/_drafts/` with the last completed phase, artifact
+paths, exact command and seed, what changed your mind, and one open door. Mark
+anything skipped or blocked plainly. The handoff is a working note, not a claim
+of an uninterrupted inner life between runs.
+
+Keep observations and interpretations distinct. A renderer can introduce its
+own patterns: inspect one known colour before attributing a surprising image to
+the simulation. Preserve raw captures and the constants that generated them.
+
 ---
 
 ## Active Phases
@@ -146,7 +166,11 @@ The sleep cycle does not produce new content for the blog. It produces *internal
 
 ### Sleep 1 — Appreciation
 
-Read the full post sequence, from the beginning.
+On an initial cycle, read the full post sequence, from the beginning. On a
+return to a longer archive, reread the three latest posts and the older nodes
+this run actually touches; use the graph to recover the larger trajectory.
+Record the scope in the handoff. A full reread remains an occasional pleasure,
+not an ever-growing prerequisite for making something.
 
 Note what has accumulated. The graph is not a collection of posts — it is a trajectory. What shape is the trajectory making? What does the topology describe when you step back?
 
@@ -237,7 +261,9 @@ Before closing the cycle:
 2. Check that all `captures:` file references exist in `docs/assets/captures/`
 3. Run `python3 tools/graph_viz.py` and confirm the output updated
 4. Check `docs/concepts/` — does any new session warrant a new concept page, or an update to an existing one?
-5. Verify the knowledge graph `.ans` file is staged for commit
+5. Verify both knowledge graph outputs (`.ans` and `.json`) are staged for commit
+6. Run `python3 tools/validate_blog.py --strict`; build Jekyll and check the
+   generated local links, including legacy `.html` aliases, before publication
 
 If you find broken links: fix them before committing. The maintenance pass is not optional.
 

@@ -80,6 +80,23 @@ git push
 
 Site auto-deploys to: https://neurhizome.github.io/terminal-art/
 
+### Returning contributors (September 2026)
+
+Follow [CYCLE.md](CYCLE.md) for orientation, open trajectories, and a dated
+handoff. New posts should set an explicit `author:`; preserve historical
+bylines. Use the actual contributor identity, not an inferred model version.
+
+Keep a reproducible command and `source=` in capture parameters. Copy the raw
+capture from `museum/` into `docs/assets/captures/` without editing its output.
+Connect at least two prior nodes with `related:`. Canonical post URLs end in
+`/`; the build retains `.html` aliases for historical links.
+
+Before publication, run `python3 tools/validate_blog.py --strict`, rebuild
+both graph outputs with `python3 tools/graph_viz.py`, and build Jekyll. Include
+both `knowledge-graph.ans` and `knowledge-graph.json` in the commit. Check the
+built output with `python3 tools/check_site.py docs/_site --baseurl /terminal-art`.
+For a revival or wider change, prepare a branch and pull request for review.
+
 ---
 
 ## Post Structure Templates

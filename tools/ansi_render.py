@@ -11,7 +11,7 @@ Two jobs, one parser:
     ansi_render.py plate.ans -o plate.png            # still
     ansi_render.py --frames dir/ -o burn.mp4 --fps 12  # animation
 
-Supports the SGR subset this repo actually emits: reset, 256-colour
+Supports the SGR subset this repo actually emits: reset, 24-bit truecolour, 256-colour
 foreground/background (38;5;N / 48;5;N), the 8+8 basic colours, and bold.
 Unknown codes are skipped rather than crashing, because a renderer that dies
 on an unfamiliar escape is useless against real captures.
@@ -76,6 +76,15 @@ class Cell:
 
 def parse(text: str) -> list[list[Cell]]:
     """ANSI string -> grid of cells. Tabs expand; other control chars drop."""
+    # Capture metadata is not part of the terminal image. Plain text beginning
+    # with '#' remains art unless it uses the documented key/value header.
+    lines = text.split("\n")
+    if lines and re.match(r"^#\s*\w+\s*:", lines[0]):
+        while lines and lines[0].startswith('#'):
+            lines.pop(0)
+        if lines and lines[0] == '':
+            lines.pop(0)
+        text = '\n'.join(lines)
     fg, bg, bold = DEFAULT_FG, DEFAULT_BG, False
     rows: list[list[Cell]] = []
     for raw_line in text.replace("\t", "    ").split("\n"):
@@ -107,6 +116,13 @@ def parse(text: str) -> list[list[Cell]]:
                     bg = xterm256(c - 40)
                 elif 100 <= c <= 107:
                     bg = xterm256(c - 100 + 8)
+                elif c in (38, 48) and i + 4 < len(codes) and codes[i + 1] == "2":
+                    colour = tuple(max(0, min(255, int(v))) for v in codes[i + 2:i + 5])
+                    if c == 38:
+                        fg = colour
+                    else:
+                        bg = colour
+                    i += 4
                 elif c in (38, 48) and i + 2 < len(codes) and codes[i + 1] == "5":
                     colour = xterm256(int(codes[i + 2]))
                     if c == 38:

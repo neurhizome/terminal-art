@@ -85,15 +85,29 @@ async function renderCapture(captureFile, elementId, opts = {}) {
         raw = await res.text();
     } catch (err) {
         console.error(`[ansi-viewer] fetch failed:`, err);
-        el.innerHTML =
-            `<p style="color:#e06c75;padding:1rem;font-family:monospace;font-size:0.9rem">` +
-            `Could not load capture: ${err.message}</p>`;
+        const message = document.createElement('p');
+        message.className = 'capture-error';
+        message.textContent = 'Could not load this capture. Please try reloading the page.';
+        el.replaceChildren(message);
         return;
     }
 
     // ── 2. Parse metadata so we know the artifact dimensions ─────────────
-    const { meta } = parseCaptureFile(raw);
-    let   { content } = parseCaptureFile(raw);
+    let { meta, content } = parseCaptureFile(raw);
+    // A final line break would scroll the first row off a scrollback-free terminal.
+    content = content.replace(/\r?\n$/, '');
+
+    if (typeof Terminal === 'undefined') {
+        const message = document.createElement('p');
+        message.className = 'capture-error';
+        message.textContent = 'The terminal viewer could not load. The original capture is still available: ';
+        const link = document.createElement('a');
+        link.href = `${_baseUrl}/assets/captures/${encodeURIComponent(captureFile)}`;
+        link.textContent = 'Download ANSI';
+        message.appendChild(link);
+        el.replaceChildren(message);
+        return;
+    }
 
     const cols     = parseInt(meta.cols)     || opts.cols     || 80;
     let   rows     = parseInt(meta.rows)     || opts.rows     || 24;
@@ -134,5 +148,8 @@ async function renderCapture(captureFile, elementId, opts = {}) {
     });
 
     term.open(el);
+    el.setAttribute('role', 'img');
+    el.setAttribute('aria-label', meta.title || `Terminal capture: ${captureFile}`);
     term.write(content);
+    return term;
 }

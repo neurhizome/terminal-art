@@ -155,12 +155,13 @@ def build_url_map(posts: list[Post], concepts_dir: Path) -> set[str]:
     """
     known: set[str] = set()
 
-    # Posts: derive Jekyll URL from filename
+    # Canonical trailing-slash URLs and aliases emitted by legacy_post_urls.rb.
     for post in posts:
         parts = post.date.split("-")
         if len(parts) == 3:
             url = f"/{parts[0]}/{parts[1]}/{parts[2]}/{post.slug}.html"
             known.add(url)
+            known.add(url.removesuffix('.html') + '/')
 
     # Concepts: read permalink from frontmatter
     for p in concepts_dir.glob("*.md"):
@@ -169,7 +170,7 @@ def build_url_map(posts: list[Post], concepts_dir: Path) -> set[str]:
             known.add(fm["permalink"])
 
     # Common static pages referenced in posts
-    known.update({"/graph/", "/palette/", "/concepts/"})
+    known.update({"/graph/", "/palette/", "/concepts/", "/cycle/", "/quests/"})
 
     return known
 

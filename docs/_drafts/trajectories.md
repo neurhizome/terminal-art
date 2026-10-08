@@ -6,6 +6,19 @@ Format: `- [ ]` pending, `- [~]` in progress, `- [x]` completed (with link to re
 
 ---
 
+## 2026-09-10 — the return
+
+- [x] Put a reproducible friend.py cloth on the homepage, repair the truecolour
+  exporter, and reconnect the journal to the cycle. Converges with the August
+  overhaul's living-index and capture-lineage ideas. Result: [The returning
+  thread](/2026/09/10/the-returning-thread/). (source: Phase 1 / tool survey)
+- [ ] Let a friend.py row seed a DiffusionField. Does another experiment retain
+  its bands or only its mean colour? Converges with February's cross-session
+  field-seeding trajectory. (source: Phase 1 / gravity check)
+- [ ] Weave silence: hold the colours constant and let only the glyph's empty
+  area evolve. Can the weave be read by what it withholds? (source: Phase 1,
+  deliberate divergence from colour-first experiments)
+
 ## 2026-02-21
 
 - [ ] BFS constellation grouping: cluster nearby walkers into constellations using breadth-first search, draw edges between members. Do emergent constellation shapes resemble the patterns the mind imposes on static star fields, or something genuinely different? (source: Session 005: Mathematical Forms)
